@@ -1,0 +1,31 @@
+project:
+  type: website
+  output-dir: docs
+website:
+  title: "VectorByte Training 2025"
+  navbar:
+    background:	"primary"
+    foreground: "light"
+    logo: "graphics/vblogoedit.png"
+    left:
+      - href: about.qmd
+        text: About
+      - href: schedule2025.qmd
+        text: Schedule
+      - href: materials.qmd
+        text: Materials
+    right:
+      - icon: github
+        href: https://github.com/VectorByteOrg/vectorbyte-training2024
+      - icon: twitter
+        href: https://twitter.com/vectorbite_rcn
+    search: TRUE
+        
+format:
+  html:
+    theme: cerulean
+    css: styles.css
+    toc: true
+
+editor: source
+

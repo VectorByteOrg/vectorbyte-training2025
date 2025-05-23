@@ -1,0 +1,94 @@
+---
+title: "2025 Training Schedule"
+description: "Draft schedule for synchronous training sessions"
+format:
+  html:
+    toc: true
+    toc-location: left
+    html-math-method: katex
+    css: styles.css
+---
+
+[Main materials](materials.qmd)
+
+# Pre-workshop
+
+Information about pre-workshop preparation -- including software installation, expectations for what you should already be familiar with, and review materials -- is available in the [pre-work portion of the materials page](materials.html#pre-work-and-set-up).
+
+<br> <br> <br>
+
+# 13 June 2025
+
+| Time | Activity | Materials |
+|------|----------|-----------|
+|      | Arrival  |           |
+
+<br> <br> <br>
+
+# 14 July 2025 (08:30 - 17:30)
+
+| Time   | Activity | Materials |
+|--------|----------|-----------|
+| 8:30   | Introduction to time dependent data and forecasting, course overview            |           |
+| 9:30   | Lecture: Regression Transformations and Diagnostics         |           |
+| 10:30  | Break    |           |
+| 10:45  | Practical: Regression Transformations and Diagnostics     |           |
+| 12:00  | Lunch    |           |
+| 13:00  | Introduction to VecDyn Database and API                                   |           |
+| 14:00  | Lecture: Time Dependent Data Analysis | |
+| 15:00  | Break    |           |
+| 15:30  | Practical: Time Dependent Data Analysis                               |           |
+| 16:30  | Working with VecDyn/time dependent data (data aggregation, covariate/predictor sources)                                        |           |
+| 17:00  | Supported practice - pull VecDyn data, add covars, fit linear model |           |
+
+
+
+<br> <br> <br>
+
+# 15 June 2025 (08:30 - 17:30)
+
+| Time   | Activity | Materials |
+|--------|----------|-----------|
+| 8:30   | Overview  of the day         |           |
+| 9:00   | Lecture: Basics of Time Series methods                      |           |
+| 10:00  | Break    |           |
+| 10:30  | Practical: Basics of Time Series methods                     |           |
+| 12:00  | Lunch    |           |
+| 13:00  | Lecture: Introduction to Gaussian Process (GP) regression applied to time dependent data                |           |
+| 14:00  | Practical: GPs in R with `hetGP`                            |           |
+| 15:00  | Break    |           |
+| 15:30  | Introduction to the dengue forecasting challenge           |           |
+| 16:00  | Form forecasting groups and begin forecasting challenge  |           |
+| 17:00  | Lightning talks                                             |           |
+
+<br>
+<br>
+<br>
+
+# 16 June 2025 (08:30 - 11:45)
+
+| Time.  | Activity                       | Materials |
+|--------|--------------------------------|-----------|
+| 8:30   | Overview  of the day           |           |
+| 9:00   | Forecasting Challenge          |           |
+| 10:30  | Break                          |           |
+| 11:00  | Present and Evaluate forecasts |           |
+| 11:45  | Lunch (Boxes to go)            |           |
+
+
+
+<br>
+<br>
+<br>
+
+# 26 July 2024
+
+| Time | Activity | Materials |
+|------|----------|-----------|
+|      | Travel   |           |
+
+# Post-workshop
+
+Enjoy using these new techniques and databases!
+
+<br> <br> <br>
