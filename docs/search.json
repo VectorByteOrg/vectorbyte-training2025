@@ -1,0 +1,37 @@
+[
+  {
+    "objectID": "VB_TimeSeries.html#learning-objectives",
+    "href": "VB_TimeSeries.html#learning-objectives",
+    "title": "Regression Methods for Time Dependent Data",
+    "section": "Learning Objectives",
+    "text": "Learning Objectives\n\nIntroduce traditional time-series approaches\nBe able to conduct simple time series analyses\nBe able to produce a forecast for a time series model."
+  },
+  {
+    "objectID": "VB_TimeSeries.html#components-of-a-time-series-model",
+    "href": "VB_TimeSeries.html#components-of-a-time-series-model",
+    "title": "Regression Methods for Time Dependent Data",
+    "section": "Components of a time-series model",
+    "text": "Components of a time-series model\nWe can classify the patterns that we wish to quantify with a time series (TS) model into five categories:\n\nLevel: the average value of the overall TS\nTrend: whether the TS tends to go up or down\nSeasonality: the tendency of the TS to repeat or cycle with a set frequency\nAuto-regression: correlation in the TS with nearby times\nNoise: random components, not correlated to other parts of the model"
+  },
+  {
+    "objectID": "VB_TimeSeries.html#first-approach-smoothing",
+    "href": "VB_TimeSeries.html#first-approach-smoothing",
+    "title": "Regression Methods for Time Dependent Data",
+    "section": "First approach – Smoothing",
+    "text": "First approach – Smoothing\nOften one of the first things we want to do is smooth a TS. This is simply averaging multiple time periods to reduce noise.\n\nThis can, on it’s own, bring out the “signal” in a TS.\n\nIt’s also super useful to produce smoothed time dependent predictors, so that you’re not using noise/extreme values to predict patterns in your target TS."
+  },
+  {
+    "objectID": "VB_TimeSeries.html#moving-average-ma-models",
+    "href": "VB_TimeSeries.html#moving-average-ma-models",
+    "title": "Regression Methods for Time Dependent Data",
+    "section": "Moving Average (MA) Models",
+    "text": "Moving Average (MA) Models\nIn a MA model, average over a window of consecutive periods. We define the window by:\n\nwidth – number of time points\norientation – which time points"
+  },
+  {
+    "objectID": "VB_TimeSeries.html#checking-for-dependence",
+    "href": "VB_TimeSeries.html#checking-for-dependence",
+    "title": "Regression Methods for Time Dependent Data",
+    "section": "Checking for dependence",
+    "text": "Checking for dependence\nTo see if \\(Y_{t-1}\\) would be useful for predicting \\(Y_t\\), just plot them together and see if there is a relationship.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCorrelation between \\(Y_t\\) and \\(Y_{t-1}\\) is called autocorrelation."
+  }
+]
