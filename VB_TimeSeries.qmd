@@ -1,0 +1,189 @@
+---
+subtitle: "VectorByte Methods Training"
+title: "Regression Methods for Time Dependent Data"
+author: "The VectorByte Team (Leah R. Johnson and Alicia Arneson, Virginia Tech)"
+title-slide-attributes:
+  data-background-image: graphics/VectorByte-logo_lg.png
+  data-background-size: contain
+  data-background-opacity: "0.2"
+format: revealjs
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(cache = FALSE, 
+                      echo = FALSE, 
+                      message = FALSE, 
+                      warning = FALSE,
+                      #fig.height=6, 
+                      #fig.width = 1.777777*6,
+                      tidy = FALSE, 
+                      comment = NA, 
+                      highlight = TRUE, 
+                      prompt = FALSE, 
+                      crop = TRUE,
+                      comment = "#>",
+                      collapse = TRUE)
+library(knitr)
+library(kableExtra)
+library(xtable)
+library(viridis)
+
+options(stringsAsFactors=FALSE)
+knit_hooks$set(no.main = function(before, options, envir) {
+    if (before) par(mar = c(4.1, 4.1, 1.1, 1.1))  # smaller margin on top
+})
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_knit$set(width = 60)
+source("my_knitter.R")
+#library(tidyverse)
+#library(reshape2)
+#theme_set(theme_light(base_size = 16))
+make_latex_decorator <- function(output, otherwise) {
+  function() {
+      if (knitr:::is_latex_output()) output else otherwise
+  }
+}
+insert_pause <- make_latex_decorator(". . .", "\n")
+insert_slide_break <- make_latex_decorator("----", "\n")
+insert_inc_bullet <- make_latex_decorator("> *", "*")
+insert_html_math <- make_latex_decorator("", "$$")
+## classoption: aspectratio=169
+set.seed(1984)
+```
+
+## Learning Objectives
+
+1. Introduce traditional time-series approaches
+2. Be able to conduct simple time series analyses
+3. Be able to produce a forecast for a time series model. 
+
+## Components of a time-series model
+
+We can classify the patterns that we wish to quantify with a time series (TS) model into five categories:
+
+- Level: the average value of the overall TS
+- Trend: whether the TS tends to go up or down
+- Seasonality: the tendency of the TS to repeat or cycle with a set frequency
+- Auto-regression: correlation in the TS with nearby times
+- Noise: random components, not correlated to other parts of the model
+
+## First approach -- Smoothing
+
+Often one of the first things we want to do is `r myblue("smooth")` a TS. This is simply averaging multiple time periods to reduce noise.  
+
+`r sk1()`
+
+This can, on it's own, bring out the "signal" in a TS. 
+
+`r sk1()`
+
+It's also super useful to produce smoothed time dependent predictors, so that you're not using noise/extreme values to predict patterns in your target TS. 
+
+## Moving Average (MA) Models
+
+In a MA model, average over a `r myblue("window")` of consecutive periods. We define the window by:
+
+- *width* -- number of time points 
+- *orientation* -- which time points
+
+-------------------------------------
+
+We consider two main orientations
+
+- Centered - used for visualizing trends
+
+$$
+\begin{align*}
+MA_t = & \left(y_{t - (w-1)/2}  + \cdots + y_{t-1} \\
+ + y_t + y_{t+1} + \cdots + y_{t - (w-1)/2} \right)/w
+\end{align*}
+$$
+
+- Trailing - used for forecasting (because you only use the past)
+$$
+F_t = \left(y_{t - w +1} + \cdots + y_{t-1} + y_t \right)/w
+$$
+
+------------------------------------------------
+   
+<center>
+
+![](graphics/MA-comp.png){width=85%}
+
+</center>
+ 
+------------------------------------------------
+   
+`r mygrn("Example")`: $Y_t =$ average daily temp. at ROA, Feb-Mar 2018.
+
+```{r, echo=TRUE, fig.align='center', fig.height=4, fig.width=8}
+weather <- read.csv("data/Roanoke_weather2018.csv")
+days<-32:90 ## This picks out February and March
+weather<-weather[days,c(1,3,7,4)]
+names(weather)[3]<-"temp"
+plot(days, weather$temp, xlab="day of year", ylab="temp (F)", type="l", col=2, lwd=2)
+```
+
+-   "sticky" sequence: today tends to be close to yesterday.
+ 
+------------------------------------------------
+   
+`r mygrn("Example")`: $Y_t =$ monthly UK deaths due to lung infections
+
+```{r, echo=TRUE, fig.align='center', fig.height=4, fig.width=8}
+ld<-as.vector(ldeaths)
+plot(ld, xlab="month", ylab="deaths", type="l", 
+     col=4, lwd=2)
+```
+
+-   The same pattern repeats itself year after year.
+ 
+------------------------------------------------
+
+`r mygrn("Example")`: uncorrelated samples from a normal random number generator.
+
+
+```{r, echo=TRUE, fig.align='center', fig.height=4, fig.width=8}
+plot(rnorm(200), xlab="t", ylab="Y_t", type="l", 
+     col=6, lwd=2)
+```
+
+-   It is tempting to see patterns even where they don't exist.
+ 
+
+   
+## Checking for dependence
+
+To see if $Y_{t-1}$ would be useful for predicting $Y_t$, just plot them together and see if there is a relationship.
+
+::: columns
+::: {.column width="50%"}
+
+```{r, fig.align='center', fig.height=5, fig.width=5}
+plot(weather$temp[1:58], weather$temp[2:59], pch=20,
+     col=4, main="Daily Temp at ROA", 
+     xlab="temp(t-1)",
+     ylab = "temp(t)")
+text(x=31, y=68, col=2, cex=1.5,
+     labels=paste("Corr =", round(cor(weather$temp[1:58],weather$temp[2:59]),2))
+     )
+```
+
+:::
+
+::: {.column width="50%"}
+
+`r sk1()`
+
+-   Correlation between $Y_t$ and $Y_{t-1}$ is called `r myred("autocorrelation")`.
+ 
+:::
+:::
+
+ 
+
+
+
+
+
+ 
