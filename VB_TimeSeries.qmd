@@ -81,10 +81,16 @@ It's also super useful to produce smoothed time dependent predictors, so that yo
 
 ## Moving Average (MA) Models
 
-In a MA model, average over a `r myblue("window")` of consecutive periods. We define the window by:
+In a MA model, average over a `r myblue("window")` of consecutive periods. 
+
+`r sk1()`
+
+We define the window by:
 
 - *width* -- number of time points 
 - *orientation* -- which time points
+
+It is also possible to ***weight*** the time points, e.g., make nearby times more important.
 
 -------------------------------------
 
@@ -112,9 +118,149 @@ $$
 
 </center>
 
+ 
+## Effects of smoothing: width
+
+In base R, the `filter` function gives us an easy way to explore the effect of smoothing.
+
+
+::: columns
+::: {.column width="50%"}
+
+*Short vs Long*
+
+```{r, echo=TRUE}
+t<-1:length(airquality$Temp)
+wind<-airquality$Wind
+## centered
+FC5<- filter(wind, 
+             filter = rep(0.2, 5))
+
+## longer centered
+FC25<- filter(wind, 
+              filter = rep(1/25,25), 
+              sides=2)
+```
+
+:::
+
+::: {.column width="50%"}
+
+
+```{r, fig.align='center', fig.height=7, fig.width=7}
+plot(t, wind, type="l", lwd=2, col="grey")
+lines(t, FC5, col="red", lwd=2)
+lines(t, FC25, col="mediumblue", lwd=3)
+```
+
+:::
+:::
+
+
+## Effects of smoothing: orientation
+
+In base R, the `filter` function gives us an easy way to explore the effect of smoothing. 
+
+
+::: columns
+::: {.column width="50%"}
+
+*Centered vs. Trailing*
+
+
+```{r, echo=TRUE}
+t<-1:length(airquality$Temp)
+wind<-airquality$Wind
+## centered
+FC<- filter(wind, 
+            filter = rep(1/9, 9))
+## trailing:  by default
+## filter function includes point
+## t in the average
+FT<- filter(wind, 
+            filter = c(0,rep(1/9, 9)), 
+            sides=1)
+```
+
+:::
+
+::: {.column width="50%"}
+
+
+```{r, fig.align='center', fig.height=7, fig.width=7}
+plot(t, wind, type="l", lwd=2, col="grey")
+lines(t, FC, col="red", lwd=3)
+lines(t, FT, col="dodgerblue", lwd=3)
+```
+
+:::
+:::
+
+
+## Effects of smoothing: weighting
+
+In base R, the `filter` function gives us an easy way to explore the effect of smoothing.
+
+
+::: columns
+::: {.column width="50%"}
+
+*Unweighted vs Weighted*
+
+```{r, echo=TRUE}
+t<-1:length(airquality$Temp)
+wind<-airquality$Wind
+## trailing 
+FT10<- filter(wind, 
+             filter = c(0,rep(0.1, 10)),
+             sides = 1)
+
+## trailing, weighted, coeffs in reverse time order
+FT10w<- filter(wind, 
+              filter = c(0, 0.3, 0.2, 0.1, 0.1, 
+                         rep(0.05, 6)), 
+              sides=1)
+```
+
+:::
+
+::: {.column width="50%"}
+
+
+```{r, fig.align='center', fig.height=7, fig.width=7}
+plot(t, wind, type="l", lwd=2, col="grey")
+lines(t, FT10w, col="purple", lwd=3)
+lines(t, FT10, col="dodgerblue", lwd=3)
+```
+
+:::
+:::
+
+
+## Exponential Smoothing
+
+Instead of weighting all points the same, or manually determining weights, `r mygrn("Exponential smoothing")` uses a special weigting of past values:
+$$
+F_{t+1} = \alpha y_t + \alpha(1-\alpha)y_{t-1} + \alpha(1-\alpha)^2 y_{t-2} + \cdots
+$$
+where $\alpha$ is a smoothing constant between 0 and 1.
+
+## Choosing a smoothing constant
+
+The value of $\alpha$ determines the influence of points farther in the past. This is sometimes called the "rate of learning
+
+<center>
+
+![](graphics/exp_smooth.png){width=85%}
+
+</center>
+
+Default values are often around 0.1 - 0.2.
+
+
+
 ## Outline of the rest
 
-- Exponential smoothing (just to wrap up smoothing)
 - brief recall of the AR models from yesterday
 - ARIMA (putting together AR + smoothing)
 - Putting and AR process on top of other models
