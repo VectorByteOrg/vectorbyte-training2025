@@ -1,7 +1,9 @@
 ---
 title: "VectorByte Methods Training: Regression Diagnostics and Transformations (practical)"
 author:
-  - name: Leah R. Johnson 
+  - name: 
+      given: Leah R.
+      family: Johnson
     url: https://lrjohnson0.github.io/QEDLab/leahJ.html
     affiliation: Virginia Tech and VectorByte
 citation: true

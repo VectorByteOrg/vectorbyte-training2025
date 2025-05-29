@@ -84,7 +84,7 @@ We are assuming familiarity with `R` basics as well as at least introductory sta
 
 ## Basics of Forecasting Time Series using `R`
 
--   [Lecture - coming soon]()
+-   [Lecture - coming soon](VB_TimeSeries.qmd)
 -   [Practical - coming soon](VB_TimeSeriesForecastingPractical.qmd)
 -   Datasets: 
     + [NEONphenologyClean.csv](data/NEONphenologyClean.csv)

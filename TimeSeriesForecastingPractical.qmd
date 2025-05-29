@@ -1,18 +1,24 @@
 ---
-title: "Practical: Time Series Forecasting"
-author: "The VectorByte Team (Alicia Arneson S., Virginia Tech)"
+title: "VectorByte Methods Training: Introduction to Time Series and Forecasting (practical)"
+author:
+  - name: 
+      given: Alicia
+      family: Arneson
+    affiliation: Virginia Tech and VectorByte
+  - name: 
+      given: Leah R.
+      family: Johnson
+    url: https://lrjohnson0.github.io/QEDLab/leahJ.html
+    affiliation: Virginia Tech and VectorByte
+citation: true
+date: 2025-06-01
+date-format: long
 format:
-
   html:
-
     toc: true
-
     toc-location: left
-
     html-math-method: katex
-
     css: styles.css
-editor: visual
 ---
 
 ```{r setup, include=FALSE}
@@ -34,11 +40,19 @@ The goals of this practical are to:
 
 4.  Learn aggressively.... See the forecasting challenge section below :)
 
-This practical will take you through an example of modeling a terrestrial phenology (how much greenness can be observed from above) data set from NEON and generating forecasts from the best model. Then, we will have the world's smallest (and fastest) forecasting competition for you to practice your skills via trial by fire, because everyone learns best under pressure! :)
+This practical will take you through an example of modeling a terrestrial phenology data set (how much greenness can be observed from above) from NEON and generating forecasts from the best model. Then, we will have the world's smallest (and fastest) forecasting competition for you to practice your skills via trial by fire, because everyone learns best under pressure! :)
+
+# Set up
+
+We will use a number of libraries for this practical, so please make sure to have them installed and loaded up front. Some, like `tidyverse` aren't absolutely necessary, but we use them here to ease data formatting and for the ggplot dependencies.
+
+```{r, message=FALSE}
+library(tidyverse)
+library(forecast)
+library(Metrics)
+```
 
 # Defining the Goal
-
-#### Slide 4
 
 The first step of forecasting is to define the forecasting goal - why the heck are you about to spend several hours of your life gathering data and modeling it?? Also, once you know that - how are you going to do it?
 
@@ -48,21 +62,14 @@ In our case, it will just take however much time you need to read the following 
 
 # Getting the Data and Pre-Processing
 
-#### Slide 5 & 7
-
-This data set originally required some cleaning and wrangling. The version you have (NEONphenologyClean.csv) is ready to explore and model! Exploring and Visualizing the Data
-
-#### Slide 6
+This data set originally required some cleaning and wrangling. The version you have (`NEONphenologyClean.csv`) is ready to explore and model! Exploring and Visualizing the Data
 
 A simple plot of the time series can go a long way in telling us what kinds of patterns are present. We can already see some strong evidence of seasonality and maybe a slight trend.
 
 ```{r, fig.align='center', fig.height=4, fig.width=5}
 
 # Read in the clean data set
-
-phen <- read.csv("NEONphenologyClean.csv")
-
-library(tidyverse)  
+phen <- read.csv("data/NEONphenologyClean.csv")
 
 ggplot(data = phen, aes(x = DATE, y = observation))+   
   geom_point() 
@@ -76,39 +83,45 @@ ggplot(data = phen, aes(x = DATE, y = meanTemp))+
   geom_point() 
 ```
 
-Decomposition plots and autocorrelation plots are also useful tools to help us prepare to fit appropriate forecasting models. In order to make a decomposition plot, we have to formally declare that the data are a time series by turning them into a time series object in R. We do that by using the `ts()` function. Several of the more basic time series models also require (or at least prefer) data to be in this format. Within the `ts()` function, we need to specify a frequency. The documentation does a good job of explaining what frequency is:
-
-"Argument `frequency` indicates the sampling frequency of the time series, with the default value `1` indicating one sample in each unit time interval. For example, one could use a value of `7` for `frequency` when the data are sampled daily, and the natural time period is a week, or `12` when the data are sampled monthly and the natural time period is a year."
-
-Given that definition, we can set the frequency here to 365 because the repeating period for trees losing their leaves and greening back up is roughly one year and we have daily observations.
+In order to explore our data more easily in R, and also to prepare the data for many of the forecasting functions, we want to formally declare that the data are a time series by turning them into a time series object in R. We do that by using the `ts()` function, which is available in base R. Within the `ts()` function, we need to specify a frequency. The documentation does a good job of explaining what frequency is -- you can take a look here:
 
 ```{r}
+?ts
+```
 
+Given the definition, we can set the frequency here to 365 because the repeating period for trees losing their leaves and greening back up is roughly one year and we have daily observations.
+
+```{r}
 phenTS <- ts(phen$observation, frequency = 365) 
 ```
 
-The decomposition plot shows that there may be a small trend in the series. It also confirms our intuition that seasonality is present.
+
+## Data Exploration
+
+Before we go further, we can get a sense of what sorts of patterns are available in our data. We've seen some of these before, but we also have some short-cut functions that help us visualize our time series data in a quick and dirty way. The most useful of these are the ACF (which we've seen before) and the decomposition plots. 
+
+The *decomposition* plot uses some default moving averages to visualize patterns in the data -- specifically trying to get at the relative amounts of trend, seasonality, and randomness.
 
 ```{r}
-
 phenDecomp <- decompose(phenTS) 
 plot(phenDecomp)
 ```
 
-The autocorrelation plot shows that there seems to be multiple levels of autocorrelation occurring in the series. On one hand, the series is pretty sticky for nearly 100 days out. On the other hand, the direction of the correlation reverses for certain lags. This also supports the presence of both a trend and seasonal pattern.
+This shows us what that there may be a small trend in the series. It also confirms our intuition that seasonality is present.
+
+We also can look at the ACF to check for the presence of auto-correlation in the time series.
 
 ```{r}
 
 acf(phen$observation, lag.max = 365)
 ```
 
+This shows that there seems to be multiple levels of autocorrelation occurring in the series. On one hand, the series is pretty sticky for nearly 100 days out. On the other hand, the direction of the correlation reverses for certain lags. This also supports the presence of both a trend and seasonal pattern.
+
+
 # Partitioning the data
 
-#### Slide 8
-
-Remember, when your goal is forecasting, data partitioning should not be done randomly. The earlier observations in the data set will be used for training and the remaining observations will be held back as a test set. Generally speaking, it is good to try to match the intended forecasting horizon with the size of the test set. The NEON challenge goal is to forecast at least 30 days out, so we will hold back 30 days of data (i.e. the most recent 30 observations).
-
-There are probably packages out there that can do this for you, so feel free to explore other ways of achieving this kind of partitioning!
+When working with time dependent data, data partitioning should not be done randomly. Instead, we will use earlier observations in the data set for training and the remaining observations will be held back as a test set. Generally speaking, it is good to try to match the intended forecasting horizon with the size of the test set. The NEON challenge goal is to forecast at least 30 days out, so we will hold back 30 days of data (i.e. the most recent 30 observations).
 
 ```{r}
 
@@ -122,7 +135,7 @@ testN <- trainN+1
 train <- phen[1:trainN,] 
 
 # Index the later 30 for testing
-test <- phen[testN:n,]
+test <- phen[testN:n,] ## or phen[-1:trainN,]
 nrow(test) # Should be 30
 ```
 
@@ -143,7 +156,6 @@ If you want to try out exponential smoothing, you will use `method = "ETS"` and 
 First, we have to turn our training data into a time series object like we did with the whole series for plotting.
 
 ```{r}
-library(forecast)
 
 # STL requires a UNIVARIATE time series object
 ts.train <- ts(train$observation, frequency = 365)
@@ -235,7 +247,6 @@ Finally, we can generate some accuracy metrics and save them in a data frame for
 #    package for this. While we're at it, let's save them to a data
 #    set for later.
 
-library(Metrics)
 stl.rmse <- rmse(compare$observed, compare$forecast)
 stl.mae <- mae(compare$observed, compare$forecast)
 

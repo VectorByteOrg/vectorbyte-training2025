@@ -111,6 +111,18 @@ $$
 ![](graphics/MA-comp.png){width=85%}
 
 </center>
+
+## Outline of the rest
+
+- Exponential smoothing (just to wrap up smoothing)
+- brief recall of the AR models from yesterday
+- ARIMA (putting together AR + smoothing)
+- Putting and AR process on top of other models
+- More details on actually forecasting
+  - training vs testing
+  - predicting ahead (why it's tricky) -- can't use future predictors.
+  - forecast package in R makes all of this relatively easy.
+
  
 ------------------------------------------------
    
