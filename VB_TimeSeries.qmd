@@ -57,15 +57,39 @@ set.seed(1984)
 2. Be able to conduct simple time series analyses
 3. Be able to produce a forecast for a time series model. 
 
+## Recall: Time Series Data
+
+Time dependent data may be considered a comprise a `r myred("time series")` (TS) if the data are observed at **`r myblue("evenly spaced intervals")`**. 
+
+
+- Most TS methods *WILL NOT* work properly if data are irregularly spaced
+- Occasionally data points may be missing -- then there are methods to interpolate.
+- Irregularly spaced data may be aggregated in a systematic way to fulfill the TS requirements.
+
 ## Components of a time-series model
 
-We can classify the patterns that we wish to quantify with a time series (TS) model into five categories:
+We can classify the patterns that we wish to quantify with a time series model into five categories:
 
 - Level: the average value of the overall TS
 - Trend: whether the TS tends to go up or down
 - Seasonality: the tendency of the TS to repeat or cycle with a set frequency
 - Auto-regression: correlation in the TS with nearby times
 - Noise: random components, not correlated to other parts of the model
+
+## Last time: Regression based
+
+We previously used a regression approach to allow us to explore these patterns:
+
+- Level: usually the intercept in the model
+- Trend: added time as a predictor
+- Seasonality: included sine/cosine predictors
+- Auto-regression: response at lagged times as a predictor
+- Noise: assumed additive, normal noise
+
+
+
+We want to expand our toolbox and give ourselves more options to build models, and eventually use them to `r myblue("forecast!")`.
+
 
 ## First approach -- Smoothing
 
@@ -100,14 +124,14 @@ We consider two main orientations
 
 $$
 \begin{align*}
-MA_t = & \left(y_{t - (w-1)/2}  + \cdots + y_{t-1} \\
+MA_{t,w} = & \left(y_{t - (w-1)/2}  + \cdots + y_{t-1} \\
  + y_t + y_{t+1} + \cdots + y_{t - (w-1)/2} \right)/w
 \end{align*}
 $$
 
 - Trailing - used for forecasting (because you only use the past)
 $$
-F_t = \left(y_{t - w +1} + \cdots + y_{t-1} + y_t \right)/w
+F_{t,w} = \left(y_{t - w +1} + \cdots + y_{t-1} + y_t \right)/w
 $$
 
 ------------------------------------------------
@@ -147,10 +171,12 @@ FC25<- filter(wind,
 ::: {.column width="50%"}
 
 
-```{r, fig.align='center', fig.height=7, fig.width=7}
+```{r, fig.align='center', fig.height=6, fig.width=6}
 plot(t, wind, type="l", lwd=2, col="grey")
 lines(t, FC5, col="red", lwd=2)
 lines(t, FC25, col="mediumblue", lwd=3)
+legend("topright", legend= c("w=5", "w=25"), 
+       fill=c("red", "mediumblue"))
 ```
 
 :::
@@ -187,10 +213,13 @@ FT<- filter(wind,
 ::: {.column width="50%"}
 
 
-```{r, fig.align='center', fig.height=7, fig.width=7}
+```{r, fig.align='center', fig.height=6, fig.width=6}
 plot(t, wind, type="l", lwd=2, col="grey")
 lines(t, FC, col="red", lwd=3)
 lines(t, FT, col="dodgerblue", lwd=3)
+legend("topright", legend= c("center", "trail"), 
+       fill=c("red", "dodgerblue"))
+
 ```
 
 :::
@@ -227,10 +256,13 @@ FT10w<- filter(wind,
 ::: {.column width="50%"}
 
 
-```{r, fig.align='center', fig.height=7, fig.width=7}
+```{r, fig.align='center', fig.height=6, fig.width=6}
 plot(t, wind, type="l", lwd=2, col="grey")
 lines(t, FT10w, col="purple", lwd=3)
 lines(t, FT10, col="dodgerblue", lwd=3)
+legend("topright", legend= c("W", "UnW"), 
+       fill=c("purple", "dodgerblue"))
+
 ```
 
 :::
@@ -239,15 +271,22 @@ lines(t, FT10, col="dodgerblue", lwd=3)
 
 ## Exponential Smoothing
 
-Instead of weighting all points the same, or manually determining weights, `r mygrn("Exponential smoothing")` uses a special weigting of past values:
+Instead of weighting all points the same, or manually determining weights, `r mygrn("Exponential smoothing/moving average")` (ema) uses a special weighting of $k$ past values:
 $$
-F_{t+1} = \alpha y_t + \alpha(1-\alpha)y_{t-1} + \alpha(1-\alpha)^2 y_{t-2} + \cdots
+\begin{align*}
+ema_{t+1} = & \alpha y_t + \alpha(1-\alpha)y_{t-1} + \alpha(1-\alpha)^2 y_{t-2} \\
+& + \cdots + \alpha(1-\alpha)^k y_{t-k}
+\end{align*}
 $$
-where $\alpha$ is a smoothing constant between 0 and 1.
+where $\alpha$ is a smoothing constant between 0 and 1. This can be rewritten as a recurssion:
+
+$$
+ema_{t+1} = \alpha y_t + \alpha(1-\alpha)ema_{t} 
+$$
 
 ## Choosing a smoothing constant
 
-The value of $\alpha$ determines the influence of points farther in the past. This is sometimes called the "rate of learning
+The value of $\alpha$ determines the influence of points farther in the past. This is sometimes called the "rate of learning"
 
 <center>
 
@@ -257,11 +296,114 @@ The value of $\alpha$ determines the influence of points farther in the past. Th
 
 Default values are often around 0.1 - 0.2.
 
+## Exponential Smoothing Example
+
+The `filter` function doesn't give us quite what we want. Instead we can use the `EMA` function in the `TTR` package:
+
+::: columns
+::: {.column width="50%"}
+
+*Unweighted vs Exponential*
+
+```{r, echo=TRUE}
+t<-1:length(airquality$Temp)
+wind<-airquality$Wind
+## trailing 
+FT10<- filter(wind, 
+             filter = rep(0.1, 10),
+             sides = 1)
+
+## exponential
+FE  <- TTR::EMA(wind, 10)
+```
+
+:::
+
+::: {.column width="50%"}
+
+
+```{r, fig.align='center', fig.height=6, fig.width=6}
+plot(t, wind, type="l", lwd=2, col="grey")
+lines(t, FE, col="darkgreen", lwd=3)
+lines(t, FT10, col="dodgerblue", lwd=3)
+legend("topright", legend= c("UnW", "Exp"), 
+       fill=c("dodgerblue", "darkgreen"))
+```
+
+:::
+:::
+
+
+## ARMA
+
+We can combine the idea of smoothing back to capture signal while recognizing the high amount of correlation at nearby time-steps using **`r myblue("Auto-Regressive Moving Average (ARMA)")`** models.
+
+We combine the AR($p$) (i.e., using $p$ lags) with a (trailing) MA($q$) model (i.e., window of size $q$). 
+
+`r sk1()`
+
+But how do we build the model?
+
+## Specifying the MA part
+
+The tricky bit is that the MA part that goes into the model is ***not*** the result of the smoother itself (i.e., it's not the $F_t$ on Slide 7). 
+
+`r sk1()`
+
+Instead, we use the *residuals* -- that is, how far the data at the previous time points are from the smoothed estimate based on $q$ previous times:
+$$
+\varepsilon_{t-1} = y_{t-1} - F_{t-1, q}
+$$
+
+## ARMA model
+
+The ARMA($p,q$) model is then a regression model (like we saw in our previous AR model) but with extra parameters and terms corresponding to those errors:
+$$
+\begin{align*}
+y_t =~& \beta_0 + \beta_1 y_{t-1} + \cdots + \beta_p y_{t-p} \\
+& + \varepsilon_t + \theta_1 \varepsilon_{t-1} + \cdots \theta_q \varepsilon_{t-q} 
+\end{align*}
+$$
+
+## Pros and Cons of ARMA
+
+Pros:
+
+- can capture some signal without needing to specify a functional form
+- fairly flexible and tunable
+
+Cons: 
+
+- don't capture trends or seasonality well (assume nearly stationary)
+- forecasts must be done one step ahead at a time
+
+
+## ARIMA and SARIMA
+
+In order to relax the assumption of stationarity and allow for seasonality/periodicity, we can add another letter "I" for `r mygrn("Integrated")` and "S" for `r mygrn("Seasonal")`.
+
+`r sk1()`
+
+What does this mean? First a digression....
+
+
+## Differencing
+
+AR/ARMA models without explicit trend or periodic components can only describe data that are stationary. 
+
+It turns out that we fiddle with a non-stationary TS to get something that is stationary through ***differencing*** -- that is, computing the differences between consecutive data points (or at another fixed lag).
+
+-----------------------
+
+Lag-1 differencing removes trends from a TS:
+
+```{r}
+
+```
 
 
 ## Outline of the rest
 
-- brief recall of the AR models from yesterday
 - ARIMA (putting together AR + smoothing)
 - Putting and AR process on top of other models
 - More details on actually forecasting
