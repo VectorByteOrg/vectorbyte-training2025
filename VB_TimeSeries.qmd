@@ -422,7 +422,7 @@ acf(diff(Temps))
 
 -----------------------
 
-Lag-$n$ differencing, where $n$ is the number if steps in a cycle, removes a seasonal signal from a TS:
+Lag-$n$ differencing, where $n$ is the number if steps in a cycle, removes/reduces a seasonal signal from a TS:
 
 ```{r, fig.align='center', fig.height=6, fig.width=10}
 ld<-as.vector(ldeaths)
@@ -487,12 +487,14 @@ summary(m.ld)
 
 Check the residuals:
 
-```{r, fig.align='center', fig.width=6, fig.height=5}
+```{r, fig.align='center', fig.width=6, fig.height=4}
 par(mfrow=c(3,1), bty="n", mar = c(4,4,1,1))
 plot(m.ld$residuals)
 acf(m.ld$residuals, main="")
 hist(m.ld$residuals, main="")
 ```
+
+One big outlier, but otherwise not too bad
 
 ---------------------------------------------
 
@@ -505,7 +507,7 @@ lines(m.ld$fitted, col=2, lty=2, lwd=2)
 legend("topright", legend=c("data", "fit"), col=1:2, lty=1:2, lwd=2)
 ```
 
-## Forecasting ahead:
+## Forecasting 
 
 ```{r, echo=TRUE}
 ## forecasting at a 12 mo horizon
@@ -556,98 +558,142 @@ It turns out we can do something really simple to correct for this extra autocor
 
 
 1. Fit the model you want
-2. Fit an AR model to the residuals
-3. Make the prediction/forecast from these bits together.
+2. Fit an AR (or an ARIMA!) model to the residuals
+3. Make the prediction/forecast from these bits together
 
 `r sk1()`
 
 This works surprisingly well -- we'll see an example of this in the practical. 
 
-## ARIMA vs regression approaches
+## ARIMA vs. regression approaches
 
+- Regression type approaches are highly flexible, and data don't need to be evenly spaced
 
+- lagged predictors can be used as long as the aren't predictor values missing
 
+- Once you add any AR or MA components, or differencing, you must have evenly spaced data w/o gaps
 
-## Outline of the rest
+- interpreting ARIMA and similar models is tricky -- usually they're better for forecasting
 
-- More details on actually forecasting
-  - training vs testing
-  - predicting ahead (why it's tricky) -- can't use future predictors.
-  - forecast package in R makes all of this relatively easy.
+TS analysis is a huge field -- we're only scratching the surface!
 
- 
-------------------------------------------------
-   
-`r mygrn("Example")`: $Y_t =$ average daily temp. at ROA, Feb-Mar 2018.
+## Forecasting
 
-```{r, echo=TRUE, fig.align='center', fig.height=4, fig.width=8}
-weather <- read.csv("data/Roanoke_weather2018.csv")
-days<-32:90 ## This picks out February and March
-weather<-weather[days,c(1,3,7,4)]
-names(weather)[3]<-"temp"
-plot(days, weather$temp, xlab="day of year", ylab="temp (F)", type="l", col=2, lwd=2)
-```
-
--   "sticky" sequence: today tends to be close to yesterday.
- 
-------------------------------------------------
-   
-`r mygrn("Example")`: $Y_t =$ monthly UK deaths due to lung infections
-
-```{r, echo=TRUE, fig.align='center', fig.height=4, fig.width=8}
-ld<-as.vector(ldeaths)
-plot(ld, xlab="month", ylab="deaths", type="l", 
-     col=4, lwd=2)
-```
-
--   The same pattern repeats itself year after year.
- 
-------------------------------------------------
-
-`r mygrn("Example")`: uncorrelated samples from a normal random number generator.
-
-
-```{r, echo=TRUE, fig.align='center', fig.height=4, fig.width=8}
-plot(rnorm(200), xlab="t", ylab="Y_t", type="l", 
-     col=6, lwd=2)
-```
-
--   It is tempting to see patterns even where they don't exist.
- 
-
-   
-## Checking for dependence
-
-To see if $Y_{t-1}$ would be useful for predicting $Y_t$, just plot them together and see if there is a relationship.
-
-::: columns
-::: {.column width="50%"}
-
-```{r, fig.align='center', fig.height=5, fig.width=5}
-plot(weather$temp[1:58], weather$temp[2:59], pch=20,
-     col=4, main="Daily Temp at ROA", 
-     xlab="temp(t-1)",
-     ylab = "temp(t)")
-text(x=31, y=68, col=2, cex=1.5,
-     labels=paste("Corr =", round(cor(weather$temp[1:58],weather$temp[2:59]),2))
-     )
-```
-
-:::
-
-::: {.column width="50%"}
+We're going to practice our TS modeling approaches through the lens of `r myred("forecasting")`. 
 
 `r sk1()`
 
--   Correlation between $Y_t$ and $Y_{t-1}$ is called `r myred("autocorrelation")`.
- 
+That is, we're going to focus on how to use our TS models to produce a prediction of what we think might happen in the future. 
+
+`r sk1()`
+
+This is actually trickier to do well than you might think...
+
+
+## Recall: Forecasting Process
+
+1. Define Goal - what to forecast? how far out?
+2. Get Data - what resolution? any predictors?
+3. Explore/Visualize - outliers? spacing?
+4. Pre-Processing - clean and organize data
+5. `r myblue("Partitioning")` - need to test our forecasts
+6. Modeling - what methods? what predictors?
+7. `r myblue("Evaluation")` - how good is the forecast?
+8. Implementation - make it repeatable, maybe automate
+
+## Evaluating predictions and forecasts
+
+We've already learned a few ways to explore how good our model is on the data that we've trained it on (within sample). 
+
+Mostly we've focused on *`r myblue("qualitative metrics")`*:
+
+- Does the pattern look like the data?
+- Are there patterns left in the residuals?
+- Are the residuals still auto-correlated?
+- Are the residuals normally distributed?
+
+What about `r myred("quantitative metrics")`?
+
+
+## Root Mean Squared Error (RMSE)
+
+RMSE is one of the simplest quantitative metrics to calculate:
+$$
+\text{RMSE} = \left(\frac{1}{n}\sum_{i=1}^n (y_i - \hat{y}_i)^2 \right)^{1/2}
+$$
+where $e_i = y_i - \hat{y}_i$ is the residual for the $i^{\text{th}}$ data point. 
+
+`r sk1()`
+
+This gives us a quantitative measure of how close, overall, our predictions are to the data. 
+
+## In-sample vs. Forecasting error
+
+Because RMSE requires that we know the data values, the obvious use is to use it to compare within-sample -- fit a couple of models, calculate RMSE, and use it as a tool to decide which model might be better (along with residual diagnostics).
+
+`r sk1()`
+
+`r myred("What about forecasting?")`
+
+`r sk1()`
+
+If we knew what the future values were going to be, we could also calculate RMSE and compare models!
+
+## Data Partitioning
+
+Data partitioning -- dividing data into a **`r mygrn("training")`** set to fit the model and a **`r myblue("testing")`** set where we make predictions -- is a standard statistical technique. 
+
+Often the testing and training sets are divided up randomly (maybe many times) so you don't accidentally bias your experiment. 
+
+However, ***`r myred("we cannot remove data at random from a time series")`*** as it will impact all aspects of the analysis. 
+
+## Data Partitioning for Forecasting
+
+When we are dealing with time dependent data, we instead `r myred("systematically")` leave out data. 
+
+If we have data from times 1 to $t_{\text{max}}$ we choose a final window of data to leave out:
+
+- `r mygrn("training")`: times from 1 to $t_{\text{test}}$
+- `r myblue("testing")`: times from $t_{\text{test}}+1$ to $t_{\text{max}}$
+
+Then we fit the model just to the `r mygrn("training")` data, make the ***forecast*** from the model, and calculate RMSE just on the `r myblue("testing")` data.
+
+## Time Series and Forecasting Practical
+
+
+::: columns
+::: {.column width="60%"}
+
+`r sk1()`
+
+In the next practical, we're going to use our new time series methods on a new data set on `r mygrn("tree greenness")`. 
+
+`r sk1()`
+
+As part of this you'll practice all of the steps in the forecasting cycle (except the last).
+
+:::
+
+
+::: {.column width="10%"}
+
+:::
+
+
+::: {.column width="30%"}
+
+
+1. Define Goal
+2. Get Data 
+3. Explore/Visualize
+4. Pre-Processing 
+5. Partitioning 
+6. Modeling 
+7. Evaluation
+8. Implementation
+
 :::
 :::
 
- 
 
 
-
-
-
- 
