@@ -154,7 +154,7 @@ In base R, the `filter` function gives us an easy way to explore the effect of s
 *Short vs Long*
 
 ```{r, echo=TRUE}
-t<-1:length(airquality$Temp)
+t<-1:length(airquality$Wind)
 wind<-airquality$Wind
 ## centered
 FC5<- filter(wind, 
@@ -384,28 +384,192 @@ In order to relax the assumption of stationarity and allow for seasonality/perio
 
 `r sk1()`
 
-What does this mean? First a digression....
+What does this mean? 
+
+`r sk1()`
+
+First a digression....
 
 
 ## Differencing
 
 AR/ARMA models without explicit trend or periodic components can only describe data that are stationary. 
 
-It turns out that we fiddle with a non-stationary TS to get something that is stationary through ***differencing*** -- that is, computing the differences between consecutive data points (or at another fixed lag).
+`r sk1()`
+
+It turns out that we fiddle with a non-stationary TS to get something that is stationary through ***`r myred("differencing")`***:
+
+- computing the differences between consecutive data points (or at another fixed lag).
 
 -----------------------
 
 Lag-1 differencing removes trends from a TS:
 
-```{r}
+```{r, fig.align='center', fig.height=6, fig.width=10}
+Temps<-airquality$Temp
+par(mfrow=c(2,2))
+plot(t, Temps, type="l", lwd=2, 
+     ylab="Temps", xlab="Day", 
+     main="Temperature")
+acf(Temps)
+plot(diff(Temps), type="l", lwd=2, 
+     ylab="diff(Temps)", xlab="Day", 
+     main="diff(Temperature)")
+acf(diff(Temps))
 
 ```
 
 
+-----------------------
+
+Lag-$n$ differencing, where $n$ is the number if steps in a cycle, removes a seasonal signal from a TS:
+
+```{r, fig.align='center', fig.height=6, fig.width=10}
+ld<-as.vector(ldeaths)
+par(mfrow=c(2,2))
+plot(ld, type="l", lwd=2, 
+     ylab="deaths", xlab="Months", 
+     main="UK deaths")
+acf(ld)
+plot(diff(ld, lag=12), type="l", lwd=2, 
+     ylab="diff(deaths, lag=12)", xlab="Months", 
+     main="differenced UK deaths")
+acf(diff(ld))
+
+```
+
+## back to ARIMA
+
+Now we can get to ARIMA. If we define the Lag-$d$ differenced time series data as $y'_t$ then an ARIMA($p,d,q$) model is just: 
+
+$$
+\begin{align*}
+y'_t =~& \beta_0 + \beta_1 y'_{t-1} + \cdots + \beta_p y'_{t-p} \\
+& + \varepsilon_t + \theta_1 \varepsilon_{t-1} + \cdots \theta_q \varepsilon_{t-q} 
+\end{align*}
+$$
+That is, it's an ARMA model but on the ***`r myblue("differenced")`*** time series to take care of trends.
+
+$\Rightarrow$ like adding polynomial terms in our regression context. 
+
+
+## Fitting an ARIMA model in R
+
+One advantage of ARIMA modeling is that there are automatic ways to choose the order of your model (the $p, q$, and $d$). 
+
+This can be convenient when you are only interested in forecasting/prediction.
+
+`r sk1()`
+
+$\Rightarrow$ We can use the `auto.arima` function in the `forecast` package.
+
+---------------------------------------
+
+```{r, echo=TRUE}
+## lung data
+ld<-as.vector(ldeaths)
+m.ld<-forecast::auto.arima(ld)
+```
+
+`r sk1()`
+
+```{r, echo=TRUE, eval=FALSE}
+summary(m.ld)
+```
+
+
+```{r}
+summary(m.ld)
+```
+
+
+----------------------------
+
+Check the residuals:
+
+```{r, fig.align='center', fig.width=6, fig.height=5}
+par(mfrow=c(3,1), bty="n", mar = c(4,4,1,1))
+plot(m.ld$residuals)
+acf(m.ld$residuals, main="")
+hist(m.ld$residuals, main="")
+```
+
+---------------------------------------------
+
+Within-sample predictions:
+
+```{r, fig.align='center', fig.width=6, fig.height=5}
+plot(ld, xlab="month", ylab="deaths", type="l", 
+     col=1, lwd=2)
+lines(m.ld$fitted, col=2, lty=2, lwd=2)
+legend("topright", legend=c("data", "fit"), col=1:2, lty=1:2, lwd=2)
+```
+
+## Forecasting ahead:
+
+```{r, echo=TRUE}
+## forecasting at a 12 mo horizon
+f.ld<-forecast::forecast(m.ld, h=12)
+```
+
+```{r, fig.align='center', fig.width=6, fig.height=5}
+plot(ld, xlab="month", ylab="deaths", type="l", 
+     col=1, lwd=2, 
+     xlim=c(0, 84), ylim=c(600, 4000))
+lines(m.ld$fitted, col=2, lty=2, lwd=2)
+lines(72+1:12, f.ld$mean, col="dodgerblue", lwd=2)
+lines(72+1:12, f.ld$lower[,2], col="dodgerblue", lwd=2, lty=3)
+lines(72+1:12, f.ld$upper[,2], col="dodgerblue", lwd=2, lty=3)
+
+legend("topleft", legend=c("data", "fit", "FC"), col=c(1:2, "dodgerblue"), lty=c(1,2,1), lwd=2)
+```
+
+
+## Elaborating on ARIMA
+
+You can include multiple sets of differences in your model. 
+
+`r sk1()`
+
+Specifically, if your differencing reflects the number of time steps over which you observe a periodic pattern, you can add this extra bit on top and create a `r myred("SARIMA")` model.
+
+`r sk1()`
+
+This also requires a second set of variables ($P,Q$ and $D$) to specify what is effectively a second entire model built on the lagged dataset. 
+
+## Fun trick -- AR model of residuals
+
+Let's say you have time series data, and you had some other model that you wanted to fit -- maybe an ODE or even just a smoother. 
+
+Often you find that your predictions/forecasts aren't great because you don't account for autocorrelation in the ***`r mygrn("error")`*** 
+
+- if you were higher than expected at time $t-1$ you're likely to still be a bit high at time $t$. 
+
+
+`r myblue("How can we incorporate this?")`
+
+----------------------------------------
+
+It turns out we can do something really simple to correct for this extra autocorrelation and get better predictions:
+
+`r sk1()`
+
+
+1. Fit the model you want
+2. Fit an AR model to the residuals
+3. Make the prediction/forecast from these bits together.
+
+`r sk1()`
+
+This works surprisingly well -- we'll see an example of this in the practical. 
+
+## ARIMA vs regression approaches
+
+
+
+
 ## Outline of the rest
 
-- ARIMA (putting together AR + smoothing)
-- Putting and AR process on top of other models
 - More details on actually forecasting
   - training vs testing
   - predicting ahead (why it's tricky) -- can't use future predictors.
