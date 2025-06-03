@@ -230,13 +230,13 @@ Let's fit one more model then we'll talk about out of sample comparisons...
 
 ## Series Decomposition by Loess + ARIMA or Exponential Smoothing
 
-In the lecture portion, we mentioned that one can smooth or fit a model first and then fit an AR or ARIMA model to the residuals. We're going to show an example of this. In this approach the time series is first de-trended and de-seasonalized using something called ***loess*** smoothing. We're going to treat loess as something of a black box, an alternative to the other smoothing methods we've talked about. If you want more details you can take a look here: 
+In the lecture portion, we mentioned that one can smooth or fit a model first and then fit an AR or ARIMA model to the residuals. We're going to show an example of this. In this approach the time series is first de-trended and de-seasonalized using something called ***loess*** smoothing. We're going to treat loess as something of a black box -- an alternative to the other smoothing methods we've talked about. If you want more details you can take a look here: 
 
 
 After we've applied the loess smoother, the remaining stationary series is modeled using ARIMA (or another method if we select a different one). 
 
-We will use the `stl` function (also in the `forecast` package) to do our fitting. 
-Note, that `stl` (and the related `stlm`) also requires a UNIVARIATE time series object, like we used for the `auto.arima` function above. Further, this function is formally smoothing with lowess then fitting the ARIMA part is in the background using the `auto.arima` function as above. 
+We will use the `stl` function (in base R with forecasting functionality supported through the `forecast` package) to do our fitting. 
+Note, that `stl` (and the related `stlm`) also requires a UNIVARIATE time series object, like we used for the `auto.arima` function above. Further, this function is formally smoothing with lowess then fitting the ARIMA part in the background using the `auto.arima` function as above. 
  
 Below you can see the output for the STL + ARIMA model
 
@@ -262,10 +262,10 @@ plot(stl.fit.arima$residuals)
 acf(stl.fit.arima$residuals)
 hist(stl.fit.arima$residuals)
 ```
-Again, this looks pretty good, although the variance is non-constant. 
+Again, this looks pretty good, although the variance is again non-constant -- but these models can't really handle this. 
 
 
-Now that we are comfortable with the model set up, we can generate forecasts. We will do that here for the ARIMA model.
+Now that we are comfortable with the model set up, we can generate forecasts. We will do that here for the loess + ARIMA model.
 
 ```{r}
 # We can generate forecasts with the forecast() function in the
@@ -277,6 +277,15 @@ stl.arima.forecasts <- forecast(stl.fit.arima, h = 30)
 #    prediction intervals
 stl.arima.forecasts
 
+```
+
+We can look at what is in this object using names:
+```{r}
+names(stl.arima.forecasts)
+```
+Here the fits and residuals from the original model are included. For our forecasting, the bits we're interested in are `mean` which gives the mean forecast, and then `lower` and `upper` hold the lower and upper bounds (both at 80% and 95% levels), respectively. 
+
+```{r, echo=FALSE, eval=FALSE}
 # Notice that it is not straightforward to get the point forecasts
 #   out - we have to convert it to a data frame first.
 str(stl.arima.forecasts)
@@ -294,45 +303,58 @@ plot(stl.arima.forecasts)
 ```
 
 
-### Comparing forecasts
+## Comparing forecasts
 
-Let's compare them to the observed test series values.
+Let's compare the forecasts of both the naive ARIMA and the loess-ARIMA to the observed test series values.
 
 ```{r}
 
 # First make a data frame with both in there
 compare <- data.frame(time = seq(1:30),
                       observed = test$observation,
-                      forecast = stl.df$`Point Forecast`)
+                      forecast1 = arima.fc$mean,
+                      forecast2 = stl.arima.forecasts$mean)
 
 # What do you think??
 ggplot(data = compare, aes(x = time, y = observed))+
   geom_line(color = "blue")+
   geom_point(color = "blue")+
-  geom_line(aes(y = forecast), color = "red")+
-  geom_point(aes(y = forecast), color = "red")
+  geom_line(aes(y = forecast1), color = "red", lty=2)+
+  geom_point(aes(y = forecast1), color = "red", pch=1)+
+  geom_line(aes(y = forecast2), color = "darkred", lty=2)+
+  geom_point(aes(y = forecast2), color = "darkred", pch=1)
 
 ```
 
-Finally, we can generate some accuracy metrics and save them in a data frame for later use.
+Notice that the two models give a bit different predictions. The loess+ARIMA seems less variable, and potentially less biased. But how can we tell for sure? 
+
+The best way to tell for sure is to generate some accuracy metrics and save them in a data frame for later use. We saw RMSE in the lecture. A second metric is Mean Absolute Error. This is given by
+$$
+\text{MAE} = \frac{1}{n} \sum_{i=1}^n | y_i - \hat{y}_i|
+$$
+These are already implemented in the `Metrics` package that we loaded at the beginning of the practical. 
 
 ```{r}
-# Last - let's get the RMSE and MAE out. We can use the Metrics
-#    package for this. While we're at it, let's save them to a data
-#    set for later.
+# Let's get the RMSE and MAE out and save them # for later.
 
-stl.rmse <- rmse(compare$observed, compare$forecast)
-stl.mae <- mae(compare$observed, compare$forecast)
+arima.comps <- c(rmse = rmse(compare$observed,
+                                compare$forecast1),
+                    mae = mae(compare$observed,
+                              compare$forecast1))
 
-(comparisonDF <- data.frame(model = "stl",
-                           RMSE = stl.rmse,
-                           MAE = stl.mae))
+
+stl.comps <- c(rmse = rmse(compare$observed,
+                                compare$forecast2),
+                    mae = mae(compare$observed,
+                              compare$forecast2))
+comps.DF<-as.data.frame(rbind(arima.comps, stl.comps))
+
+comps.DF
 
 ```
 
-An additional argument in `stlm()` exists that allows for the inclusion of extra predictors into an ARIMA-based model post-decomposition. This function requires the predictors to exist in a separate matrix rather than inside of a data frame, which makes it somewhat challenging to use if you are unfamiliar with using matrices in R.
 
-### Exponential Smoothing
+## Exponential Smoothing
 
 If you want to try out exponential smoothing, you will use `method = "ETS"` and you can specify different model types using `etsmodel = "ANN"` for example. Other potential models can be found in the lecture slides (e.g. "MNN", "AAA", etc.). Note that because we have de-trended and de-seasonalized the series, we do not really need the latter two letters to change from "N".
 
@@ -344,23 +366,45 @@ summary(stl.fit.ets$model)
 ```
 
 
-## Linear Regression
+## Extra predictors with Linear Regression
 
-#### Slide 29-32
+In addition to the observation time series itself, we have a bunch of other predictor information. Maybe some of it will be useful for forecasting!
 
-Fortunately, there are several kinds of time series models that accommodate extra predictors in a more intuitive way. The most obvious starting place is linear regression! We have a lot of predictors in our data set to choose from. Feel free to play around with them! For time's sake, I am going to use mean temperature and its one day lag only. This part is probably not too different from what you are used to doing for non-time series data. The only major difference is in what predictors we choose to include to account for autocorrelation, trend, and seasonality.
+We could extend an ARIMA type model. For example, an additional argument in `stlm()` exists that allows for the inclusion of extra predictors into an ARIMA-based model post-decomposition. However, this function requires the predictors to exist in a separate matrix rather than inside of a data frame, which makes it somewhat challenging to use if you are unfamiliar with using matrices in R. Interpretation can also be more difficult. 
+
+So let's go back and use our linear modeling approach, but add in a bit of spicy TS modeling aspects. We have a lot of predictors in our data set to choose from. Feel free to play around with them! For time's sake, I am going to focus on lagged versions of mean temperature. Note that when we're predicting into the future you usually don't know what tomorrow's temperature will be, so we often don't include the temperature of the day itself. Let's take a look at this predictor:
+```{r}
+plot(train$meanTempLag1, type="l")
+```
+
+We can fit a really simple model here, and examine the residuals.
 
 ```{r}
 
 # We will start with just our predictors
-lm.fit <- lm(observation ~ meanTemp + meanTempLag1, 
+lm.fit <- lm(observation ~ meanTempLag1, 
              data = train)
 summary(lm.fit)
-acf(lm.fit$residuals, 365) # Still a lot of seasonality left
+acf(lm.fit$residuals, 365) 
 
 ```
 
-Let's add the sine and cosine terms we discussed into the data set to include them in the model. We will need to do this for `train` and `test`. Note that if you were to be forecasting beyond test, you would need to generate these terms for those time points as well.
+There is still a lot of seasonal signal left! So we know this isn't a great model. Also, the temperature TS itself is really noisy, and further, we maybe expect that how many leaves are out on trees might depend on not just the temperature today, but maybe over the last week. So let's start by filtering the ***temperature*** to smooth it out. Then I'll fit a simple linear model of the filtered data.
+
+```{r}
+## 7 day moving average, not including today
+train$meanTempMA7 <- as.vector(stats::filter(ts(train$meanTemp), 
+                           filter = c(0,rep(1/7, 7)),
+                           sides = 1))
+plot(train$meanTempMA7, type="l")
+```
+
+The only down-side is that the first few terms are now going to be NAs, so we'll have to trim when we fit:
+```{r}
+train$meanTempMA7[1:10]
+```
+
+Let's add the sine and cosine terms into the data set to include them in the model for both the eventual model of the greeness and also for the temperature. We will need to do this for `train` and `test`. Note that if you were to be forecasting beyond test, you would need to generate these terms for those time points as well.
 
 ```{r}
 
@@ -374,25 +418,38 @@ test$cosSeason <- cos((2*pi*test$X)/365)
 
 ```
 
-Back to business! Let's add in the sine and cosine terms for seasonality.
+So first build a model for estimating average temperature over the previous 7 days using an ARIMA model:
+```{r}
+temp.lm<-auto.arima(train$meanTempMA7)
+summary(temp.lm)
+acf(temp.lm$residuals)
+```
+Pretty good! Now we forecast this ahead and add it to the testing data set. Note that this is already lagged....
+```{r}
+temp.fc<-forecast(temp.lm, 30)
+
+test$meanTempMA7<-temp.fc$mean
+```
+
+NOTE: this is a point forecast and is uncertain. We will technically be underestimating the amount of noise in our full forecast. 
+
+
+Back to the main forecast! Let's add in the sine and cosine terms for seasonality.
 
 ```{r}
 # Add seasonality via sine and cosine terms
-lm.fit <- lm(observation ~ sinSeason + cosSeason + meanTemp +
-               meanTempLag1, 
+lm.fit <- lm(observation ~ sinSeason + cosSeason + meanTempMA7, 
              data = train)
 
 summary(lm.fit)
 acf(lm.fit$residuals, 365)
 ```
-
-Finally, we can add in the trend.
+We're still missing a lot....we can try to add in the trend.
 
 ```{r}
 
 # Add trend
-lm.fit <- lm(observation ~ X + sinSeason + cosSeason + meanTemp +
-               meanTempLag1, 
+lm.fit <- lm(observation ~ X + sinSeason + cosSeason  + meanTempMA7, 
              data = train)
 
 summary(lm.fit)
@@ -417,65 +474,56 @@ lm.forecasts <- forecast(lm.fit, h = 30, newdata = test)
 # The forecast function gives us point forecasts, as well as
 #    prediction intervals
 lm.forecasts
-
-# Notice that it is not straightforward to get the point forecasts
-#   out - we have to convert it to a data frame first.
-str(lm.forecasts)
-
-lm.df <- as.data.frame(lm.forecasts)
 ```
 
-We can visualize the forecasts against the observed values if we add them to our `test` data set.
+We can visualize the forecasts against the observed values if we add them to our `compare` data set.
 
 ```{r}
 
 # Add the forecasts to test
-test$forecast <- lm.df$`Point Forecast`
+test$forecast <- lm.forecasts$mean
 
-# Let's look at the forecasts!
+# and to the compare set
+compare$forecast3 <- lm.forecasts$mean
 
-# What do you test??
+# What do you think??
 ggplot(data = compare, aes(x = time, y = observed))+
   geom_line(color = "blue")+
   geom_point(color = "blue")+
-  geom_line(aes(y = forecast), color = "red")+
-  geom_point(aes(y = forecast), color = "red")
+  geom_line(aes(y = forecast1), color = "red", lty=2)+
+  geom_point(aes(y = forecast1), color = "red", pch=1)+
+  geom_line(aes(y = forecast2), color = "darkred", lty=2)+
+  geom_point(aes(y = forecast2), color = "darkred", pch=1)+
+  geom_line(aes(y = forecast3), color = "brown", lty=2)+
+  geom_point(aes(y = forecast3), color = "brown", pch=1)
 ```
+
+This linear model is much different! It's partly because we don't include an AR term in the model and also because we are including a forecast of the temperature, which is relatively smooth.
 
 Finally we will generate and save the accuracy metrics again.
 
 ```{r}
 
-# Last - let's get the RMSE and MAE out. We can use the Metrics
-#    package for this. While we're at it, let's save them to a data
-#    set for later.
+lm.comps <- c(rmse = rmse(test$observation, test$forecast),
+              mae = mae(test$observation, test$forecast))
 
-lm.rmse <- rmse(test$observation, test$forecast)
-lm.mae <- mae(test$observation, test$forecast)
-
-newrow <- c("lm", lm.rmse, lm.mae)
-
-(comparisonDF <- rbind(comparisonDF, newrow))
-
+comps.DF <-as.data.frame(cbind(model = c("arima", "stl", "lm"), rbind(arima.comps, stl.comps, lm.comps)))
+comps.DF
 ```
 
 # Evaluate and Compare Performance
 
-#### Slide 10-12
-
-We have been saving performance metrics for all of our models so far - let's check them out with a graph! Remember - for RMSE and MAE, lower is better. Feel free to take the inverse and look at that if it is confusing to consider this visually.\
+We have been saving performance metrics for all of our models so far - let's check them out with a graph! Remember - for RMSE and MAE, lower is better. Feel free to take the inverse and look at that if it is confusing to consider this visually.
 
 ```{r}
-comparisonDF$RMSE <- as.numeric(comparisonDF$RMSE)
-comparisonDF$MAE <- as.numeric(comparisonDF$MAE)
 
 # Which model did the best based on RMSE?
-ggplot(data = comparisonDF, aes(x = model, y = RMSE))+
+ggplot(data = comps.DF, aes(x = model, y = rmse))+
   geom_bar(stat = "identity", fill = "slateblue1")+
   labs(title = "RMSE Comparison")
 
 # Which model did the best based on MAE?
-ggplot(data = comparisonDF, aes(x = model, y = MAE))+
+ggplot(data = comps.DF, aes(x = model, y = mae))+
   geom_bar(stat = "identity", fill = "plum")+
   labs(title = "MAE Comparison")
 ```
@@ -486,6 +534,4 @@ If we were to want to forecast tree greenness for real, we could try to fine tun
 
 To generate the real forecasts, we would re-fit the best model using *all* of the data we have. Using the new model parameters, we would then make forecasts out to the desired horizon (in this case 30 days out).
 
-If your chosen model is the ensemble, you would re-fit *all* of the models with *all* of the data and then multiply the forecasts you make by the weights you already generated.
-
-**NOTE:** When you generate the forecasts, you will also have to forecast any predictors you used in your model!! For example, if we used the temperature in our model we would need to either find forecasted temperatures for our horizon or generate other forecasting models to build our own temperature forecasts.
+**REMEMBER:** When you generate the forecasts, you will also have to forecast any predictors you used in your model!! For example, if we used the temperature in our model we would need to either find forecasted temperatures for our horizon or generate other forecasting models to build our own temperature forecasts.
