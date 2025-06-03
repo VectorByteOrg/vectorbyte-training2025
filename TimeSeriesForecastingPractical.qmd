@@ -203,7 +203,7 @@ plot(arima.fc)
 The forecast isn't too bad. We can also look at the fit plus forecast bounds like in the lectures using base R (note I'm plotting the TESTING data also):
 
 ```{r, fig.align='center', fig.width=6, fig.height=5}
-plot(as.vector(phen$observation), xlab="month", ylab="pheno", type="l", xlim=c(0, 1560),
+plot(as.vector(phen$observation), xlab="day", ylab="pheno", type="l", xlim=c(0, 1560),
      col=1, lwd=2, ylim=c(0.25, 0.55))
 lines(as.vector(fit.arima$fitted), col=2, lty=2, lwd=2)
 lines(1528+1:30, arima.fc$mean, col="dodgerblue", lwd=2)
@@ -212,7 +212,20 @@ lines(1528+1:30, arima.fc$upper[,2], col="dodgerblue", lwd=2, lty=3)
 
 legend("topleft", legend=c("data", "fit", "FC"), col=c(1:2, "dodgerblue"), lty=c(1,2,1), lwd=2)
 ```
-Pretty good! Let's fit one more model then we'll talk about out of sample comparisons...
+Pretty good! We can also just zoom in on the last part of the plot.
+
+```{r, fig.align='center', fig.width=6, fig.height=5}
+plot(as.vector(phen$observation), xlab="day", ylab="pheno", type="l", xlim=c(1160, 1560),
+     col=1, lwd=2, ylim=c(0.3, 0.525))
+lines(as.vector(fit.arima$fitted), col=2, lty=2, lwd=2)
+lines(1528+1:30, arima.fc$mean, col="dodgerblue", lwd=2)
+lines(1528+1:30, arima.fc$lower[,2], col="dodgerblue", lwd=2, lty=3)
+lines(1528+1:30, arima.fc$upper[,2], col="dodgerblue", lwd=2, lty=3)
+
+legend("topleft", legend=c("data", "fit", "FC"), col=c(1:2, "dodgerblue"), lty=c(1,2,1), lwd=2)
+```
+
+Let's fit one more model then we'll talk about out of sample comparisons...
 
 
 ## Series Decomposition by Loess + ARIMA or Exponential Smoothing
