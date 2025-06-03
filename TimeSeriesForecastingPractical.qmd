@@ -75,13 +75,20 @@ ggplot(data = phen, aes(x = DATE, y = observation))+
   geom_point() 
 ```
 
-We can explore some of the predictors we have available as well to see if the patterns in the predictors match up. Temperature seems to share a similar seasonal pattern to our variable of interest. Take some time here and explore some of the other predictors to see how they might match up.
+We can explore some of the predictors we have. There are a lot of them! 
+```{r}
+names(phen)
+```
+
+We can plot some of these and see if it seems like the the patterns in the predictors match up with our main time series. For example, let's say we choose `meanTemp`: 
 
 ```{r, fig.align='center', fig.height=4, fig.width=5}
 
 ggplot(data = phen, aes(x = DATE, y = meanTemp))+   
   geom_point() 
 ```
+
+We can see that temperature seems to share an annual seasonal pattern with our variable of interest. Take some time here and explore some of the other predictors to see how they might match up.
 
 In order to explore our data more easily in R, and also to prepare the data for many of the forecasting functions, we want to formally declare that the data are a time series by turning them into a time series object in R. We do that by using the `ts()` function, which is available in base R. Within the `ts()` function, we need to specify a frequency. The documentation does a good job of explaining what frequency is -- you can take a look here:
 
@@ -139,60 +146,111 @@ test <- phen[testN:n,] ## or phen[-1:trainN,]
 nrow(test) # Should be 30
 ```
 
+Notice here that we've got ALL the data still in the testing dataset:
+```{r}
+summary(test)
+```
+
+
 # Modeling - *Woot Woot 🥳*
 
 We discussed several kinds of models during the lecture. There are many more model types out there that you may encounter, but this set should get you a good start and will provide you with the foundation you need to continue learning on your own should you need to.
 
 In each section, we will fit the model to the training set, generate forecasts to compare to the test set, and generate RMSE and MAE for each model on its test set performance to evaluate each one and compare them in the next section.
 
-## Series Decomposition by Loess + ARIMA or Exponential Smoothing
+## Simple modeling with ARIMA
 
-#### Slide 22-27 & 40-43
-
-In this approach the time series is first de-trended and de-seasonalized using loess smoothing. Then the remaining stationary series is modeled using ARIMA (or another method if we select a different one). The ARIMA part is fitted via an automated process in the background so we do not have to manually specify p, d, and q. For more information about this process, see the documentation for the `auto.arima()` function.
-
-If you want to try out exponential smoothing, you will use `method = "ETS"` and you can specify different model types using `etsmodel = "ANN"` for example. Other potential models can be found in the lecture slides (e.g. "MNN", "AAA", etc.). Note that because we have de-trended and de-seasonalized the series, we do not really need the latter two letters to change from "N".
-
-First, we have to turn our training data into a time series object like we did with the whole series for plotting.
+We know that ARIMA can capture some trends, but is typically less good at seasonal patterns -- and we've got some definite seasonal patterns. But let's give it a go as our default modeling approach first. Remember that this doesn't use any additional predictors, just the original time series, as a time series object:
 
 ```{r}
-
-# STL requires a UNIVARIATE time series object
 ts.train <- ts(train$observation, frequency = 365)
-
-
-
 ```
 
-Below you can see the output for the STL + ARIMA and an ETS model
+
+
+The ARIMA part is fitted via an automated process in the background so we do not have to manually specify $p, d$, and $q$. For more information about this process, see the documentation for the `auto.arima()` function.
+
+Note that this is really really slow....
+
+```{r, cache=TRUE}
+fit.arima<-auto.arima(ts.train)
+```
+
+
+```{r}
+summary(fit.arima)
+```
+As always we first check the residuals -- we can look across time, at the ACF, and at the histogram
+```{r, fig.align='center', fig.width=5, fig.height=5}
+par(mfrow=c(3,1), bty="n", mar = c(4,4,1,1))
+plot(fit.arima$residuals)
+acf(fit.arima$residuals, main="")
+hist(fit.arima$residuals, main="")
+```
+
+Not terrible, although we have non-constant variance in different parts of the space. So let's make our first set of forecasts for this model, 30 days out:
+
+```{r}
+arima.fc<-forecast(fit.arima, h=30)
+```
+
+Then we can make a default plot of the forecast:
+
+```{r}
+plot(arima.fc)
+```
+
+The forecast isn't too bad. We can also look at the fit plus forecast bounds like in the lectures using base R (note I'm plotting the TESTING data also):
+
+```{r, fig.align='center', fig.width=6, fig.height=5}
+plot(as.vector(phen$observation), xlab="month", ylab="pheno", type="l", xlim=c(0, 1560),
+     col=1, lwd=2, ylim=c(0.25, 0.55))
+lines(as.vector(fit.arima$fitted), col=2, lty=2, lwd=2)
+lines(1528+1:30, arima.fc$mean, col="dodgerblue", lwd=2)
+lines(1528+1:30, arima.fc$lower[,2], col="dodgerblue", lwd=2, lty=3)
+lines(1528+1:30, arima.fc$upper[,2], col="dodgerblue", lwd=2, lty=3)
+
+legend("topleft", legend=c("data", "fit", "FC"), col=c(1:2, "dodgerblue"), lty=c(1,2,1), lwd=2)
+```
+Pretty good! Let's fit one more model then we'll talk about out of sample comparisons...
+
+
+## Series Decomposition by Loess + ARIMA or Exponential Smoothing
+
+In the lecture portion, we mentioned that one can smooth or fit a model first and then fit an AR or ARIMA model to the residuals. We're going to show an example of this. In this approach the time series is first de-trended and de-seasonalized using something called ***loess*** smoothing. We're going to treat loess as something of a black box, an alternative to the other smoothing methods we've talked about. If you want more details you can take a look here: 
+
+
+After we've applied the loess smoother, the remaining stationary series is modeled using ARIMA (or another method if we select a different one). 
+
+We will use the `stl` function (also in the `forecast` package) to do our fitting. 
+Note, that `stl` (and the related `stlm`) also requires a UNIVARIATE time series object, like we used for the `auto.arima` function above. Further, this function is formally smoothing with lowess then fitting the ARIMA part is in the background using the `auto.arima` function as above. 
+ 
+Below you can see the output for the STL + ARIMA model
 
 ```{r}
 # There are several options that we can customize in the stl()
 #   function, but the one we have to specify is the s.window. 
 #   Check out the documentation and play around with some of the
 #   other options if you would like.
-stl.fit.arima <- stlm(ts.train, s.window = "periodic", method = "arima")
+stl.fit.arima <- stlm(ts.train, 
+                      s.window = "periodic",
+                      method = "arima")
 
 summary(stl.fit.arima$model)
 
-
-stl.fit.ets <- stlm(ts.train, s.window = "periodic", method = "ets",
-                 etsmodel = "ANN")
-
-summary(stl.fit.ets$model)
-
-
 ```
+
 
 Let's look at the residuals to see if there is anything left unaccounted for.
 
-```{r}
-# Check for leftover autocorrelation in the residuals
+```{r, fig.align='center', fig.width=5, fig.height=5}
+par(mfrow=c(3,1), bty="n", mar = c(4,4,1,1))
+plot(stl.fit.arima$residuals)
 acf(stl.fit.arima$residuals)
-
-# These models still do assume normal residuals - these look good!
 hist(stl.fit.arima$residuals)
 ```
+Again, this looks pretty good, although the variance is non-constant. 
+
 
 Now that we are comfortable with the model set up, we can generate forecasts. We will do that here for the ARIMA model.
 
@@ -221,6 +279,9 @@ Let's visualize the forecasts! For the basic models available in the forecast pa
 plot(stl.arima.forecasts)
 
 ```
+
+
+### Comparing forecasts
 
 Let's compare them to the observed test series values.
 
@@ -257,6 +318,18 @@ stl.mae <- mae(compare$observed, compare$forecast)
 ```
 
 An additional argument in `stlm()` exists that allows for the inclusion of extra predictors into an ARIMA-based model post-decomposition. This function requires the predictors to exist in a separate matrix rather than inside of a data frame, which makes it somewhat challenging to use if you are unfamiliar with using matrices in R.
+
+### Exponential Smoothing
+
+If you want to try out exponential smoothing, you will use `method = "ETS"` and you can specify different model types using `etsmodel = "ANN"` for example. Other potential models can be found in the lecture slides (e.g. "MNN", "AAA", etc.). Note that because we have de-trended and de-seasonalized the series, we do not really need the latter two letters to change from "N".
+
+```{r}
+stl.fit.ets <- stlm(ts.train, s.window = "periodic", method = "ets",
+                 etsmodel = "ANN")
+
+summary(stl.fit.ets$model)
+```
+
 
 ## Linear Regression
 
