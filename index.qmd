@@ -10,6 +10,23 @@ format:
       margin-width: 1000px
 ---
 
+::: columns
+::: {.column width="30%"}
+
+<center>
+
+
+[![](graphics/VectorByte-logo_lg.png)](https://www.vectorbyte.org)
+
+</center>
+
+:::
+
+::: {.column width="5%"}
+
+:::
+
+::: {.column width="65%"}
 
 
 ***Check out our [about](about.qmd) and [schedule](schedule2025.qmd) pages to continue.***
@@ -18,7 +35,6 @@ Information about pre-workshop preparation -- including software installation, e
 
 <br> <br> <br>
 
-<center>
-[![](graphics/VectorByte-logo_lg.png){width="4in"}](https://www.vectorbyte.org)
-<br>
-</center>
+:::
+
+:::

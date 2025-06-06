@@ -44,7 +44,7 @@ We are assuming familiarity with `R` basics as well as at least introductory sta
 
 ## Introduction to the Workshop
 
--   [Lecture -- Coming Soon](VB_IntroTimeDepData.qmd)
+-   [Lecture](VB_IntroTimeDepData.qmd)
 
 <br> <br>
 
@@ -84,13 +84,10 @@ We are assuming familiarity with `R` basics as well as at least introductory sta
 
 ## Basics of Forecasting Time Series using `R`
 
--   [Lecture - coming soon](VB_TimeSeries.qmd)
--   [Practical - coming soon](VB_TimeSeriesForecastingPractical.qmd)
--   Datasets: 
-    + [NEONphenologyClean.csv](data/NEONphenologyClean.csv)
-    + [phenologyWeather.csv](data/phenologyWeather.csv)
-    + [NEONbeetlesChallenge.csv](data/NEONbeetlesChallenge.csv)
-    + [tinyForecastingChallengeCovs.csv](data/tinyForecastingChallengeCovs.csv)
+-   [Lecture](VB_TimeSeries.qmd)
+-   [Practical](VB_TimeSeriesForecastingPractical.qmd)
+-   Dataset: [NEONphenologyClean.csv](data/NEONphenologyClean.csv)
+
 
 <br> <br>
 

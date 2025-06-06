@@ -1,6 +1,6 @@
 ---
 title: "2025 Training Schedule"
-description: "Draft schedule for synchronous training sessions"
+description: "Schedule for in-person training sessions"
 format:
   html:
     toc: true
@@ -19,9 +19,9 @@ Information about pre-workshop preparation -- including software installation, e
 
 # 13 June 2025
 
-| Time | Activity | Materials |
-|------|----------|-----------|
-|      | Arrival  |           |
+| Time | Activity | 
+|------|----------|
+|      | Arrival  | 
 
 <br> <br> <br>
 
@@ -80,12 +80,6 @@ Information about pre-workshop preparation -- including software installation, e
 <br>
 <br>
 <br>
-
-# 26 July 2024
-
-| Time | Activity | Materials |
-|------|----------|-----------|
-|      | Travel   |           |
 
 # Post-workshop
 
