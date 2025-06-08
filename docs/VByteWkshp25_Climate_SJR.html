@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.23">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Sadie J. Ryan">
+<meta name="dcterms.date" content="2025-06-06">
+
+<title>VectorByte Methods Training: `Climate’ variables for time-series analyses – VectorByte Training 2025</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-226bd0f977fa82dfae4534cac220d79a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-28b30d3fbfd08f0e14ecc68248e78738.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    <img src="./graphics/vblogoedit.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">VectorByte Training 2025</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./schedule2025.html"> 
+<span class="menu-text">Schedule</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./materials.html"> 
+<span class="menu-text">Materials</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/VectorByteOrg/vectorbyte-training2024"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/vectorbite_rcn"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#section-1.-choice-and-acquisition" id="toc-section-1.-choice-and-acquisition" class="nav-link active" data-scroll-target="#section-1.-choice-and-acquisition">Section 1. Choice and Acquisition</a>
+  <ul class="collapse">
+  <li><a href="#choice" id="toc-choice" class="nav-link" data-scroll-target="#choice">Choice</a></li>
+  <li><a href="#scale" id="toc-scale" class="nav-link" data-scroll-target="#scale">Scale</a></li>
+  <li><a href="#acquisition" id="toc-acquisition" class="nav-link" data-scroll-target="#acquisition">Acquisition</a></li>
+  </ul></li>
+  <li><a href="#section-2-daymet-point-extraction-example" id="toc-section-2-daymet-point-extraction-example" class="nav-link" data-scroll-target="#section-2-daymet-point-extraction-example">Section 2: DAYMET point extraction example</a>
+  <ul class="collapse">
+  <li><a href="#choose-a-location" id="toc-choose-a-location" class="nav-link" data-scroll-target="#choose-a-location">Choose a location</a></li>
+  <li><a href="#then-navigate-to-the-daymet-site" id="toc-then-navigate-to-the-daymet-site" class="nav-link" data-scroll-target="#then-navigate-to-the-daymet-site">Then navigate to the DAYMET site</a></li>
+  <li><a href="#locate-the-single-pixel-extraction-tool" id="toc-locate-the-single-pixel-extraction-tool" class="nav-link" data-scroll-target="#locate-the-single-pixel-extraction-tool">Locate the Single Pixel Extraction Tool</a></li>
+  <li><a href="#input-your-coordinates-or-navigate-to-the-location-you-want-on-their-map" id="toc-input-your-coordinates-or-navigate-to-the-location-you-want-on-their-map" class="nav-link" data-scroll-target="#input-your-coordinates-or-navigate-to-the-location-you-want-on-their-map">Input your coordinates, or navigate to the location you want on their map</a></li>
+  </ul></li>
+  <li><a href="#section-3-pulling-a-local-weather-stations-data-using-noaa-access" id="toc-section-3-pulling-a-local-weather-stations-data-using-noaa-access" class="nav-link" data-scroll-target="#section-3-pulling-a-local-weather-stations-data-using-noaa-access">Section 3: Pulling a local weather station’s data using NOAA access</a>
+  <ul class="collapse">
+  <li><a href="#how-to-download-historical-weather-data-from-noaa-in-14-easy-steps" id="toc-how-to-download-historical-weather-data-from-noaa-in-14-easy-steps" class="nav-link" data-scroll-target="#how-to-download-historical-weather-data-from-noaa-in-14-easy-steps">How to Download Historical Weather Data from NOAA in 14 Easy Steps</a>
+  <ul class="collapse">
+  <li><a href="#step-1" id="toc-step-1" class="nav-link" data-scroll-target="#step-1">Step 1</a></li>
+  <li><a href="#step-2" id="toc-step-2" class="nav-link" data-scroll-target="#step-2">Step 2</a></li>
+  <li><a href="#step-3" id="toc-step-3" class="nav-link" data-scroll-target="#step-3">Step 3</a></li>
+  <li><a href="#step-4" id="toc-step-4" class="nav-link" data-scroll-target="#step-4">Step 4</a></li>
+  <li><a href="#step-5" id="toc-step-5" class="nav-link" data-scroll-target="#step-5">Step 5</a></li>
+  <li><a href="#step-6" id="toc-step-6" class="nav-link" data-scroll-target="#step-6">Step 6</a></li>
+  <li><a href="#step-7" id="toc-step-7" class="nav-link" data-scroll-target="#step-7">Step 7</a></li>
+  <li><a href="#step-8" id="toc-step-8" class="nav-link" data-scroll-target="#step-8">Step 8</a></li>
+  <li><a href="#step-9" id="toc-step-9" class="nav-link" data-scroll-target="#step-9">Step 9</a></li>
+  <li><a href="#step-10" id="toc-step-10" class="nav-link" data-scroll-target="#step-10">Step 10</a></li>
+  <li><a href="#step-11" id="toc-step-11" class="nav-link" data-scroll-target="#step-11">Step 11</a></li>
+  <li><a href="#step-12" id="toc-step-12" class="nav-link" data-scroll-target="#step-12">Step 12</a></li>
+  <li><a href="#step-13" id="toc-step-13" class="nav-link" data-scroll-target="#step-13">Step 13</a></li>
+  <li><a href="#step-14" id="toc-step-14" class="nav-link" data-scroll-target="#step-14">Step 14</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#section-4-using-google-earth-engine-to-retrieve-eo-data" id="toc-section-4-using-google-earth-engine-to-retrieve-eo-data" class="nav-link" data-scroll-target="#section-4-using-google-earth-engine-to-retrieve-eo-data">Section 4: Using Google Earth Engine to retrieve EO data</a>
+  <ul class="collapse">
+  <li><a href="#navigating-to-the-code-editor" id="toc-navigating-to-the-code-editor" class="nav-link" data-scroll-target="#navigating-to-the-code-editor">Navigating to the Code Editor</a></li>
+  <li><a href="#your-turn" id="toc-your-turn" class="nav-link" data-scroll-target="#your-turn">YOUR TURN!!</a></li>
+  </ul></li>
+  <li><a href="#section-5-last-notes-and-caveats" id="toc-section-5-last-notes-and-caveats" class="nav-link" data-scroll-target="#section-5-last-notes-and-caveats">Section 5: Last notes and caveats</a>
+  <ul class="collapse">
+  <li><a href="#eo-vs-weather-station-data" id="toc-eo-vs-weather-station-data" class="nav-link" data-scroll-target="#eo-vs-weather-station-data">EO vs Weather station data</a></li>
+  <li><a href="#weather-station-data" id="toc-weather-station-data" class="nav-link" data-scroll-target="#weather-station-data">Weather Station Data</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">VectorByte Methods Training: `Climate’ variables for time-series analyses</h1>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Sadie J. Ryan </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            University of Florida and VectorByte
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 6, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="section-1.-choice-and-acquisition" class="level1">
+<h1>Section 1. Choice and Acquisition</h1>
+<section id="choice" class="level2">
+<h2 class="anchored" data-anchor-id="choice">Choice</h2>
+<p>Before you dive into products, or just do what someone else did, think about the biological mechanisms you might be exploring. Think about what meteorological or climate data corresponds to the mechanism.</p>
+<p>Example: mosquitoes (pick your species of choice)</p>
+<ul>
+<li><p>When does temperature limit your mosquito of interest, and how?</p>
+<ul>
+<li><p>Is minimum temperature likely to be most important?</p></li>
+<li><p>What about maximum temperature?</p></li>
+</ul></li>
+</ul>
+<p>Create reasonable hypotheses for mechanistic processes</p>
+<p>Think about how these differ among temperate vs.&nbsp;tropical vs.&nbsp;boreal</p>
+<p><img src="images/VB_S1Fig1.jpeg" class="img-fluid"></p>
+</section>
+<section id="scale" class="level2">
+<h2 class="anchored" data-anchor-id="scale">Scale</h2>
+<p>You’ve decided minimum temperature will be important, but when and for how long?</p>
+<p>For example, think about temporal scale:</p>
+<ul>
+<li>Do you need to know the temperature of the coldest month? Minimum temperature in an hour in a day?</li>
+<li>First month in which a daily minimum temperature is exceeded? (Thresholds)</li>
+<li>Average v. cumulative measures (think temperature and precipitation)</li>
+</ul>
+<p>We also think about spatial scale. A bit of Tobler’s law –- how far does the effect carry (derived from the ‘law’ that things that are closer are more similar). So we think about various “geographic” considerations for met/climate variables:</p>
+<ul>
+<li>Is the nearest weather station useful for your organism of interest, is interpolation of data reflecting the likely response at the location?</li>
+<li>Where are measurements made?</li>
+<li>Is ground surface temperature equivalent to air temperature, and when does it matter?</li>
+<li>Does rain absorb into the surface or sit on it?</li>
+</ul>
+</section>
+<section id="acquisition" class="level2">
+<h2 class="anchored" data-anchor-id="acquisition">Acquisition</h2>
+<p>Often we’re going to need to focus on making the best of things.</p>
+<p>Unless you have a weather station logging your variables of interest next to your trapping/collecting sites, you will use proxies in some way.</p>
+<ul>
+<li><p>If your data are time series, you need regularly spaced, consistent observation or modeled products</p></li>
+<li><p>Most ‘weather’ products are modeled (interpolated) in some way</p>
+<ul>
+<li><p>Read the documentation carefully, and know what it is</p></li>
+<li><p>Imperfect is often still useful, but may have important limitations</p></li>
+</ul></li>
+<li><p>EOS products are also modeled, and spatiotemporal aggregations will also determine their utility</p>
+<p>Beware of apparent consistency</p></li>
+</ul>
+<p>Today, we will be exploring three examples:</p>
+<ul>
+<li>Point extraction of Daymet data
+<ul>
+<li>Useful for USA-based studies</li>
+<li>High frequency data availability</li>
+<li>Consistency already worked out for you.</li>
+</ul></li>
+<li>Finding a NOAA weather station and making a data request</li>
+<li>GEE extraction of MODIS products (EOS)
+<ul>
+<li>Proxies for rainfall, temp, and NDVI, which can proxy both, in some circumstances</li>
+</ul></li>
+</ul>
+<p><strong>Before you even start</strong></p>
+<ul>
+<li><p>What is the location of your vector time-series?</p></li>
+<li><p>We assume absolutely perfect data, and chances are you have a coordinate pair</p></li>
+<li><p>What projection is it in?</p></li>
+<li><p>Whose GPS unit was it reported from?</p></li>
+<li><p>How accurate or precise is it?</p></li>
+</ul>
+<p>Throw it on Google maps and make sure it seems to be where you think it is.</p>
+<hr>
+</section>
+</section>
+<section id="section-2-daymet-point-extraction-example" class="level1">
+<h1>Section 2: DAYMET point extraction example</h1>
+<section id="choose-a-location" class="level2">
+<h2 class="anchored" data-anchor-id="choose-a-location">Choose a location</h2>
+<p>Put your point in Google maps, or choose an address. For example:</p>
+<p><strong>29.6557572689658, -82.32141674790877</strong></p>
+<p>What is this?</p>
+<p>This is my house – 405 NE 5th Avenue, Gainesville, FL.</p>
+<p><img src="images/VB_S2Fig1.png" class="img-fluid"></p>
+<p><strong>Right click to get coordinates</strong></p>
+<p><img src="images/VB_S2Fig2.png" class="img-fluid"></p>
+<p>Earthdata profile with NASA – make yourself an account - https://urs.earthdata.nasa.gov/</p>
+</section>
+<section id="then-navigate-to-the-daymet-site" class="level2">
+<h2 class="anchored" data-anchor-id="then-navigate-to-the-daymet-site">Then navigate to the DAYMET site</h2>
+<p><img src="images/VB_S2Fig3.png" class="img-fluid"></p>
+<p><img src="images/VB_S2Fig4.png" class="img-fluid"></p>
+</section>
+<section id="locate-the-single-pixel-extraction-tool" class="level2">
+<h2 class="anchored" data-anchor-id="locate-the-single-pixel-extraction-tool">Locate the Single Pixel Extraction Tool</h2>
+<p><img src="images/VB_S2Fig5.png" class="img-fluid"></p>
+</section>
+<section id="input-your-coordinates-or-navigate-to-the-location-you-want-on-their-map" class="level2">
+<h2 class="anchored" data-anchor-id="input-your-coordinates-or-navigate-to-the-location-you-want-on-their-map">Input your coordinates, or navigate to the location you want on their map</h2>
+<p><img src="images/VB_S2Fig6.png" class="img-fluid"></p>
+<p>You will see lots of choices of variables - DAYL - day length, PRCP - precip, etc. Use the website itself and the references to publications of the model for this product to fully understand what the variables are and mean - remember, a daily minimum could mean the lowest recording in a given hour, or may have a different value for day and night within a 24 hour period.</p>
+<p>Choose the timeline you are interested in to select your date range. Remember, at a single pixel, “accidentally” downloading too many variables or too many years is just a bigger text file, but not huge. If you are downloading modeled climate data across a region and make this sort of mistake in requests, you may either be waiting a while, or end up with unwieldy huge files. You can always return and re-download.</p>
+<p><strong>DON’T OPEN YOUR DATA IN EXCEL – demo only for this workshop!</strong></p>
+<p>Annoying/informational header lines will need to be examined and you can determine how to format your data from there.</p>
+<p><img src="images/VB_S2Fig7.png" class="img-fluid"></p>
+<p><strong>User choice about how to wrangle it into R</strong></p>
+<p>Be super careful about csv formats if you open in Excel, but you probably know this at this stage in your career. Generally, don’t. Just pull it into R and chop off rows or subset what you need, check the classes of each variable field you’ll use, make sure the units of measurement (temperature, VP, etc) are as you expect, and enjoy!</p>
+<p><strong>Last notes for the DAYMET data pull</strong></p>
+<p>For a single point, the question about what the projection is in the Daymet model should be ok, because you are not overlaying rasters, and you can see it all on google maps, both before and during your extraction</p>
+<p>If you are doing this for multiple points, DEFINITELY THINK ABOUT THE PROJECTION</p>
+<hr>
+<p>Pause – were you able to navigate this so far?</p>
+<p>Daymet is a bit deluxe – high resolution (pixels are small), high frequency (daily availability). Easy UIs for data extraction</p>
+<p>Limitations: It is just a model (pulling in all the best station data available across multiple agencies) Only continental North America (plus HI from 1980 and PR from 1950)<br>
+Seems to get released by calendar year (up to end of last year)</p>
+<hr>
+</section>
+</section>
+<section id="section-3-pulling-a-local-weather-stations-data-using-noaa-access" class="level1">
+<h1>Section 3: Pulling a local weather station’s data using NOAA access</h1>
+<section id="how-to-download-historical-weather-data-from-noaa-in-14-easy-steps" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-download-historical-weather-data-from-noaa-in-14-easy-steps">How to Download Historical Weather Data from NOAA in 14 Easy Steps</h2>
+<section id="step-1" class="level3">
+<h3 class="anchored" data-anchor-id="step-1">Step 1</h3>
+<p>Go to https://www.ncei.noaa.gov/maps/lcd/</p>
+<p><img src="images/VB_S3Fig1.png" class="img-fluid"></p>
+</section>
+<section id="step-2" class="level3">
+<h3 class="anchored" data-anchor-id="step-2">Step 2</h3>
+<p>Find the area on the map that you want weather data from. Click and drag to move around and scroll to zoom in or out. In this example, we will retrieve weather data from South Bend.</p>
+<p><img src="images/VB_S3Fig2.png" class="img-fluid"></p>
+</section>
+<section id="step-3" class="level3">
+<h3 class="anchored" data-anchor-id="step-3">Step 3</h3>
+<p>In the “Layers” tab on the left panel, select the tools icon.</p>
+<p><img src="images/VB_S3Fig4.png" class="img-fluid"></p>
+</section>
+<section id="step-4" class="level3">
+<h3 class="anchored" data-anchor-id="step-4">Step 4</h3>
+<p>Choose an option from the tools menu to select an area to get weather data from. In this case, we will use the rectangle tool.</p>
+<p><img src="images/VB_S3Fig4a.png" class="img-fluid"></p>
+</section>
+<section id="step-5" class="level3">
+<h3 class="anchored" data-anchor-id="step-5">Step 5</h3>
+<p>Use the selected tool to select a point or area. With the rectangle tool, simply click and drag to form a rectangle over the area of interest.</p>
+<p><img src="images/VB_S3Fig5.png" class="img-fluid"></p>
+</section>
+<section id="step-6" class="level3">
+<h3 class="anchored" data-anchor-id="step-6">Step 6</h3>
+<p>In the “Results” tab of the left panel, click the checkbox for “Select All” or select the appropriate stations that you would like to receive data from.</p>
+<p><img src="images/VB_S3Fig6.png" class="img-fluid" width="541"></p>
+</section>
+<section id="step-7" class="level3">
+<h3 class="anchored" data-anchor-id="step-7">Step 7</h3>
+<p>Click the “Add to Cart” button.</p>
+<p><img src="images/VB_S3Fig7.png" class="img-fluid"></p>
+</section>
+<section id="step-8" class="level3">
+<h3 class="anchored" data-anchor-id="step-8">Step 8</h3>
+<p>A new tab will open. In this specific step, you may likely experience technical difficulties.&nbsp; If you see an error page, simply reload the page until this error ceases to occur. Furthermore, if the page loads but you do not see the “LCD CSV” option listed, reload until you do.&nbsp;</p>
+<p>The page should look like this:</p>
+<p><img src="images/VB_S3Fig8.png" class="img-fluid"></p>
+</section>
+<section id="step-9" class="level3">
+<h3 class="anchored" data-anchor-id="step-9">Step 9</h3>
+<p>Select the “LCD CSV” option.</p>
+<p><img src="images/VB_S3Fig9.png" class="img-fluid"></p>
+</section>
+<section id="step-10" class="level3">
+<h3 class="anchored" data-anchor-id="step-10">Step 10</h3>
+<p>Select the start and end date from which you would like to receive data from. Be sure to select not only a year and a month but also a day, or the blank will not update. Click the “APPLY” button when finished.</p>
+<p><img src="images/VB_S3Fig10.png" class="img-fluid"></p>
+</section>
+<section id="step-11" class="level3">
+<h3 class="anchored" data-anchor-id="step-11">Step 11</h3>
+<p>Click the “Continue” button.</p>
+<p>If nothing happens, scroll up to see the error message. The most likely error is that you selected more than ten years of data.</p>
+<p><img src="images/VB_S3Fig11.png" class="img-fluid"></p>
+<p><img src="images/VB_S3Fig12.png" class="img-fluid"></p>
+</section>
+<section id="step-12" class="level3">
+<h3 class="anchored" data-anchor-id="step-12">Step 12</h3>
+<p>Enter your email address so that the download link can be sent to you. Then click “SUBMIT ORDER”.</p>
+<p><img src="images/VB_S3Fig13.png" class="img-fluid"></p>
+</section>
+<section id="step-13" class="level3">
+<h3 class="anchored" data-anchor-id="step-13">Step 13</h3>
+<p>You will immediately receive an email that you don’t need to do anything with. This email can be ignored.</p>
+</section>
+<section id="step-14" class="level3">
+<h3 class="anchored" data-anchor-id="step-14">Step 14</h3>
+<p>About one minute later, you should receive another email with a download link for the CSV file. Click the link.</p>
+<p><img src="images/VB_S3Fig14.png" class="img-fluid"></p>
+<hr>
+</section>
+</section>
+</section>
+<section id="section-4-using-google-earth-engine-to-retrieve-eo-data" class="level1">
+<h1>Section 4: Using Google Earth Engine to retrieve EO data</h1>
+<p>In this section, we will walk through an example of using a script in Google Earth Engine (GEE) to pull Earth Observation (EO) data time series for a point set.</p>
+<p>In this case, we will be pulling data generated by NASA’s MODIS platform.</p>
+<p>Thanks to Dr Cat Lippi and Dr Nique Etienne for contributing this example and data use to this module.</p>
+<p>What is this example about?</p>
+<p>This exploratory research was part of a project thinking about how to correlate NEON tick observation data to climate, in context of invasion dynamics. Ultimately, we did not use these data, but found some interesting things along the way.</p>
+<p>We will look at 13 NEON terrestrial sites, for which there are observation towers for climate data, and also tick collection plots</p>
+<p>These selected sites span a chunk of the northeastern and southeastern US, with one more midwestern site.</p>
+<p><img src="images/VB_S4Fig1.png" class="img-fluid"></p>
+<p>While we were looking at the sites and at the tower data, and thinking about how to bring in EO data to explore our questions, we noticed something.</p>
+<p>the tick plots and the NEON climate data may not overlap a lot. This is a question of scale. But think about a tick, and the environment it experiences. This figure demonstrates for one of the sites (Ordway Swisher Biological Station) how the tick collection plot sites and the NEON tower are quite far, in terms of tick ranging, from each other.</p>
+<p><img src="images/VB_S4Fig2.png" class="img-fluid"></p>
+<p>Luckily, since we were downloading land surface temperature (LST) from MODIS anyway, we could also ask the two questions:</p>
+<p>How does the temperature (MODIS LST) differ between towers and tick collection plots?</p>
+<p>How does the temperature (MODIS LST and NEON Tower measurements) differ at the tower?</p>
+<p>This figure summarizes that answer for that same example OSBS NEON site we just saw - the top right illustration is of Question 1 for one tick collection plot; the lower set of 3 time series is tower temperature data (top), tick counts (middle), and the MODIS LST plotted for both tower and tick collection plot.</p>
+<p><img src="images/VB_S4Fig3.png" class="img-fluid"></p>
+<p>So what do we see? Yes, there are differences both between instruments at a location (tower and MODIS LST), and between tower and tick plot locations (MODIS LST).</p>
+<p>How much might this matter to a tick at this scale? Are these meaningful differences?</p>
+<p>Great questions!</p>
+<p>What other EO data measurements might ticks be cueing on? NDVI - a measure of vegetation greenness?</p>
+<p>This next figure is a summary of time series of MODIS LST (left, 1km scale) and NDVI (0.5km scale), and the tick counts for each respective site - these are alphabetical by site acronym, but see if you can pick out patterns for the more northern versus southern, and think about seasons.</p>
+<p><img src="images/VB_S4Fig4.png" class="img-fluid"></p>
+<p>Now it’s your turn - you can recreate the examples here, and hopefully extend this to other datasets!</p>
+<p>To start, you need to create a Google Earth Engine account.</p>
+<p>Head to Earthengine.google.com</p>
+<p><img src="images/VB_S4Fig5.png" class="img-fluid"></p>
+<p>You can add it to an existing Google or Gmail account - if you don’t have one, I recommend making one Sign up for the noncommercial/academic use account</p>
+<p><img src="images/VB_S4Fig6.png" class="img-fluid"></p>
+<p>You may also want to remind yourself where your google drive folder is - your account associated with your GEE account is where output files will end up.</p>
+<p>More things to keep in mind</p>
+<p>This is a JavaScript editor, which is pretty good about highlighting when you have a syntax issue. Still good to familiarize yourself with conventions (e.g., creating objects with “var”, ending functions with “;”, etc) The worst part of this is that the script runs all at once (i.e., you can’t run individual lines like in R). This can make it tricky to test code/troubleshoot, but you can still use “//” to “turn off” blocks of code (i.e., use like # in R)</p>
+<p>Also be mindful of saving your script often. If you click to open a different script, for example, to copy and paste some code, any unsaved changes will be lost. This is dumb. Hit the ‘Save’ button often in code editor</p>
+<p><img src="images/VB_S4Fig8.png" class="img-fluid"></p>
+<section id="navigating-to-the-code-editor" class="level3">
+<h3 class="anchored" data-anchor-id="navigating-to-the-code-editor">Navigating to the Code Editor</h3>
+<p>Head to the main page, and under Platform, you’ll find a pull-down menu, and you want to choose Code Editor</p>
+<p><img src="images/VB_S4Fig9.png" class="img-fluid"></p>
+<p>Take a moment to look at all the tabs and pull-downs for yourself</p>
+<p><img src="images/VB_S4Fig10.png" class="img-fluid"></p>
+<p>Start a script under the ‘Scripts’ tab by clicking NEW Can also create new project groups and folders</p>
+<p><img src="images/VB_S4Fig11.png" class="img-fluid"></p>
+<p>Docs tab</p>
+<p>Docs tab has a directory of functions Provides definitions, arguments, and snippets of code that you can copy and paste into your script</p>
+<p><img src="images/VB_S4Fig12.png" class="img-fluid"></p>
+<p>Assets Tab</p>
+<p>This is where you keep your spatial datasets that you upload. If there are some spatial datasets you use a lot, uploading them as assets can be useful. These are stored in GEE and can be called into your code directly, rather than having to read them in with scripting</p>
+<p><img src="images/VB_S4Fig13.png" class="img-fluid"></p>
+<p>IMPORTANT NOTE ON SPATIAL DATA FILES:</p>
+<p>If you are uploading a csv file, make sure you save it in UTF8 format or it won’t work in GEE</p>
+<p>In our example here, the 13 NEON sites are our spatial data file - you can find the csv in our workshop materials</p>
+<p>Loading EOS Data</p>
+<p>You can use the search bar in GEE to shop for EOS products - click on product to pop open a product description window</p>
+<p><img src="images/VB_S4Fig14.png" class="img-fluid"></p>
+</section>
+<section id="your-turn" class="level2">
+<h2 class="anchored" data-anchor-id="your-turn">YOUR TURN!!</h2>
+<p>Grab the 13 NEON site spatial data as csv and upload it to your assets.</p>
+<p>Below is the modified script from the example you can copy and paste into a GEE script:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span>Pulling MODIS LST data <span class="cf">for</span> a collection of NEON points <span class="sc">/</span><span class="er">/</span><span class="dv">16</span> January <span class="dv">2024</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span>Cat Lippi </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span>Modded by S.J. Ryan, July <span class="dv">2024</span> <span class="cf">for</span> VByte Workshop</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span>Bring <span class="cf">in</span> MODIS LST imagery </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>var modis <span class="ot">=</span> <span class="fu">ee.ImageCollection</span>(<span class="st">'MODIS/061/MOD11A2'</span>)<span class="fu">.filterDate</span>(<span class="st">'2018'</span>, <span class="fu">Date.now</span>()); var modis_lst <span class="ot">=</span> <span class="fu">modis.select</span>(<span class="st">'LST_Day_1km'</span>); var modis_lst_vis <span class="ot">=</span> { min<span class="sc">:</span> <span class="fl">13000.0</span>, max<span class="sc">:</span> <span class="fl">16500.0</span>, palette<span class="sc">:</span> \[ <span class="st">'040274'</span>, <span class="st">'040281'</span>, <span class="st">'0502a3'</span>, <span class="st">'0502b8'</span>, <span class="st">'0502ce'</span>, <span class="st">'0502e6'</span>, <span class="st">'0602ff'</span>, <span class="st">'235cb1'</span>, <span class="st">'307ef3'</span>, <span class="st">'269db1'</span>, <span class="st">'30c8e2'</span>, <span class="st">'32d3ef'</span>, <span class="st">'3be285'</span>, <span class="st">'3ff38f'</span>, <span class="st">'86e26f'</span>, <span class="st">'3ae237'</span>, <span class="st">'b5e22e'</span>, <span class="st">'d6e21f'</span>, <span class="st">'fff705'</span>, <span class="st">'ffd611'</span>, <span class="st">'ffb613'</span>, <span class="st">'ff8b13'</span>, <span class="st">'ff6e08'</span>, <span class="st">'ff500d'</span>, <span class="st">'ff0000'</span>, <span class="st">'de0101'</span>, <span class="st">'c21301'</span>, <span class="st">'a71001'</span>, <span class="st">'911003'</span> \], };</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span>Add MODIS imagery to map </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">Map.addLayer</span>(modis_lst, modis_lst_vis, <span class="st">'MODIS LST'</span>, false);</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> Rescale MODIS LST and convert to <span class="fu">Celsius</span> (C) </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>var modis_lst_C <span class="ot">=</span> <span class="fu">modis_lst.map</span>(<span class="cf">function</span>(image) { return image <span class="fu">.multiply</span>(<span class="fl">0.02</span>) <span class="fu">.subtract</span>(<span class="fl">273.15</span>) <span class="fu">.copyProperties</span>(image, \[<span class="st">'system:time_start'</span>\]); });</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">//////////////////////////////////////////////////////////////////////////</span> <span class="er">//</span>FUNCTIONS<span class="sc">/</span><span class="er">/</span> <span class="er">//////////////////////////////////////////////////////////////////////////</span> </span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="er">//</span> Function to create buffer around each point </span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span> <span class="fu">bufferPoints</span>(radius, bounds) { return <span class="cf">function</span>(pt) { pt <span class="ot">=</span> <span class="fu">ee.Feature</span>(pt); return bounds ? <span class="fu">pt.buffer</span>(radius)<span class="fu">.bounds</span>() <span class="sc">:</span> <span class="fu">pt.buffer</span>(radius); }; }</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">//////////////////////////////////////////////////////////////////////////////////</span> <span class="er">///////////////////////////////////////////////////////////////////////////////////</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="er">//</span>Trying to export LST values <span class="cf">for</span> all NEON points at once <span class="sc">/</span><span class="er">/</span> Pull <span class="cf">in</span> points and make FeatureCollection </span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> Combine NEON points into one feature collection </span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>var towers <span class="ot">=</span> <span class="fu">ee.FeatureCollection</span>(\[ <span class="fu">ee.Feature</span>(<span class="fu">ee.Geometry.Point</span>(\[<span class="sc">-</span><span class="fl">81.99343</span>, <span class="fl">29.68927</span>\]), {plot_id<span class="sc">:</span> <span class="st">'OSBS'</span>}), <span class="fu">ee.Feature</span>(<span class="fu">ee.Geometry.Point</span>(\[<span class="sc">-</span><span class="fl">71.28731</span>, <span class="fl">44.06388</span>\]), {plot_id<span class="sc">:</span> <span class="st">'BART'</span>}), <span class="fu">ee.Feature</span>(<span class="fu">ee.Geometry.Point</span>(\[<span class="sc">-</span><span class="fl">78.07164</span>, <span class="fl">39.06026</span>\]), {plot_id<span class="sc">:</span> <span class="st">'BLAN'</span>}), <span class="fu">ee.Feature</span>(<span class="fu">ee.Geometry.Point</span>(\[<span class="sc">-</span><span class="fl">76.56001</span>, <span class="fl">38.89008</span>\]), {plot_id<span class="sc">:</span> <span class="st">'SERC'</span>}), <span class="fu">ee.Feature</span>(<span class="fu">ee.Geometry.Point</span>(\[<span class="sc">-</span><span class="fl">81.4362</span>, <span class="fl">28.12504</span>\]), {plot_id<span class="sc">:</span> <span class="st">'DSNY'</span>}), <span class="fu">ee.Feature</span>(<span class="fu">ee.Geometry.Point</span>(\[<span class="sc">-</span><span class="fl">84.46861</span>, <span class="fl">31.19484</span>\]), {plot_id<span class="sc">:</span> <span class="st">'JERC'</span>}), <span class="fu">ee.Feature</span>(<span class="fu">ee.Geometry.Point</span>(\[<span class="sc">-</span><span class="fl">83.50195</span>, <span class="fl">35.68896</span>\]), {plot_id<span class="sc">:</span> <span class="st">'GRSM'</span>}), <span class="fu">ee.Feature</span>(<span class="fu">ee.Geometry.Point</span>(\[<span class="sc">-</span><span class="fl">80.52484</span>, <span class="fl">37.37828</span>\]), {plot_id<span class="sc">:</span> <span class="st">'MLBS'</span>}), <span class="fu">ee.Feature</span>(<span class="fu">ee.Geometry.Point</span>(\[<span class="sc">-</span><span class="fl">72.17266</span>, <span class="fl">42.5369</span>\]), {plot_id<span class="sc">:</span> <span class="st">'HARV'</span>}), <span class="fu">ee.Feature</span>(<span class="fu">ee.Geometry.Point</span>(\[<span class="sc">-</span><span class="fl">78.1395</span>, <span class="fl">38.89292</span>\]), {plot_id<span class="sc">:</span> <span class="st">'SCBI'</span>}), <span class="fu">ee.Feature</span>(<span class="fu">ee.Geometry.Point</span>(\[<span class="sc">-</span><span class="fl">89.53725</span>, <span class="fl">46.23388</span>\]), {plot_id<span class="sc">:</span> <span class="st">'UNDE'</span>}), <span class="fu">ee.Feature</span>(<span class="fu">ee.Geometry.Point</span>(\[<span class="sc">-</span><span class="fl">84.2826</span>, <span class="fl">35.96412</span>\]), {plot_id<span class="sc">:</span> <span class="st">'ORNL'</span>}), <span class="fu">ee.Feature</span>(<span class="fu">ee.Geometry.Point</span>(\[<span class="sc">-</span><span class="fl">87.39327</span>, <span class="fl">32.95046</span>\]), {plot_id<span class="sc">:</span> <span class="st">'TALL'</span>}),\]);</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span>Read <span class="cf">in</span> tick plots from <span class="dv">13</span> NEON sites </span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span>Uploaded csv to Assets </span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span>NOTE<span class="sc">:</span> Yours will be named <span class="cf">for</span> your asset collection, so change the below variable assignment </span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>var tickplots <span class="ot">=</span> <span class="fu">ee.FeatureCollection</span>(<span class="st">'projects/ee-sjryan3/assets/NEON_tickplots_13sites_utf8'</span>);</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span>view feature collections </span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="fu">Map.addLayer</span>(towers, {color<span class="sc">:</span> <span class="st">'Red'</span>}, <span class="st">'NEON Towers'</span>); <span class="fu">Map.addLayer</span>(tickplots, {color<span class="sc">:</span> <span class="st">'Green'</span>}, <span class="st">'NEON Tick Plots'</span>);</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> Implement buffer <span class="cf">function</span> to make each point a <span class="dv">1</span>km\<span class="sc">^</span><span class="dv">2</span> polygon </span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>var ptsbuff <span class="ot">=</span> <span class="fu">towers.map</span>(<span class="fu">bufferPoints</span>(<span class="dv">500</span>, true)); </span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span>true <span class="ot">=</span> square pixel </span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>var tickbuff <span class="ot">=</span> <span class="fu">tickplots.map</span>(<span class="fu">bufferPoints</span>(<span class="dv">500</span>, true));</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span>Get zonal statistics </span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>var towreduced <span class="ot">=</span> <span class="fu">modis_lst_C.map</span>(<span class="cf">function</span>(image){ return <span class="fu">image.reduceRegions</span>({ collection<span class="sc">:</span>ptsbuff, reducer<span class="sc">:</span><span class="fu">ee.Reducer.mean</span>(), scale<span class="sc">:</span> <span class="dv">1000</span> <span class="sc">/</span><span class="er">/</span>Resolution of MODIS <span class="fu">LST</span> (m) }); });</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">towreduced.limit</span>(<span class="dv">50</span>));</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>var tickreduced <span class="ot">=</span> <span class="fu">modis_lst_C.map</span>(<span class="cf">function</span>(image){ return <span class="fu">image.reduceRegions</span>({ collection<span class="sc">:</span>tickbuff, reducer<span class="sc">:</span><span class="fu">ee.Reducer.mean</span>(), scale<span class="sc">:</span> <span class="dv">1000</span> </span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span>Resolution of MODIS <span class="fu">LST</span> (m) }); });</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">tickreduced.limit</span>(<span class="dv">50</span>));</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> The resulting mean is a FeatureCollection, so you can export it as a table </span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span>NOTE<span class="sc">:</span> when you run the export script, it does not automatically write the file </span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span>after running script, the task tab will highlight <span class="cf">in</span> the right GEE editor window </span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span>need to click the run button under unsubmitted tasks <span class="cf">for</span> each csv file</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="fu">Export.table.toDrive</span>({ collection<span class="sc">:</span> <span class="fu">towreduced.flatten</span>(), description<span class="sc">:</span> <span class="st">'NEON_towers_MODIS_LST_export'</span>, folder<span class="sc">:</span> <span class="st">'NEON_MODIS'</span>, fileFormat<span class="sc">:</span> <span class="st">'CSV'</span> })</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="fu">Export.table.toDrive</span>({ collection<span class="sc">:</span> <span class="fu">tickreduced.flatten</span>(), description<span class="sc">:</span> <span class="st">'NEON_tickplots_MODIS_LST_export'</span>, folder<span class="sc">:</span> <span class="st">'NEON_MODIS'</span>, fileFormat<span class="sc">:</span> <span class="st">'CSV'</span> })</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span>var table <span class="ot">=</span> <span class="fu">reduced.flatten</span>();</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> Print <span class="cf">in</span> console\</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span><span class="fu">print</span>(<span class="fu">table.limit</span>(<span class="dv">50</span>));</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+</section>
+<section id="section-5-last-notes-and-caveats" class="level1">
+<h1>Section 5: Last notes and caveats</h1>
+<section id="eo-vs-weather-station-data" class="level3">
+<h3 class="anchored" data-anchor-id="eo-vs-weather-station-data">EO vs Weather station data</h3>
+<p>EO - Earth Observation - primarily satellite data - from ‘looking down’ onto things (also called EOS data - earth observation system data</p>
+<p>LST - land surface temperature is reflectance converted to temperature via algorithms</p>
+<p>What if it’s a forest? What is your vector experiencing?</p>
+<p>What if there’s lots of clouds? What if cloud cover prevents accurate readings in a systematic way, e.g.&nbsp;at certain times of year?</p>
+<p>Lots of products available, always a lag because someone has to process and QA/QC before you can use it</p>
+</section>
+<section id="weather-station-data" class="level3">
+<h3 class="anchored" data-anchor-id="weather-station-data">Weather Station Data</h3>
+<p>Point based data that often gets interpolated to represent irregular region shapes - great if you have lots of stations, less great with sparse coverage.</p>
+<p>Requires people to record data at some step of the way; gaps can occur on holidays, larger gaps during natural disasters - know what missing data protocols are within the dataset.</p>
+<p>Geography (where in the world) very much influences coverage and quality. Tracking down what the nearest weather station is takes a little time (look on NOAA, WMO), but getting those data can sometimes be complicated.</p>
+<p>Much of weather data is collected and recorded for commercial purposes. Your access to those data is not guaranteed.</p>
+<p>Today we have reviewed a few concepts and products - there are TONS out there.</p>
+<p><strong><em>Starting points are:</em></strong></p>
+<p>NOAA - lots of gridded products as well as weather stations</p>
+<p>NASA - lots of processed EO data from many missions with many spatiotemporal resolutions and utility</p>
+<p>ERA - large climate modeled runs and even counterfactuals</p>
+<p>Copernicus - European entry point for gridded and processed data sets, model outputs</p>
+
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{ryan2025,
+  author = {Ryan, Sadie J.},
+  title = {{VectorByte} {Methods} {Training:} {`Climate’} Variables for
+    Time-Series Analyses},
+  date = {2025-06-06},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-ryan2025" class="csl-entry quarto-appendix-citeas" role="listitem">
+Ryan, Sadie J. 2025.<span>“ VectorByte Methods Training: `Climate’
+Variables for Time-Series Analyses.”</span> June 6, 2025.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
