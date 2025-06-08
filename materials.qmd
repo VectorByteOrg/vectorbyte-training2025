@@ -75,8 +75,7 @@ We are assuming familiarity with `R` basics as well as at least introductory sta
 
 ## Introduction to climate and weather data for time dependent analyses
 
-- [Lecture -- coming soon]()
-- [Other materials -- coming soon]()
+- [Guided Practice](VByteWkshp25_Climate_SJR.qmd)
 - dataset: [NEON_tickplots_13sites_utf8.csv](data/NEON_tickplots_13sites_utf8.csv)
 
 <br><br>
