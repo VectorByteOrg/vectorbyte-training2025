@@ -34,14 +34,15 @@ PR <- c()
 
 # This code pulls them together into a data set for exporting
 
-forecasts <- data.frame(state = rep(c("MG", "SP", "RS", "BA",
+forecasts <- data.frame(teamName = rep(teamName, 60),
+                        state = rep(c("MG", "SP", "RS", "BA",
                                       "PR"), each = 12),
                         epiweek = rep(seq(202416, 202427, 1), 5),
-                        cases = c(MG, SP, RS, BA, PR))
+                        cases = c(BA, MG, PR, RS, SP))
 
 ####### Export Forecast .csv ######
 
-filename <- paste0(teamname,"_dengueChallenge_VB_2025.csv")
+filename <- paste0(teamName,"_dengueChallenge_VB_2025.csv")
 
 # This will export the file to the folder where you have the data stored
 write.csv(forecasts, filename)

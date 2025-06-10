@@ -52,7 +52,7 @@ For time's sake, we will focus on making forecasts for just a few of the 27 stat
 
 Using the modeling skills you have earned over the course of the workshop, you are going to produce 12 weekly forecasts of Dengue incidence for 5 separate states in Brazil. You can use any of the models we discussed in the workshop, or others you may have experience with. You have incidence data and several covariates ranging from 2010 to mid-2024 in the data set called dengueForecasting.csv.
 
-The code file called dengueForecastingChallenge.R contains the infrastructure you need to quickly read in the data set and export a .csv file of the forecasts you make in a standard file. Once you have generated your forecasts, you will submit them here: [Forecast Submission Form](https://virginiatech.questionpro.com/t/AaEFhZ6WQD). We will score the forecasts using CRPS and a winner will be crowned!
+The code file called dengueForecastingChallenge.R contains the infrastructure you need to quickly read in the data set and export a .csv file of the forecasts you make in a standard file. Once you have generated your forecasts, you will submit them here: [Forecast Submission Form](https://virginiatech.questionpro.com/t/AaEFhZ6WQD). We will score the forecasts using RMSE and a winner will be crowned!
 
 ## Easier version
 
