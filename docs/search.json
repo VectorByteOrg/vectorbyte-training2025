@@ -214,7 +214,7 @@
     "href": "materials.html#dengue-forecasting-challenge",
     "title": "VectorByte Training Materials 2025",
     "section": "Dengue Forecasting Challenge",
-    "text": "Dengue Forecasting Challenge\n\nDescription – coming soon\ndataset: coming soon!"
+    "text": "Dengue Forecasting Challenge\n\nDescription\ndataset: dengueForecasting.csv\nhelper code: dengueForecastingChallenge.R"
   },
   {
     "objectID": "VB_TimeDepData.html#learning-objectives",
@@ -420,32 +420,305 @@
     "text": "Your Turn!\nRepeat this process with the other 3 datasets, and see if you can figure out a appropriate transformations for each dataset."
   },
   {
-    "objectID": "VB_TimeDepData_practical.html#exploring-the-data",
-    "href": "VB_TimeDepData_practical.html#exploring-the-data",
-    "title": "VectorByte Methods Training: Regression Methods for Time Dependent Data (practical)",
+    "objectID": "schedule2025.html",
+    "href": "schedule2025.html",
+    "title": "2025 Training Schedule",
+    "section": "",
+    "text": "Main materials\n\nPre-workshop\nInformation about pre-workshop preparation – including software installation, expectations for what you should already be familiar with, and review materials – is available in the pre-work portion of the materials page.\n  \n\n\n13 June 2025\n\n\n\nTime\nActivity\n\n\n\n\n\nArrival\n\n\n\n  \n\n\n14 July 2025 (08:30 - 17:30)\n\n\n\n\n\n\n\n\nTime\nActivity\nMaterials\n\n\n\n\n8:30\nIntroduction to time dependent data and forecasting, course overview\n\n\n\n9:30\nLecture: Regression Transformations and Diagnostics\n\n\n\n10:30\nBreak\n\n\n\n10:45\nPractical: Regression Transformations and Diagnostics\n\n\n\n12:00\nLunch\n\n\n\n13:00\nIntroduction to VecDyn Database and API\n\n\n\n14:00\nLecture: Time Dependent Data Analysis\n\n\n\n15:00\nBreak\n\n\n\n15:30\nPractical: Time Dependent Data Analysis\n\n\n\n16:30\nWorking with VecDyn/time dependent data (data aggregation, covariate/predictor sources)\n\n\n\n17:00\nSupported practice - pull VecDyn data, add covars, fit linear model\n\n\n\n\n  \n\n\n15 June 2025 (08:30 - 17:30)\n\n\n\n\n\n\n\n\nTime\nActivity\nMaterials\n\n\n\n\n8:30\nOverview of the day\n\n\n\n9:00\nLecture: Basics of Time Series methods\n\n\n\n10:00\nBreak\n\n\n\n10:30\nPractical: Basics of Time Series methods\n\n\n\n12:00\nLunch\n\n\n\n13:00\nLecture: Introduction to Gaussian Process (GP) regression applied to time dependent data\n\n\n\n14:00\nPractical: GPs in R with hetGP\n\n\n\n15:00\nBreak\n\n\n\n15:30\nIntroduction to the dengue forecasting challenge\n\n\n\n16:00\nForm forecasting groups and begin forecasting challenge\n\n\n\n17:00\nLightning talks\n\n\n\n\n  \n\n\n16 June 2025 (08:30 - 11:45)\n\n\n\nTime.\nActivity\nMaterials\n\n\n\n\n8:30\nOverview of the day\n\n\n\n9:00\nForecasting Challenge\n\n\n\n10:30\nBreak\n\n\n\n11:00\nPresent and Evaluate forecasts\n\n\n\n11:45\nLunch (Boxes to go)\n\n\n\n\n  \n\n\nPost-workshop\nEnjoy using these new techniques and databases!"
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#learning-objectives",
+    "href": "VB_RegDiagTrans.html#learning-objectives",
+    "title": "Review of Diagnostics and Transformations for Regression Models",
+    "section": "Learning Objectives",
+    "text": "Learning Objectives\n\nReview assumptions of SLR/MLR models\nReview using diagnostic plots to assess whether assumptions are met\nReview the idea of basic transformations to use when assumptions aren’t met"
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#slr-model-assumptions",
+    "href": "VB_RegDiagTrans.html#slr-model-assumptions",
+    "title": "Review of Diagnostics and Transformations for Regression Models",
+    "section": "SLR model assumptions",
+    "text": "SLR model assumptions\n\\[\nY_i |X_i \\stackrel{ind}{\\sim} \\mathcal{N}(\\beta_0 + \\beta_1 X_i, \\sigma^2)\n\\]\nRecall the key assumptions of the Simple Linear Regression model:\n\nThe conditional mean of \\(Y\\) is linear in \\(X\\).\nThe additive errors (deviations from line)\n\nare normally distributed\nindependent from each other\nidentically distributed (i.e., they have constant variance)"
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#example-model-violations",
+    "href": "VB_RegDiagTrans.html#example-model-violations",
+    "title": "Review of Diagnostics and Transformations for Regression Models",
+    "section": "Example model violations",
+    "text": "Example model violations\nAnscombe’s quartet comprises four datasets that have similar statistical properties …\n\n\n\n\nXmean\nYmean\nXsd\nYsd\nXYcor\n\n\n\n\n1\n9.000\n7.501\n3.317\n2.032\n0.816\n\n\n2\n9.000\n7.501\n3.317\n2.032\n0.816\n\n\n3\n9.000\n7.500\n3.317\n2.030\n0.816\n\n\n4\n9.000\n7.501\n3.317\n2.031\n0.817"
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#residuals-and-the-model-assumptions",
+    "href": "VB_RegDiagTrans.html#residuals-and-the-model-assumptions",
+    "title": "Review of Diagnostics and Transformations for Regression Models",
+    "section": "Residuals and the model assumptions",
+    "text": "Residuals and the model assumptions\nRecall that the linear regression model assumes \\[\nY_i =\\beta_0 + \\beta_1 X_i + \\varepsilon_i,~~\\mbox{where}~~\n\\varepsilon_i \\stackrel{iid}{\\sim} \\mathcal{N}(0,\\sigma^2).\n\\]\nOur goal is to determine if the “true” residuals are iid normal and unrelated to \\(X\\). If the SLR model assumptions are true, then the residuals must be just “white noise”:\n\nEach \\(\\varepsilon_i\\) has the same variance (\\(\\sigma^2\\)).\nEach \\(\\varepsilon_i\\) has the same mean (0).\nAll of the \\(\\varepsilon_i\\) have the same normal distribution."
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#understanding-leverage",
+    "href": "VB_RegDiagTrans.html#understanding-leverage",
+    "title": "Review of Diagnostics and Transformations for Regression Models",
+    "section": "Understanding Leverage",
+    "text": "Understanding Leverage\nThe \\(h_i\\) leverage term measures sensitivity of the estimated least squares regression line to changes in \\(Y_i\\).\nThe term “leverage” provides a mechanical intuition:\n\nThe farther you are from a pivot joint, the more torque you have pulling on a lever.\n\nHere is a nice online (interactive) illustration of leverage:\n\nhttps://omaymas.shinyapps.io/Influence_Analysis/\n\n\nOutliers do more damage if they have high leverage!"
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#standardized-residuals",
+    "href": "VB_RegDiagTrans.html#standardized-residuals",
+    "title": "Review of Diagnostics and Transformations for Regression Models",
+    "section": "Standardized residuals",
+    "text": "Standardized residuals\nSince \\(e_i \\sim N(0, \\sigma^2 [1-h_i])\\), we know that \\[\n\\color{red}{\\frac{e_i}{\\sigma \\sqrt{1-h_i} }\\sim N(0, 1)}.\n\\]\nThese transformed \\(e_i\\)’s are called the standardized residuals.\n\nThey all have the same distribution if the SLR model assumptions are true.\nThey are almost (close enough) independent (\\(\\stackrel{iid}{\\sim}N(0,1)\\)).\nEstimate \\(\\sigma^2 \\approx s^2 = \\frac{1}{n-p}\\sum_{j=1}^n e_j^2\\). (\\(p=2\\) for SLR)"
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#studentized-residuals",
+    "href": "VB_RegDiagTrans.html#studentized-residuals",
+    "title": "Review of Diagnostics and Transformations for Regression Models",
+    "section": "Studentized residuals",
+    "text": "Studentized residuals\nWe thus define a standard Studentized residual as \\[\nr_i = \\frac{e_i}{s_{-i} \\sqrt{1-h_i} }\\sim t_{n-p-1}(0, 1)\n\\] where \\(s_{-i}^2 = \\frac{1}{n-p-1}\\sum_{j \\neq i} e_j^2\\) is \\(\\hat{\\sigma~}^2\\) calculated without \\(e_i\\).\n\nThese are easy to get in R with the rstudent() function:\n\nas.numeric(rstudent(reg3))\n#&gt;  [1]   -0.43905545   -0.18550224 1203.53946386   -0.31384418   -0.57429485\n#&gt;  [6]   -1.15598185    0.06640743    0.36185145   -0.73567703   -0.06576806\n#&gt; [11]    0.20026336"
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#outliers-and-studentized-residuals",
+    "href": "VB_RegDiagTrans.html#outliers-and-studentized-residuals",
+    "title": "Review of Diagnostics and Transformations for Regression Models",
+    "section": "Outliers and Studentized residuals",
+    "text": "Outliers and Studentized residuals\nSince the studentized residuals are distributed \\(t_{n-p-1}(0,1)\\), we should be concerned about any \\(r_i\\) outside of about \\([-2.5, 2.5]\\).\n\n (Note: As \\(n\\) gets much bigger, we will expect to see some very rare events (big \\(\\color{red}{\\varepsilon_i}\\) ) and not get worried unless \\(|r_i| &gt; 3\\) or \\(4\\).)"
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#how-to-deal-with-outliers",
+    "href": "VB_RegDiagTrans.html#how-to-deal-with-outliers",
+    "title": "Review of Diagnostics and Transformations for Regression Models",
+    "section": "How to deal with outliers",
+    "text": "How to deal with outliers\n\n\n\n\nfrom Research Wahlberg"
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#how-to-deal-with-outliers-1",
+    "href": "VB_RegDiagTrans.html#how-to-deal-with-outliers-1",
+    "title": "Review of Diagnostics and Transformations for Regression Models",
+    "section": "How to deal with outliers",
+    "text": "How to deal with outliers\nWhen should you delete outliers?\n\nOnly when you have a really good reason!\n\nThere is nothing wrong with running a regression with and without potential outliers to see whether results are significantly impacted.\nAny time outliers are dropped, the reasons for doing so should be clearly noted.\n\nI maintain that both a statistical and a non-statistical reason are required."
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#outliers-leverage-and-residuals",
+    "href": "VB_RegDiagTrans.html#outliers-leverage-and-residuals",
+    "title": "Review of Diagnostics and Transformations for Regression Models",
+    "section": "Outliers, leverage, and residuals",
+    "text": "Outliers, leverage, and residuals\nWarning: Unfortunately, outliers with high leverage are hard to catch through \\(\\color{dodgerblue}{r_i}\\) (since the line is pulled towards them).\nMeans get distracted by outliers…"
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#outliers-leverage-and-residuals-1",
+    "href": "VB_RegDiagTrans.html#outliers-leverage-and-residuals-1",
+    "title": "Review of Diagnostics and Transformations for Regression Models",
+    "section": "Outliers, leverage, and residuals",
+    "text": "Outliers, leverage, and residuals\nWarning: Unfortunately, outliers with high leverage are hard to catch through \\(\\color{dodgerblue}{r_i}\\) (since the line is pulled towards them).\nConsider data on house Rents vs SqFt:\n\nPlots of \\(r_i\\) or \\(e_i\\) against \\(\\hat{Y~}_i\\) or \\(X_i\\) are still your best diagnostic!"
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#normality-and-studentized-residuals",
+    "href": "VB_RegDiagTrans.html#normality-and-studentized-residuals",
+    "title": "Review of Diagnostics and Transformations for Regression Models",
+    "section": "Normality and studentized residuals",
+    "text": "Normality and studentized residuals\nA more subtle issue is the normality of the distribution on \\(\\varepsilon\\).\n\nWe can look at the residuals to judge normality if \\(n\\) is big enough (say \\(&gt;20~~ \\rightarrow\\) less than that makes it too hard to call).\n\nIn particular, if we have decent size \\(\\color{red}{n}\\), we want the shape of the studentized residual distribution to “look” like \\(\\color{red}{N(0,1)}\\).\n The most obvious tactic is to look at a histogram of \\(r_i\\)."
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#assessing-normality-via-q-q-plots",
+    "href": "VB_RegDiagTrans.html#assessing-normality-via-q-q-plots",
+    "title": "Review of Diagnostics and Transformations for Regression Models",
+    "section": "Assessing normality via Q-Q plots",
+    "text": "Assessing normality via Q-Q plots\nHigher fidelity diagnostics are provided by normal quantile-quantile (Q-Q) plots that:\n\nplot the sample quantiles (e.g. \\(10^{th}\\) percentile, etc.)\nagainst true percentiles from a \\(N(0,1)\\) distribution (e.g. \\(-1.96\\) is the true 2.5% quantile).\n\nIf \\(r_i \\sim N(0,1)\\) these quantiles should be equal\n\nlie on a line through 0 with slope 1"
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#go-to-diagnostic-plots",
+    "href": "VB_RegDiagTrans.html#go-to-diagnostic-plots",
+    "title": "Review of Diagnostics and Transformations for Regression Models",
+    "section": "3 Go-To Diagnostic Plots",
+    "text": "3 Go-To Diagnostic Plots"
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#violations-of-slr-model-assumptions",
+    "href": "VB_RegDiagTrans.html#violations-of-slr-model-assumptions",
+    "title": "Review of Diagnostics and Transformations for Regression Models",
+    "section": "Violations of SLR Model Assumptions",
+    "text": "Violations of SLR Model Assumptions\n\\[\\color{dodgerblue}{Y_i |X_i \\stackrel{ind}{\\sim} \\mathcal{N}(\\beta_0 + \\beta_1 X_i, \\sigma^2)}\\]\n\nThe conditional mean of \\(Y\\) is linear in \\(X\\).\nThe additive errors (deviations from line)\n\nare normally distributed\nindependent from each other\nidentically distributed (i.e., they have constant variance)\n\n\nAll of these can be violated! Let’s see what violations look like and how we can deal with them within the SLR framework."
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#violation-1-non-constant-variance",
+    "href": "VB_RegDiagTrans.html#violation-1-non-constant-variance",
+    "title": "Review of Diagnostics and Transformations for Regression Models",
+    "section": "Violation 1: Non-constant variance",
+    "text": "Violation 1: Non-constant variance\nIf you get a trumpet shape (bunching of the \\(Y\\)s), you have nonconstant variance.\n\nThis violates our assumption that all \\(\\varepsilon_i\\) have the same \\(\\sigma^2\\)."
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#solution-1-variance-stabilizing-transformations",
+    "href": "VB_RegDiagTrans.html#solution-1-variance-stabilizing-transformations",
+    "title": "Review of Diagnostics and Transformations for Regression Models",
+    "section": "Solution 1: Variance stabilizing transformations",
+    "text": "Solution 1: Variance stabilizing transformations\nThis is one of the most common model violations; luckily, it is usually fixable by transforming the response (\\(Y\\)) variable.\n\\(\\color{dodgerblue}{\\log(Y)}\\) is the most common variance stabilizing transform.\n\nIf \\(Y\\) has only positive values (e.g. sales) or is a count (e.g. # of customers), take \\(\\log(Y)\\) (always natural log).\n\n\\(\\color{dodgerblue}{\\sqrt{Y}}\\) is sometimes used, especially if the data have zeros.\n\nIn general, think what you expect to be linear for your data."
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#violation-2-nonlinear-residual-patterns",
+    "href": "VB_RegDiagTrans.html#violation-2-nonlinear-residual-patterns",
+    "title": "Review of Diagnostics and Transformations for Regression Models",
+    "section": "Violation 2: Nonlinear residual patterns",
+    "text": "Violation 2: Nonlinear residual patterns\nConsider regression residuals for the 2nd Anscombe dataset:\n\nThings are not good! It appears that we do not have a linear mean function; that is \\(\\color{dodgerblue}{\\mathbb{E}[Y] \\neq \\beta_0 + \\beta_1 X}\\)."
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#solution-2-polynomial-regression",
+    "href": "VB_RegDiagTrans.html#solution-2-polynomial-regression",
+    "title": "Review of Diagnostics and Transformations for Regression Models",
+    "section": "Solution 2: Polynomial regression",
+    "text": "Solution 2: Polynomial regression\nEven though we are limited to a linear mean, it is possible to get nonlinear regression by transforming the \\(X\\) variable.\n\nIn general, we can add powers of \\(\\color{dodgerblue}X\\) to get polynomial regression: \\(\\color{red}{\\mathbb{E}[Y] = \\beta_0 + \\beta_1X + \\beta_2 X^2 + \\cdots + \\beta_m X^m}\\)\n\nYou can fit any mean function if \\(m\\) is big enough.\n\nUsually stick to m=2 unless you have a good reason."
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#testing-for-nonlinearity",
+    "href": "VB_RegDiagTrans.html#testing-for-nonlinearity",
+    "title": "Review of Diagnostics and Transformations for Regression Models",
+    "section": "Testing for nonlinearity",
+    "text": "Testing for nonlinearity\nTo see if you need more nonlinearity, try the regression which includes the next polynomial term, and see if it is significant.\nFor example, to see if you need a quadratic term,\n\nfit the model then run the regression \\(\\mathbb{E}[Y] = \\beta_0 + \\beta_1 X + \\beta_2 X^2\\).\nIf your test implies \\(\\color{dodgerblue}{\\beta_2 \\neq 0}\\), you need \\(\\color{dodgerblue}{X^2}\\) in your model.\n\nNote: \\(p\\)-values are calculated “given the other \\(\\beta\\)’s are nonzero”; i.e., conditional on \\(X\\) being in the model."
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#closing-comments-on-polynomials",
+    "href": "VB_RegDiagTrans.html#closing-comments-on-polynomials",
+    "title": "Review of Diagnostics and Transformations for Regression Models",
+    "section": "Closing comments on polynomials",
+    "text": "Closing comments on polynomials\n\nWe can always add higher powers (cubic, etc.) if necessary.\n\nIf you add a higher order term, the lower order term is kept in the model regardless of its individual \\(t\\)-stat.\n\nBe very careful about predicting outside the data range as the curve may do unintended things beyond the data.\nWatch out for over-fitting.\n\nYou can get a “perfect” fit with enough polynomial terms,\nbut that doesn’t mean it will be any good for prediction or understanding."
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#other-problems",
+    "href": "VB_RegDiagTrans.html#other-problems",
+    "title": "Review of Diagnostics and Transformations for Regression Models",
+    "section": "Other problems",
+    "text": "Other problems\nSometimes we have other strange things going on in our data sets\n\ndata are “clumped” up in \\(X\\) – high leverage points\nresiduals still aren’t normally distributed after taking transforms from earlier\nresponses take discrete values instead of continuous\n\n\nThe latter 2 we can deal with using MLR and GLMs. What about the first?"
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#the-log-log-model",
+    "href": "VB_RegDiagTrans.html#the-log-log-model",
+    "title": "Review of Diagnostics and Transformations for Regression Models",
+    "section": "The log-log model",
+    "text": "The log-log model\nThe other common covariate transform is \\(\\log(X)\\).\n\nWhen \\(X\\)-values are bunched up, \\(\\log(X)\\) helps spread them out and reduces the leverage of extreme values.\nRecall that both reduce \\(s_{b_1}\\).\n\nIn practice, this is often used in conjunction with a \\(\\log(Y)\\) response transformation. The log-log model is \\[\n    \\color{red}{\\log(Y) = \\beta_0 + \\beta_1 \\log(X) + \\varepsilon}.\n    \\]\nIt is super useful, and has some special properties …"
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#elasticity-and-the-log-log-model",
+    "href": "VB_RegDiagTrans.html#elasticity-and-the-log-log-model",
+    "title": "Review of Diagnostics and Transformations for Regression Models",
+    "section": "Elasticity and the log-log model",
+    "text": "Elasticity and the log-log model\nIn a log-log model, the slope \\(\\beta_1\\) is sometimes called elasticity.\nThe elasticity is (roughly) % change in \\(Y\\) per 1% change in \\(X\\). \\[\\color{dodgerblue}{\n\\beta_1 \\approx \\frac{d\\%Y}{d\\%X}}\\] For example, economists often assume that GDP has import elasticity of 1. Indeed:\n\nGDPlm&lt;-lm(log(GDP) ~ log(IMPORTS))\ncoef(GDPlm)\n#&gt;  (Intercept) log(IMPORTS) \n#&gt;     1.891516     0.969337\n\n\n(Can we test for 1%?)"
+  },
+  {
+    "objectID": "VB_RegDiagTrans.html#practical",
+    "href": "VB_RegDiagTrans.html#practical",
+    "title": "Review of Diagnostics and Transformations for Regression Models",
+    "section": "Practical",
+    "text": "Practical\nNext we’ll do a short practical to practice:\n\nFitting linear models in R\nChecking diagnostics\nChoosing transformations\nPlotting predictions"
+  },
+  {
+    "objectID": "VB_RegDiagTrans_practical_soln.html#fit-the-linear-regression-model.-plot-the-data-and-fitted-line.",
+    "href": "VB_RegDiagTrans_practical_soln.html#fit-the-linear-regression-model.-plot-the-data-and-fitted-line.",
+    "title": "VectorByte Methods Training",
+    "section": "1. Fit the linear regression model. Plot the data and fitted line.",
+    "text": "1. Fit the linear regression model. Plot the data and fitted line.\n\n## fit models\nattach(D &lt;- read.csv(\"data/transforms.csv\"))\nlm1 &lt;- lm(Y1 ~ X1)\nlm2 &lt;- lm(Y2 ~ X2)\nlm3 &lt;- lm(Y3 ~ X3)\nlm4 &lt;- lm(Y4 ~ X4)\n\n## plot points and lines\npar(mfrow=c(2,2), mar=c(3,2,2,1))\nplot(X1, Y1, col=1, main=\"I\"); abline(lm1, col=1)\nplot(X2, Y2, col=2, main=\"II\"); abline(lm2, col=2)\nplot(X3, Y3, col=3, main=\"III\"); abline(lm3, col=3)\nplot(X4, Y4, col=4, main=\"IV\"); abline(lm4, col=4)"
+  },
+  {
+    "objectID": "VB_RegDiagTrans_practical_soln.html#provide-a-scatterplot-normal-q-q-plot-and-histogram-for-the-studentized-regression-residuals.",
+    "href": "VB_RegDiagTrans_practical_soln.html#provide-a-scatterplot-normal-q-q-plot-and-histogram-for-the-studentized-regression-residuals.",
+    "title": "VectorByte Methods Training",
+    "section": "2. Provide a scatterplot, normal Q-Q plot, and histogram for the studentized regression residuals.",
+    "text": "2. Provide a scatterplot, normal Q-Q plot, and histogram for the studentized regression residuals.\n\npar(mfrow=c(3,4), mar=c(4,4,2,0.5))   # you might have to make \n                                      # the plot window big to \n                                      # fit everything\nplot(lm1$fitted, rstudent(lm1), col=1,\n     xlab=\"Fitted Values\", ylab=\"Studentized Residuals\", \n     pch=20, main=\"I\")\nplot(lm2$fitted, rstudent(lm2), col=2,\n     xlab=\"Fitted Values\", ylab=\"Studentized Residuals\", \n     pch=20, main=\"II\")\nplot(lm3$fitted, rstudent(lm3), col=3,\n     xlab=\"Fitted Values\", ylab=\"Studentized Residuals\", \n     pch=20, main=\"III\")\nplot(lm4$fitted, rstudent(lm4), col=4,\n     xlab=\"Fitted Values\", ylab=\"Studentized Residuals\", \n     pch=20, main=\"IV\")\n\nqqnorm(rstudent(lm1), pch=20, col=1, main=\"\" )\nabline(a=0,b=1,lty=2)\nqqnorm(rstudent(lm2), pch=20, col=2, main=\"\" )\nabline(a=0,b=1,lty=2)\nqqnorm(rstudent(lm3), pch=20, col=3, main=\"\" )\nabline(a=0,b=1,lty=2)\nqqnorm(rstudent(lm4), pch=20, col=4, main=\"\" )\nabline(a=0,b=1,lty=2)\n\nhist(rstudent(lm1), col=1, xlab=\"Studentized Residuals\", \n     main=\"\", border=8)\nhist(rstudent(lm2), col=2, xlab=\"Studentized Residuals\", main=\"\")\nhist(rstudent(lm3), col=3, xlab=\"Studentized Residuals\", main=\"\")\nhist(rstudent(lm4), col=4, xlab=\"Studentized Residuals\", main=\"\")"
+  },
+  {
+    "objectID": "VB_RegDiagTrans_practical_soln.html#using-the-residual-scatterplots-state-how-the-slr-model-assumptions-are-violated.",
+    "href": "VB_RegDiagTrans_practical_soln.html#using-the-residual-scatterplots-state-how-the-slr-model-assumptions-are-violated.",
+    "title": "VectorByte Methods Training",
+    "section": "3. Using the residual scatterplots, state how the SLR model assumptions are violated.",
+    "text": "3. Using the residual scatterplots, state how the SLR model assumptions are violated.\nSet 1: Xs are clumpy AND the variance seems non-constant. It looks a lot like the GDP data from class. Since both Xs and Ys are strictly positive, we can try a log-log transform.\nSet 2: Data have non-constant variance – should probably log transform the Ys\nSet 3: Data have an underlying non-linear pattern. Add in an x^2 and x^3 term in this case.\nSet 4: X values are very clumpy and all positive. Try log transform of the Xs"
+  },
+  {
+    "objectID": "VB_RegDiagTrans_practical_soln.html#determine-the-data-transformation-to-correct-the-problems-in-3-fit-the-corresponding-regression-model-and-plot-the-transformed-data-with-new-fitted-line.",
+    "href": "VB_RegDiagTrans_practical_soln.html#determine-the-data-transformation-to-correct-the-problems-in-3-fit-the-corresponding-regression-model-and-plot-the-transformed-data-with-new-fitted-line.",
+    "title": "VectorByte Methods Training",
+    "section": "4. Determine the data transformation to correct the problems in 3, fit the corresponding regression model, and plot the transformed data with new fitted line.",
+    "text": "4. Determine the data transformation to correct the problems in 3, fit the corresponding regression model, and plot the transformed data with new fitted line.\n\n### the fixes are as follows:\nlogX1&lt;- log(X1)\nlogY1 &lt;- log(Y1)\nlogY2 &lt;- log(Y2)\nX3sq &lt;- X3^2\nX3cube&lt;-X3^3\nlogX4 &lt;- log(X4)\n\n\n### re-run the regressions and residual plots to show this worked\nlm1 &lt;- lm(logY1 ~ logX1)\nlm2 &lt;- lm(logY2 ~ X2)\nlm3 &lt;- lm(Y3 ~ X3+ X3sq + X3cube)\nlm4 &lt;- lm(Y4 ~ logX4)\n\n## plot points and lines\npar(mfrow=c(2,2), mar=c(3,2,2,1))\nplot(logX1, logY1, col=1, main=\"I\"); abline(lm1, col=1)\nplot(X2, logY2, col=2, main=\"II\"); abline(lm2, col=2)\nplot(X3, Y3, col=3, main=\"III\")\nxx3 &lt;- seq(min(X3), max(X3), length=1000)\nlines(xx3, lm3$coef[1] + lm3$coef[2]*xx3 + \n        lm3$coef[3]*xx3^2+lm3$coef[3]*xx3^3, col=3)\nplot(logX4, Y4, col=4, main=\"IV\"); abline(lm4, col=4)"
+  },
+  {
+    "objectID": "VB_RegDiagTrans_practical_soln.html#provide-plots-to-show-that-your-transformations-have-mostly-fixed-the-model-violations.",
+    "href": "VB_RegDiagTrans_practical_soln.html#provide-plots-to-show-that-your-transformations-have-mostly-fixed-the-model-violations.",
+    "title": "VectorByte Methods Training",
+    "section": "5. Provide plots to show that your transformations have (mostly) fixed the model violations.",
+    "text": "5. Provide plots to show that your transformations have (mostly) fixed the model violations.\n\npar(mfrow=c(3,4), mar=c(4,4,2,0.5))  \nplot(lm1$fitted, rstudent(lm1), col=1,\n     xlab=\"Fitted Values\", ylab=\"Studentized Residuals\", \n     pch=20, main=\"I\")\nplot(lm2$fitted, rstudent(lm2), col=2,\n     xlab=\"Fitted Values\", ylab=\"Studentized Residuals\", \n     pch=20, main=\"II\")\nplot(lm3$fitted, rstudent(lm3), col=3,\n     xlab=\"Fitted Values\", ylab=\"Studentized Residuals\", \n     pch=20, main=\"III\")\nplot(lm4$fitted, rstudent(lm4), col=4,\n     xlab=\"Fitted Values\", ylab=\"Studentized Residuals\", \n     pch=20, main=\"IV\")\n\n## Q-Q plots\nqqnorm(rstudent(lm1), pch=20, col=1, main=\"\" )\nabline(a=0,b=1,lty=2)\nqqnorm(rstudent(lm2), pch=20, col=2, main=\"\" )\nabline(a=0,b=1,lty=2)\nqqnorm(rstudent(lm3), pch=20, col=3, main=\"\" )\nabline(a=0,b=1,lty=2)\nqqnorm(rstudent(lm4), pch=20, col=4, main=\"\" )\nabline(a=0,b=1,lty=2)\n\n## histograms of studentized residuals\nhist(rstudent(lm1), col=1, xlab=\"Studentized Residuals\", \n     main=\"\", border=8)\nhist(rstudent(lm2), col=2, xlab=\"Studentized Residuals\", main=\"\")\nhist(rstudent(lm3), col=3, xlab=\"Studentized Residuals\", main=\"\")\nhist(rstudent(lm4), col=4, xlab=\"Studentized Residuals\", main=\"\")"
+  },
+  {
+    "objectID": "VB_TimeDepData_practical_soln.html#exploring-the-data",
+    "href": "VB_TimeDepData_practical_soln.html#exploring-the-data",
+    "title": "VectorByte Methods Training: Regression Methods for Time Dependent Data (practical - solution)",
     "section": "Exploring the Data",
     "text": "Exploring the Data\nAs always, we first want to take a look at the data, to make sure we understand it, and that we don’t have missing or weird values.\n\nmozData&lt;-read.csv(\"data/Culex_erraticus_walton_covariates_aggregated.csv\")\nsummary(mozData)\n\n   Month_Yr          sample_value        MaxTemp          Precip      \n Length:36          Min.   :0.00000   Min.   :16.02   Min.   : 0.000  \n Class :character   1st Qu.:0.04318   1st Qu.:22.99   1st Qu.: 2.162  \n Mode  :character   Median :0.73001   Median :26.69   Median : 4.606  \n                    Mean   :0.80798   Mean   :26.23   Mean   : 5.595  \n                    3rd Qu.:1.22443   3rd Qu.:30.70   3rd Qu.: 7.864  \n                    Max.   :3.00595   Max.   :33.31   Max.   :18.307  \n\n\nWe can see that the minimum observed average number of mosquitoes it zero, and max is only 3 (there are likely many zeros averaged over many days in the month). There don’t appear to be any NAs in the data. In this case the dataset itself is small enough that we can print the whole thing to ensure it’s complete:\n\nmozData\n\n   Month_Yr sample_value  MaxTemp       Precip\n1   2015-01  0.000000000 17.74602  3.303991888\n2   2015-02  0.018181818 17.87269 16.544265802\n3   2015-03  0.468085106 23.81767  2.405651215\n4   2015-04  1.619047619 26.03559  8.974406168\n5   2015-05  0.821428571 30.01602  0.567960943\n6   2015-06  3.005952381 31.12094  4.841342729\n7   2015-07  2.380952381 32.81130  3.849010353\n8   2015-08  1.826347305 32.56245  5.562845324\n9   2015-09  0.648809524 30.55155 10.409724627\n10  2015-10  0.988023952 27.22605  0.337750269\n11  2015-11  0.737804878 24.86768 18.306749680\n12  2015-12  0.142857143 22.46588  5.621475377\n13  2016-01  0.000000000 16.02406  3.550622029\n14  2016-02  0.020202020 19.42057 11.254680803\n15  2016-03  0.015151515 23.13610  4.785664728\n16  2016-04  0.026143791 24.98082  4.580424519\n17  2016-05  0.025252525 28.72884  0.053057634\n18  2016-06  0.833333333 30.96990  6.155417473\n19  2016-07  1.261363636 33.30509  4.496368193\n20  2016-08  1.685279188 32.09633 11.338749182\n21  2016-09  2.617142857 31.60575  2.868288451\n22  2016-10  1.212121212 29.14275  0.000000000\n23  2016-11  1.539772727 24.48482  0.005462681\n24  2016-12  0.771573604 20.46054 11.615521725\n25  2017-01  0.045454545 18.35473  0.000000000\n26  2017-02  0.036363636 23.65584  3.150710053\n27  2017-03  0.194285714 22.53573  1.430094952\n28  2017-04  0.436548223 26.15299  0.499381616\n29  2017-05  1.202020202 28.00173  6.580562663\n30  2017-06  0.834196891 29.48951 13.333939858\n31  2017-07  1.765363128 32.25135  7.493927035\n32  2017-08  0.744791667 31.86476  6.082113434\n33  2017-09  0.722222222 30.60566  4.631037395\n34  2017-10  0.142131980 27.73453 11.567112214\n35  2017-11  0.289772727 23.23140  1.195760473\n36  2017-12  0.009174312 18.93603  4.018254442"
   },
   {
-    "objectID": "VB_TimeDepData_practical.html#plotting-the-data",
-    "href": "VB_TimeDepData_practical.html#plotting-the-data",
-    "title": "VectorByte Methods Training: Regression Methods for Time Dependent Data (practical)",
+    "objectID": "VB_TimeDepData_practical_soln.html#plotting-the-data",
+    "href": "VB_TimeDepData_practical_soln.html#plotting-the-data",
+    "title": "VectorByte Methods Training: Regression Methods for Time Dependent Data (practical - solution)",
     "section": "Plotting the data",
     "text": "Plotting the data\nFirst we’ll examine the data itself, including the predictors:\n\nmonths&lt;-dim(mozData)[1]\nt&lt;-1:months ## counter for months in the data set\npar(mfrow=c(3,1))\nplot(t, mozData$sample_value, type=\"l\", lwd=2, \n     main=\"Average Monthly Abundance\", \n     xlab =\"Time (months)\", \n     ylab = \"Average Count\")\nplot(t, mozData$MaxTemp, type=\"l\",\n     col = 2, lwd=2, \n     main=\"Average Maximum Temp\", \n     xlab =\"Time (months)\", \n     ylab = \"Temperature (C)\")\nplot(t, mozData$Precip, type=\"l\",\n     col=\"dodgerblue\", lwd=2,\n     main=\"Average Monthly Precip\", \n     xlab =\"Time (months)\", \n     ylab = \"Precipitation (in)\")\n\n\n\n\n\n\n\n\nVisually we noticed that there may be a bit of clumping in the values for abundance (this is subtle) – in particular, since we have a lot of very small/nearly zero counts, a transform, such as a square root, may spread things out for the abundances. It also looks like both the abundance and temperature data are more cyclical than the precipitation, and thus more likely to be related to each other. There’s also not visually a lot of indication of a trend, but it’s usually worthwhile to consider it anyway. Replotting the abundance data with a transformation:\n\nmonths&lt;-dim(mozData)[1]\nt&lt;-1:months ## counter for months in the data set\nplot(t, sqrt(mozData$sample_value), type=\"l\", lwd=2, \n     main=\"Sqrt Average Monthly Abundance\", \n     xlab =\"Time (months)\", \n     ylab = \"Average Count\")\n\n\n\n\n\n\n\n\nThat looks a little bit better. I suggest we go with this for our response."
   },
   {
-    "objectID": "VB_TimeDepData_practical.html#building-a-data-frame",
-    "href": "VB_TimeDepData_practical.html#building-a-data-frame",
-    "title": "VectorByte Methods Training: Regression Methods for Time Dependent Data (practical)",
+    "objectID": "VB_TimeDepData_practical_soln.html#building-a-data-frame",
+    "href": "VB_TimeDepData_practical_soln.html#building-a-data-frame",
+    "title": "VectorByte Methods Training: Regression Methods for Time Dependent Data (practical - solution)",
     "section": "Building a data frame",
     "text": "Building a data frame\nBefore we get into model building, we always want to build a data frame to contain all of the predictors that we want to consider, at the potential lags that we’re interested in. In the lecture we saw building the AR, sine/cosine, and trend predictors:\n\nt &lt;- 2:months ## to make building the AR1 predictors easier\n\nmozTS &lt;- data.frame(\n  Y=sqrt(mozData$sample_value[t]), # transformed response\n  Yl1=sqrt(mozData$sample_value[t-1]), # AR1 predictor\n  t=t, # trend predictor\n  sin12=sin(2*pi*t/12), \n  cos12=cos(2*pi*t/12) # periodic predictors\n  )\n\nWe will also put in the temperature and precipitation predictors. But we need to think about what might be an appropriate lag. If this were daily or weekly data, we’d probably want to have a fairly sizable lag – mosquitoes take a while to develop, so the number we see today is not likely related to the temperature today. However, since these data are agregated across a whole month, as is the temperature/precipitaion, the current month values are likely to be useful. However, it’s even possible that last month’s values may be so we’ll add those in as well:\n\nmozTS$MaxTemp&lt;-mozData$MaxTemp[t] ## current temps\nmozTS$MaxTempl1&lt;-mozData$MaxTemp[t-1] ## previous temps\nmozTS$Precip&lt;-mozData$Precip[t] ## current precip\nmozTS$Precipl1&lt;-mozData$Precip[t-1] ## previous precip\n\nThus our full dataframe:\n\nsummary(mozTS)\n\n       Y               Yl1               t            sin12         \n Min.   :0.0000   Min.   :0.0000   Min.   : 2.0   Min.   :-1.00000  \n 1st Qu.:0.2951   1st Qu.:0.2951   1st Qu.:10.5   1st Qu.:-0.68301  \n Median :0.8590   Median :0.8590   Median :19.0   Median : 0.00000  \n Mean   :0.7711   Mean   :0.7684   Mean   :19.0   Mean   :-0.01429  \n 3rd Qu.:1.1120   3rd Qu.:1.1120   3rd Qu.:27.5   3rd Qu.: 0.68301  \n Max.   :1.7338   Max.   :1.7338   Max.   :36.0   Max.   : 1.00000  \n     cos12             MaxTemp        MaxTempl1         Precip      \n Min.   :-1.00000   Min.   :16.02   Min.   :16.02   Min.   : 0.000  \n 1st Qu.:-0.68301   1st Qu.:23.18   1st Qu.:23.18   1st Qu.: 1.918  \n Median : 0.00000   Median :27.23   Median :27.23   Median : 4.631  \n Mean   :-0.02474   Mean   :26.47   Mean   :26.44   Mean   : 5.660  \n 3rd Qu.: 0.50000   3rd Qu.:30.79   3rd Qu.:30.79   3rd Qu.: 8.234  \n Max.   : 1.00000   Max.   :33.31   Max.   :33.31   Max.   :18.307  \n    Precipl1     \n Min.   : 0.000  \n 1st Qu.: 1.918  \n Median : 4.631  \n Mean   : 5.640  \n 3rd Qu.: 8.234  \n Max.   :18.307  \n\n\n\nhead(mozTS)\n\n          Y       Yl1 t         sin12         cos12  MaxTemp MaxTempl1\n1 0.1348400 0.0000000 2  8.660254e-01  5.000000e-01 17.87269  17.74602\n2 0.6841675 0.1348400 3  1.000000e+00  6.123234e-17 23.81767  17.87269\n3 1.2724180 0.6841675 4  8.660254e-01 -5.000000e-01 26.03559  23.81767\n4 0.9063270 1.2724180 5  5.000000e-01 -8.660254e-01 30.01602  26.03559\n5 1.7337683 0.9063270 6  1.224647e-16 -1.000000e+00 31.12094  30.01602\n6 1.5430335 1.7337683 7 -5.000000e-01 -8.660254e-01 32.81130  31.12094\n      Precip   Precipl1\n1 16.5442658  3.3039919\n2  2.4056512 16.5442658\n3  8.9744062  2.4056512\n4  0.5679609  8.9744062\n5  4.8413427  0.5679609\n6  3.8490104  4.8413427"
   },
   {
-    "objectID": "VB_TimeDepData_practical.html#building-a-first-model",
-    "href": "VB_TimeDepData_practical.html#building-a-first-model",
-    "title": "VectorByte Methods Training: Regression Methods for Time Dependent Data (practical)",
+    "objectID": "VB_TimeDepData_practical_soln.html#building-a-first-model",
+    "href": "VB_TimeDepData_practical_soln.html#building-a-first-model",
+    "title": "VectorByte Methods Training: Regression Methods for Time Dependent Data (practical - solution)",
     "section": "Building a first model",
     "text": "Building a first model\nWe will first build a very simple model – just a trend – to practice building the model, checking diagnostics, and plotting predictions.\n\nmod1&lt;-lm(Y ~ t, data=mozTS)\nsummary(mod1)\n\n\nCall:\nlm(formula = Y ~ t, data = mozTS)\n\nResiduals:\n     Min       1Q   Median       3Q      Max \n-0.81332 -0.47902  0.03671  0.37384  0.87119 \n\nCoefficients:\n             Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)  0.904809   0.178421   5.071  1.5e-05 ***\nt           -0.007038   0.008292  -0.849    0.402    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.4954 on 33 degrees of freedom\nMultiple R-squared:  0.02136,   Adjusted R-squared:  -0.008291 \nF-statistic: 0.7204 on 1 and 33 DF,  p-value: 0.4021\n\n\nThe model output indicates that this model is not useful – the trend is not significant and it only explains about 2% of the variability. Let’s plot the predictions:\n\n## plot points and fitted lines\nplot(Y~t, data=mozTS, col=1, type=\"l\")\nlines(t, mod1$fitted, col=\"dodgerblue\", lwd=2)\n\n\n\n\n\n\n\n\nNot good – we’ll definitely need to try something else! Remember that since we’re using a linear model for this, that we should check our residual plots as usual, and then also plot the acf of the residuals:\n\npar(mfrow=c(1,3), mar=c(4,4,2,0.5))   \n\n## studentized residuals vs fitted\nplot(mod1$fitted, rstudent(mod1), col=1,\n     xlab=\"Fitted Values\", \n     ylab=\"Studentized Residuals\", \n     pch=20, main=\"AR 1 only model\")\n\n## qq plot of studentized residuals\nqqnorm(rstudent(mod1), pch=20, col=1, main=\"\" )\nabline(a=0,b=1,lty=2, col=2)\n\n## histogram of studentized residuals\nhist(rstudent(mod1), col=1, \n     xlab=\"Studentized Residuals\", \n     main=\"\", border=8)\n\n\n\n\n\n\n\n\nThis doesn’t look really bad, although the histogram might be a bit weird. Finally the acf\n\nacf(mod1$residuals)\n\n\n\n\n\n\n\n\nThis is where we can see that we definitely aren’t able to capture the pattern. There’s substantial autocorrelation left at a 1 month lag, and around 6 months.\nFinally, for moving forward, we can extract the BIC for this model so that we can compare with other models that you’ll build next.\n\nn&lt;-length(t)\nextractAIC(mod1, k=log(n))[2]\n\n[1] -44.11057"
+  },
+  {
+    "objectID": "VB_TimeDepData_practical_soln.html#example-solution-ar1-model-only",
+    "href": "VB_TimeDepData_practical_soln.html#example-solution-ar1-model-only",
+    "title": "VectorByte Methods Training: Regression Methods for Time Dependent Data (practical - solution)",
+    "section": "Example Solution: AR1 model only",
+    "text": "Example Solution: AR1 model only\n\nmod2&lt;-lm(Y ~ Yl1, data=mozTS)\nsummary(mod2)\n\n\nCall:\nlm(formula = Y ~ Yl1, data = mozTS)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-0.6338 -0.2173 -0.0678  0.2463  0.8675 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)   0.2410     0.1130   2.132   0.0405 *  \nYl1           0.6899     0.1240   5.562 3.51e-06 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.3598 on 33 degrees of freedom\nMultiple R-squared:  0.4839,    Adjusted R-squared:  0.4682 \nF-statistic: 30.94 on 1 and 33 DF,  p-value: 3.507e-06\n\n\nThe model is better than the original trend only model – the AR1 term explains about 48% of the variability. Let’s plot the predictions:\n\n## plot points and fitted lines\nplot(Y~t, data=mozTS, col=1, type=\"l\")\nlines(t, mod2$fitted, col=2, lwd=2)\n\n\n\n\n\n\n\n\nPretty good! Look at all of the diagnostic plots:\n\npar(mfrow=c(1,3), mar=c(4,4,2,0.5))   \n\n## studentized residuals vs fitted\nplot(mod2$fitted, rstudent(mod2), col=2,\n     xlab=\"Fitted Values\", \n     ylab=\"Studentized Residuals\", \n     pch=20, main=\"AR 1 only model\")\n\n## qq plot of studentized residuals\nqqnorm(rstudent(mod2), pch=20, col=2, main=\"\" )\nabline(a=0,b=1,lty=2, col=1)\n\n## histogram of studentized residuals\nhist(rstudent(mod2), col=2, \n     xlab=\"Studentized Residuals\", \n     main=\"\", border=8)\n\n\n\n\n\n\n\n\nMaybe one outlier, but not too bad.\n\nacf(mod2$residuals)\n\n\n\n\n\n\n\n\nWe seem to have taken care of all of the autoregression, even at multiple lags!\n\nn&lt;-length(t)\nextractAIC(mod2, k=log(n))[2]\n\n[1] -66.50482\n\n\nBIC is much lower – overall a much much better model than the first one."
+  },
+  {
+    "objectID": "VB_TimeDepData_practical_soln.html#example-solution-sinecosine-terms-only",
+    "href": "VB_TimeDepData_practical_soln.html#example-solution-sinecosine-terms-only",
+    "title": "VectorByte Methods Training: Regression Methods for Time Dependent Data (practical - solution)",
+    "section": "Example Solution: sine/cosine terms only",
+    "text": "Example Solution: sine/cosine terms only\n\nmod3&lt;-lm(Y ~ sin12 + cos12, data=mozTS)\nsummary(mod3)\n\n\nCall:\nlm(formula = Y ~ sin12 + cos12, data = mozTS)\n\nResiduals:\n     Min       1Q   Median       3Q      Max \n-0.70116 -0.21655 -0.03611  0.19213  0.67992 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)  0.75706    0.05750  13.165 1.83e-14 ***\nsin12       -0.38804    0.08072  -4.807 3.48e-05 ***\ncos12       -0.34298    0.08192  -4.187 0.000207 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.3399 on 32 degrees of freedom\nMultiple R-squared:  0.5533,    Adjusted R-squared:  0.5254 \nF-statistic: 19.82 on 2 and 32 DF,  p-value: 2.512e-06\n\n\nThe model is better than the original trend only model – it explains about 55% of the variability (we expect R^2 to increase as we have more predictors). Let’s plot the predictions:\n\n## plot points and fitted lines\nplot(Y~t, data=mozTS, col=1, type=\"l\")\nlines(t, mod3$fitted, col=3, lwd=2)\n\n\n\n\n\n\n\n\nPretty good! Look at all of the diagnostic plots:\n\npar(mfrow=c(1,3), mar=c(4,4,2,0.5))   \n\n## studentized residuals vs fitted\nplot(mod3$fitted, rstudent(mod3), col=3,\n     xlab=\"Fitted Values\", \n     ylab=\"Studentized Residuals\", \n     pch=20, main=\"sin/cos only model\")\n\n## qq plot of studentized residuals\nqqnorm(rstudent(mod3), pch=20, col=3, main=\"\" )\nabline(a=0,b=1,lty=2, col=2)\n\n## histogram of studentized residuals\nhist(rstudent(mod3), col=3, \n     xlab=\"Studentized Residuals\", \n     main=\"\", border=8)\n\n\n\n\n\n\n\n\nMaybe one outlier, but not too bad.\n\nacf(mod3$residuals)\n\n\n\n\n\n\n\n\nWe seem have taken care of the longer lag autocorrelation, but still some lag 1 left.\n\nn&lt;-length(t)\nextractAIC(mod3, k=log(n))[2]\n\n[1] -68.00597\n\n\nThis model is even better than the AR1 model. We’ll keep this in mind…."
+  },
+  {
+    "objectID": "VB_TimeDepData_practical_soln.html#example-solution-environmental-predictors-only",
+    "href": "VB_TimeDepData_practical_soln.html#example-solution-environmental-predictors-only",
+    "title": "VectorByte Methods Training: Regression Methods for Time Dependent Data (practical - solution)",
+    "section": "Example Solution: environmental predictors only",
+    "text": "Example Solution: environmental predictors only\nI’ll put in the predictors at the current time period. Since this is monthly averaged data we could probably do either current or lagged.\n\nmod4&lt;-lm(Y ~ MaxTemp + Precip, data=mozTS)\nsummary(mod4)\n\n\nCall:\nlm(formula = Y ~ MaxTemp + Precip, data = mozTS)\n\nResiduals:\n     Min       1Q   Median       3Q      Max \n-0.76043 -0.17925 -0.01671  0.15491  0.64193 \n\nCoefficients:\n             Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept) -1.248452   0.323576  -3.858 0.000521 ***\nMaxTemp      0.075450   0.011641   6.481 2.72e-07 ***\nPrecip       0.003928   0.011870   0.331 0.742852    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.3344 on 32 degrees of freedom\nMultiple R-squared:  0.5676,    Adjusted R-squared:  0.5406 \nF-statistic:    21 on 2 and 32 DF,  p-value: 1.493e-06\n\n\nThe model is even better than the last – the model explains about 58% of the variability, although the Precip isn’t significant and we might want to consider dropping it. Let’s plot the predictions:\n\n## plot points and fitted lines\nplot(Y~t, data=mozTS, col=1, type=\"l\")\nlines(t, mod4$fitted, col=4, lwd=2)\n\n\n\n\n\n\n\n\nPretty good! Look at all of the diagnostic plots:\n\npar(mfrow=c(1,3), mar=c(4,4,2,0.5))   \n\n## studentized residuals vs fitted\nplot(mod4$fitted, rstudent(mod4), col=4,\n     xlab=\"Fitted Values\", \n     ylab=\"Studentized Residuals\", \n     pch=20, main=\"weather model\")\n\n## qq plot of studentized residuals\nqqnorm(rstudent(mod4), pch=20, col=4, main=\"\" )\nabline(a=0,b=1,lty=2, col=2)\n\n## histogram of studentized residuals\nhist(rstudent(mod4), col=4, \n     xlab=\"Studentized Residuals\", \n     main=\"\", border=8)\n\n\n\n\n\n\n\n\nMaybe one outlier again, but not too bad.\n\nacf(mod4$residuals)\n\n\n\n\n\n\n\n\nWe seem to have taken care of all of the autoregression, except maybe a bit of AR1.\n\nn&lt;-length(t)\nextractAIC(mod4, k=log(n))[2]\n\n[1] -69.14372\n\n\nEven better, although it’s not much different than the sin/cos"
+  },
+  {
+    "objectID": "VB_TimeDepData_practical_soln.html#example-solution-ar1-plus-sincos",
+    "href": "VB_TimeDepData_practical_soln.html#example-solution-ar1-plus-sincos",
+    "title": "VectorByte Methods Training: Regression Methods for Time Dependent Data (practical - solution)",
+    "section": "Example Solution: AR1 plus sin/cos",
+    "text": "Example Solution: AR1 plus sin/cos\nOk, now to combine things:\n\nmod5&lt;-lm(Y ~ Yl1 + sin12 + cos12, data=mozTS)\nsummary(mod5)\n\n\nCall:\nlm(formula = Y ~ Yl1 + sin12 + cos12, data = mozTS)\n\nResiduals:\n     Min       1Q   Median       3Q      Max \n-0.49092 -0.25028 -0.02153  0.17287  0.60748 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)  0.38035    0.12935   2.940 0.006148 ** \nYl1          0.49652    0.15681   3.166 0.003453 ** \nsin12       -0.13417    0.10729  -1.251 0.220457    \ncos12       -0.29593    0.07386  -4.007 0.000358 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.3002 on 31 degrees of freedom\nMultiple R-squared:  0.6625,    Adjusted R-squared:  0.6298 \nF-statistic: 20.28 on 3 and 31 DF,  p-value: 1.835e-07\n\n\nThe model is better than the original trend only model – the AR1 term explains about 48% of the variability. Let’s plot the predictions:\n\n## plot points and fitted lines\nplot(Y~t, data=mozTS, col=1, type=\"l\")\nlines(t, mod5$fitted, col=5, lwd=2)\n\n\n\n\n\n\n\n\nPretty good! Look at all of the diagnostic plots:\n\npar(mfrow=c(1,3), mar=c(4,4,2,0.5))   \n\n## studentized residuals vs fitted\nplot(mod5$fitted, rstudent(mod5), col=5,\n     xlab=\"Fitted Values\", \n     ylab=\"Studentized Residuals\", \n     pch=20, main=\"AR 1 only model\")\n\n## qq plot of studentized residuals\nqqnorm(rstudent(mod5), pch=20, col=5, main=\"\" )\nabline(a=0,b=1,lty=2, col=2)\n\n## histogram of studentized residuals\nhist(rstudent(mod5), col=5, \n     xlab=\"Studentized Residuals\", \n     main=\"\", border=8)\n\n\n\n\n\n\n\n\nThat’s really good!.\n\nacf(mod5$residuals)\n\n\n\n\n\n\n\n\nWe seem to have taken care of all of the autoregression!\n\nn&lt;-length(t)\nextractAIC(mod5, k=log(n))[2]\n\n[1] -74.25862\n\n\nAnd definitely the best so far. Just to compare more easily:\n\nc(mod1 = extractAIC(mod1, k=log(n))[2],\n  mod2 = extractAIC(mod2, k=log(n))[2],\n  mod3 = extractAIC(mod3, k=log(n))[2],\n  mod4 = extractAIC(mod4, k=log(n))[2],\n  mod5 = extractAIC(mod5, k=log(n))[2])\n\n     mod1      mod2      mod3      mod4      mod5 \n-44.11057 -66.50482 -68.00597 -69.14372 -74.25862 \n\n\nWe’re looking for difference of about 5 to determine if a model is better. Model 5 is about 5 better than model 4, and models 2-4 are all about even. It may be that AR1 plus temperature might be even better, but it’s easier to forecast with a sine/cosine than using temperature, so I went for that…."
+  },
+  {
+    "objectID": "DengueForecastingChallenge.html",
+    "href": "DengueForecastingChallenge.html",
+    "title": "VectorByte Methods Training: Dengue Forecasting Challenge",
+    "section": "",
+    "text": "Using the skills you have gained in this year’s training, we are going to build some real forecasting models! We will focus on one part of a larger forecasting challenge called the Infodengue-Mosqlimate Dengue Challenge (IMDC). It aims to help make improved predictions of weekly dengue cases (incidence) in Brazil.\nThe IMDC involves three validation tests and one forecasting task, each focusing on predicting weekly dengue cases by state (UF) for specific epidemiological seasons:\nValidation Test 1: Predict cases for the 2022–2023 season using data from 2010 to mid-2022.\nValidation Test 2: Predict cases for the 2023–2024 season using data up to mid-2023.\nValidation Test 3: Predict cases for the 2024–2025 season using data up to mid-2024.\nForecast Task: Predict cases for the 2025–2026 season using data up to mid-2025.\nEach model must provide median estimates along with 50%, 80%, 90%, and 95% predictive intervals for all 27 Brazilian federative units.\nSee this link for the full challenge details: https://sprint.mosqlimate.org/2025/\nFor time’s sake, we will focus on making forecasts for just a few of the 27 states, and we will work with part of validation test 3."
+  },
+  {
+    "objectID": "DengueForecastingChallenge.html#easier-version",
+    "href": "DengueForecastingChallenge.html#easier-version",
+    "title": "VectorByte Methods Training: Dengue Forecasting Challenge",
+    "section": "Easier version",
+    "text": "Easier version\nIf that task sounds overwhelming, aim to produce those 12 weekly forecasts just for 1 state of your choice."
+  },
+  {
+    "objectID": "DengueForecastingChallenge.html#some-tips",
+    "href": "DengueForecastingChallenge.html#some-tips",
+    "title": "VectorByte Methods Training: Dengue Forecasting Challenge",
+    "section": "Some Tips",
+    "text": "Some Tips\n\nRemember - if you are using any covariates you will also have to produce forecasting models for each of those to have data available during the forecasting horizon, because in real life, we don’t know what the future holds - we have to make educated assumptions using models!\nDon’t forget to split your data into a training and test set to see how your model does on unseen data after you fit it. It is also good to test your covariate forecasts in this way.\nYour training and test set selection should be representative of your forecasting goal. Since we want 12 weeks of forecasts, consider holding back the last 12 weeks of data as a test set (there is a convenient column in the data to make this split easy if you choose to do it this way).\nBefore making your forecasts, remember to go back and fit your chosen model to the whole data set to give it access to the most relevant data."
   },
   {
     "objectID": "VB_TimeSeries.html#learning-objectives",
@@ -672,305 +945,32 @@
     "text": "Time Series and Forecasting Practical\n\n\n\nIn the next practical, we’re going to use our new time series methods on a new data set on tree greenness.\n\nAs part of this you’ll practice all of the steps in the forecasting cycle (except the last).\n\n\n\n\nDefine Goal\nGet Data\nExplore/Visualize\nPre-Processing\nPartitioning\nModeling\nEvaluation\nImplementation"
   },
   {
-    "objectID": "VB_RegDiagTrans_practical_soln.html#fit-the-linear-regression-model.-plot-the-data-and-fitted-line.",
-    "href": "VB_RegDiagTrans_practical_soln.html#fit-the-linear-regression-model.-plot-the-data-and-fitted-line.",
-    "title": "VectorByte Methods Training",
-    "section": "1. Fit the linear regression model. Plot the data and fitted line.",
-    "text": "1. Fit the linear regression model. Plot the data and fitted line.\n\n## fit models\nattach(D &lt;- read.csv(\"data/transforms.csv\"))\nlm1 &lt;- lm(Y1 ~ X1)\nlm2 &lt;- lm(Y2 ~ X2)\nlm3 &lt;- lm(Y3 ~ X3)\nlm4 &lt;- lm(Y4 ~ X4)\n\n## plot points and lines\npar(mfrow=c(2,2), mar=c(3,2,2,1))\nplot(X1, Y1, col=1, main=\"I\"); abline(lm1, col=1)\nplot(X2, Y2, col=2, main=\"II\"); abline(lm2, col=2)\nplot(X3, Y3, col=3, main=\"III\"); abline(lm3, col=3)\nplot(X4, Y4, col=4, main=\"IV\"); abline(lm4, col=4)"
-  },
-  {
-    "objectID": "VB_RegDiagTrans_practical_soln.html#provide-a-scatterplot-normal-q-q-plot-and-histogram-for-the-studentized-regression-residuals.",
-    "href": "VB_RegDiagTrans_practical_soln.html#provide-a-scatterplot-normal-q-q-plot-and-histogram-for-the-studentized-regression-residuals.",
-    "title": "VectorByte Methods Training",
-    "section": "2. Provide a scatterplot, normal Q-Q plot, and histogram for the studentized regression residuals.",
-    "text": "2. Provide a scatterplot, normal Q-Q plot, and histogram for the studentized regression residuals.\n\npar(mfrow=c(3,4), mar=c(4,4,2,0.5))   # you might have to make \n                                      # the plot window big to \n                                      # fit everything\nplot(lm1$fitted, rstudent(lm1), col=1,\n     xlab=\"Fitted Values\", ylab=\"Studentized Residuals\", \n     pch=20, main=\"I\")\nplot(lm2$fitted, rstudent(lm2), col=2,\n     xlab=\"Fitted Values\", ylab=\"Studentized Residuals\", \n     pch=20, main=\"II\")\nplot(lm3$fitted, rstudent(lm3), col=3,\n     xlab=\"Fitted Values\", ylab=\"Studentized Residuals\", \n     pch=20, main=\"III\")\nplot(lm4$fitted, rstudent(lm4), col=4,\n     xlab=\"Fitted Values\", ylab=\"Studentized Residuals\", \n     pch=20, main=\"IV\")\n\nqqnorm(rstudent(lm1), pch=20, col=1, main=\"\" )\nabline(a=0,b=1,lty=2)\nqqnorm(rstudent(lm2), pch=20, col=2, main=\"\" )\nabline(a=0,b=1,lty=2)\nqqnorm(rstudent(lm3), pch=20, col=3, main=\"\" )\nabline(a=0,b=1,lty=2)\nqqnorm(rstudent(lm4), pch=20, col=4, main=\"\" )\nabline(a=0,b=1,lty=2)\n\nhist(rstudent(lm1), col=1, xlab=\"Studentized Residuals\", \n     main=\"\", border=8)\nhist(rstudent(lm2), col=2, xlab=\"Studentized Residuals\", main=\"\")\nhist(rstudent(lm3), col=3, xlab=\"Studentized Residuals\", main=\"\")\nhist(rstudent(lm4), col=4, xlab=\"Studentized Residuals\", main=\"\")"
-  },
-  {
-    "objectID": "VB_RegDiagTrans_practical_soln.html#using-the-residual-scatterplots-state-how-the-slr-model-assumptions-are-violated.",
-    "href": "VB_RegDiagTrans_practical_soln.html#using-the-residual-scatterplots-state-how-the-slr-model-assumptions-are-violated.",
-    "title": "VectorByte Methods Training",
-    "section": "3. Using the residual scatterplots, state how the SLR model assumptions are violated.",
-    "text": "3. Using the residual scatterplots, state how the SLR model assumptions are violated.\nSet 1: Xs are clumpy AND the variance seems non-constant. It looks a lot like the GDP data from class. Since both Xs and Ys are strictly positive, we can try a log-log transform.\nSet 2: Data have non-constant variance – should probably log transform the Ys\nSet 3: Data have an underlying non-linear pattern. Add in an x^2 and x^3 term in this case.\nSet 4: X values are very clumpy and all positive. Try log transform of the Xs"
-  },
-  {
-    "objectID": "VB_RegDiagTrans_practical_soln.html#determine-the-data-transformation-to-correct-the-problems-in-3-fit-the-corresponding-regression-model-and-plot-the-transformed-data-with-new-fitted-line.",
-    "href": "VB_RegDiagTrans_practical_soln.html#determine-the-data-transformation-to-correct-the-problems-in-3-fit-the-corresponding-regression-model-and-plot-the-transformed-data-with-new-fitted-line.",
-    "title": "VectorByte Methods Training",
-    "section": "4. Determine the data transformation to correct the problems in 3, fit the corresponding regression model, and plot the transformed data with new fitted line.",
-    "text": "4. Determine the data transformation to correct the problems in 3, fit the corresponding regression model, and plot the transformed data with new fitted line.\n\n### the fixes are as follows:\nlogX1&lt;- log(X1)\nlogY1 &lt;- log(Y1)\nlogY2 &lt;- log(Y2)\nX3sq &lt;- X3^2\nX3cube&lt;-X3^3\nlogX4 &lt;- log(X4)\n\n\n### re-run the regressions and residual plots to show this worked\nlm1 &lt;- lm(logY1 ~ logX1)\nlm2 &lt;- lm(logY2 ~ X2)\nlm3 &lt;- lm(Y3 ~ X3+ X3sq + X3cube)\nlm4 &lt;- lm(Y4 ~ logX4)\n\n## plot points and lines\npar(mfrow=c(2,2), mar=c(3,2,2,1))\nplot(logX1, logY1, col=1, main=\"I\"); abline(lm1, col=1)\nplot(X2, logY2, col=2, main=\"II\"); abline(lm2, col=2)\nplot(X3, Y3, col=3, main=\"III\")\nxx3 &lt;- seq(min(X3), max(X3), length=1000)\nlines(xx3, lm3$coef[1] + lm3$coef[2]*xx3 + \n        lm3$coef[3]*xx3^2+lm3$coef[3]*xx3^3, col=3)\nplot(logX4, Y4, col=4, main=\"IV\"); abline(lm4, col=4)"
-  },
-  {
-    "objectID": "VB_RegDiagTrans_practical_soln.html#provide-plots-to-show-that-your-transformations-have-mostly-fixed-the-model-violations.",
-    "href": "VB_RegDiagTrans_practical_soln.html#provide-plots-to-show-that-your-transformations-have-mostly-fixed-the-model-violations.",
-    "title": "VectorByte Methods Training",
-    "section": "5. Provide plots to show that your transformations have (mostly) fixed the model violations.",
-    "text": "5. Provide plots to show that your transformations have (mostly) fixed the model violations.\n\npar(mfrow=c(3,4), mar=c(4,4,2,0.5))  \nplot(lm1$fitted, rstudent(lm1), col=1,\n     xlab=\"Fitted Values\", ylab=\"Studentized Residuals\", \n     pch=20, main=\"I\")\nplot(lm2$fitted, rstudent(lm2), col=2,\n     xlab=\"Fitted Values\", ylab=\"Studentized Residuals\", \n     pch=20, main=\"II\")\nplot(lm3$fitted, rstudent(lm3), col=3,\n     xlab=\"Fitted Values\", ylab=\"Studentized Residuals\", \n     pch=20, main=\"III\")\nplot(lm4$fitted, rstudent(lm4), col=4,\n     xlab=\"Fitted Values\", ylab=\"Studentized Residuals\", \n     pch=20, main=\"IV\")\n\n## Q-Q plots\nqqnorm(rstudent(lm1), pch=20, col=1, main=\"\" )\nabline(a=0,b=1,lty=2)\nqqnorm(rstudent(lm2), pch=20, col=2, main=\"\" )\nabline(a=0,b=1,lty=2)\nqqnorm(rstudent(lm3), pch=20, col=3, main=\"\" )\nabline(a=0,b=1,lty=2)\nqqnorm(rstudent(lm4), pch=20, col=4, main=\"\" )\nabline(a=0,b=1,lty=2)\n\n## histograms of studentized residuals\nhist(rstudent(lm1), col=1, xlab=\"Studentized Residuals\", \n     main=\"\", border=8)\nhist(rstudent(lm2), col=2, xlab=\"Studentized Residuals\", main=\"\")\nhist(rstudent(lm3), col=3, xlab=\"Studentized Residuals\", main=\"\")\nhist(rstudent(lm4), col=4, xlab=\"Studentized Residuals\", main=\"\")"
-  },
-  {
-    "objectID": "VB_TimeDepData_practical_soln.html#exploring-the-data",
-    "href": "VB_TimeDepData_practical_soln.html#exploring-the-data",
-    "title": "VectorByte Methods Training: Regression Methods for Time Dependent Data (practical - solution)",
+    "objectID": "VB_TimeDepData_practical.html#exploring-the-data",
+    "href": "VB_TimeDepData_practical.html#exploring-the-data",
+    "title": "VectorByte Methods Training: Regression Methods for Time Dependent Data (practical)",
     "section": "Exploring the Data",
     "text": "Exploring the Data\nAs always, we first want to take a look at the data, to make sure we understand it, and that we don’t have missing or weird values.\n\nmozData&lt;-read.csv(\"data/Culex_erraticus_walton_covariates_aggregated.csv\")\nsummary(mozData)\n\n   Month_Yr          sample_value        MaxTemp          Precip      \n Length:36          Min.   :0.00000   Min.   :16.02   Min.   : 0.000  \n Class :character   1st Qu.:0.04318   1st Qu.:22.99   1st Qu.: 2.162  \n Mode  :character   Median :0.73001   Median :26.69   Median : 4.606  \n                    Mean   :0.80798   Mean   :26.23   Mean   : 5.595  \n                    3rd Qu.:1.22443   3rd Qu.:30.70   3rd Qu.: 7.864  \n                    Max.   :3.00595   Max.   :33.31   Max.   :18.307  \n\n\nWe can see that the minimum observed average number of mosquitoes it zero, and max is only 3 (there are likely many zeros averaged over many days in the month). There don’t appear to be any NAs in the data. In this case the dataset itself is small enough that we can print the whole thing to ensure it’s complete:\n\nmozData\n\n   Month_Yr sample_value  MaxTemp       Precip\n1   2015-01  0.000000000 17.74602  3.303991888\n2   2015-02  0.018181818 17.87269 16.544265802\n3   2015-03  0.468085106 23.81767  2.405651215\n4   2015-04  1.619047619 26.03559  8.974406168\n5   2015-05  0.821428571 30.01602  0.567960943\n6   2015-06  3.005952381 31.12094  4.841342729\n7   2015-07  2.380952381 32.81130  3.849010353\n8   2015-08  1.826347305 32.56245  5.562845324\n9   2015-09  0.648809524 30.55155 10.409724627\n10  2015-10  0.988023952 27.22605  0.337750269\n11  2015-11  0.737804878 24.86768 18.306749680\n12  2015-12  0.142857143 22.46588  5.621475377\n13  2016-01  0.000000000 16.02406  3.550622029\n14  2016-02  0.020202020 19.42057 11.254680803\n15  2016-03  0.015151515 23.13610  4.785664728\n16  2016-04  0.026143791 24.98082  4.580424519\n17  2016-05  0.025252525 28.72884  0.053057634\n18  2016-06  0.833333333 30.96990  6.155417473\n19  2016-07  1.261363636 33.30509  4.496368193\n20  2016-08  1.685279188 32.09633 11.338749182\n21  2016-09  2.617142857 31.60575  2.868288451\n22  2016-10  1.212121212 29.14275  0.000000000\n23  2016-11  1.539772727 24.48482  0.005462681\n24  2016-12  0.771573604 20.46054 11.615521725\n25  2017-01  0.045454545 18.35473  0.000000000\n26  2017-02  0.036363636 23.65584  3.150710053\n27  2017-03  0.194285714 22.53573  1.430094952\n28  2017-04  0.436548223 26.15299  0.499381616\n29  2017-05  1.202020202 28.00173  6.580562663\n30  2017-06  0.834196891 29.48951 13.333939858\n31  2017-07  1.765363128 32.25135  7.493927035\n32  2017-08  0.744791667 31.86476  6.082113434\n33  2017-09  0.722222222 30.60566  4.631037395\n34  2017-10  0.142131980 27.73453 11.567112214\n35  2017-11  0.289772727 23.23140  1.195760473\n36  2017-12  0.009174312 18.93603  4.018254442"
   },
   {
-    "objectID": "VB_TimeDepData_practical_soln.html#plotting-the-data",
-    "href": "VB_TimeDepData_practical_soln.html#plotting-the-data",
-    "title": "VectorByte Methods Training: Regression Methods for Time Dependent Data (practical - solution)",
+    "objectID": "VB_TimeDepData_practical.html#plotting-the-data",
+    "href": "VB_TimeDepData_practical.html#plotting-the-data",
+    "title": "VectorByte Methods Training: Regression Methods for Time Dependent Data (practical)",
     "section": "Plotting the data",
     "text": "Plotting the data\nFirst we’ll examine the data itself, including the predictors:\n\nmonths&lt;-dim(mozData)[1]\nt&lt;-1:months ## counter for months in the data set\npar(mfrow=c(3,1))\nplot(t, mozData$sample_value, type=\"l\", lwd=2, \n     main=\"Average Monthly Abundance\", \n     xlab =\"Time (months)\", \n     ylab = \"Average Count\")\nplot(t, mozData$MaxTemp, type=\"l\",\n     col = 2, lwd=2, \n     main=\"Average Maximum Temp\", \n     xlab =\"Time (months)\", \n     ylab = \"Temperature (C)\")\nplot(t, mozData$Precip, type=\"l\",\n     col=\"dodgerblue\", lwd=2,\n     main=\"Average Monthly Precip\", \n     xlab =\"Time (months)\", \n     ylab = \"Precipitation (in)\")\n\n\n\n\n\n\n\n\nVisually we noticed that there may be a bit of clumping in the values for abundance (this is subtle) – in particular, since we have a lot of very small/nearly zero counts, a transform, such as a square root, may spread things out for the abundances. It also looks like both the abundance and temperature data are more cyclical than the precipitation, and thus more likely to be related to each other. There’s also not visually a lot of indication of a trend, but it’s usually worthwhile to consider it anyway. Replotting the abundance data with a transformation:\n\nmonths&lt;-dim(mozData)[1]\nt&lt;-1:months ## counter for months in the data set\nplot(t, sqrt(mozData$sample_value), type=\"l\", lwd=2, \n     main=\"Sqrt Average Monthly Abundance\", \n     xlab =\"Time (months)\", \n     ylab = \"Average Count\")\n\n\n\n\n\n\n\n\nThat looks a little bit better. I suggest we go with this for our response."
   },
   {
-    "objectID": "VB_TimeDepData_practical_soln.html#building-a-data-frame",
-    "href": "VB_TimeDepData_practical_soln.html#building-a-data-frame",
-    "title": "VectorByte Methods Training: Regression Methods for Time Dependent Data (practical - solution)",
+    "objectID": "VB_TimeDepData_practical.html#building-a-data-frame",
+    "href": "VB_TimeDepData_practical.html#building-a-data-frame",
+    "title": "VectorByte Methods Training: Regression Methods for Time Dependent Data (practical)",
     "section": "Building a data frame",
     "text": "Building a data frame\nBefore we get into model building, we always want to build a data frame to contain all of the predictors that we want to consider, at the potential lags that we’re interested in. In the lecture we saw building the AR, sine/cosine, and trend predictors:\n\nt &lt;- 2:months ## to make building the AR1 predictors easier\n\nmozTS &lt;- data.frame(\n  Y=sqrt(mozData$sample_value[t]), # transformed response\n  Yl1=sqrt(mozData$sample_value[t-1]), # AR1 predictor\n  t=t, # trend predictor\n  sin12=sin(2*pi*t/12), \n  cos12=cos(2*pi*t/12) # periodic predictors\n  )\n\nWe will also put in the temperature and precipitation predictors. But we need to think about what might be an appropriate lag. If this were daily or weekly data, we’d probably want to have a fairly sizable lag – mosquitoes take a while to develop, so the number we see today is not likely related to the temperature today. However, since these data are agregated across a whole month, as is the temperature/precipitaion, the current month values are likely to be useful. However, it’s even possible that last month’s values may be so we’ll add those in as well:\n\nmozTS$MaxTemp&lt;-mozData$MaxTemp[t] ## current temps\nmozTS$MaxTempl1&lt;-mozData$MaxTemp[t-1] ## previous temps\nmozTS$Precip&lt;-mozData$Precip[t] ## current precip\nmozTS$Precipl1&lt;-mozData$Precip[t-1] ## previous precip\n\nThus our full dataframe:\n\nsummary(mozTS)\n\n       Y               Yl1               t            sin12         \n Min.   :0.0000   Min.   :0.0000   Min.   : 2.0   Min.   :-1.00000  \n 1st Qu.:0.2951   1st Qu.:0.2951   1st Qu.:10.5   1st Qu.:-0.68301  \n Median :0.8590   Median :0.8590   Median :19.0   Median : 0.00000  \n Mean   :0.7711   Mean   :0.7684   Mean   :19.0   Mean   :-0.01429  \n 3rd Qu.:1.1120   3rd Qu.:1.1120   3rd Qu.:27.5   3rd Qu.: 0.68301  \n Max.   :1.7338   Max.   :1.7338   Max.   :36.0   Max.   : 1.00000  \n     cos12             MaxTemp        MaxTempl1         Precip      \n Min.   :-1.00000   Min.   :16.02   Min.   :16.02   Min.   : 0.000  \n 1st Qu.:-0.68301   1st Qu.:23.18   1st Qu.:23.18   1st Qu.: 1.918  \n Median : 0.00000   Median :27.23   Median :27.23   Median : 4.631  \n Mean   :-0.02474   Mean   :26.47   Mean   :26.44   Mean   : 5.660  \n 3rd Qu.: 0.50000   3rd Qu.:30.79   3rd Qu.:30.79   3rd Qu.: 8.234  \n Max.   : 1.00000   Max.   :33.31   Max.   :33.31   Max.   :18.307  \n    Precipl1     \n Min.   : 0.000  \n 1st Qu.: 1.918  \n Median : 4.631  \n Mean   : 5.640  \n 3rd Qu.: 8.234  \n Max.   :18.307  \n\n\n\nhead(mozTS)\n\n          Y       Yl1 t         sin12         cos12  MaxTemp MaxTempl1\n1 0.1348400 0.0000000 2  8.660254e-01  5.000000e-01 17.87269  17.74602\n2 0.6841675 0.1348400 3  1.000000e+00  6.123234e-17 23.81767  17.87269\n3 1.2724180 0.6841675 4  8.660254e-01 -5.000000e-01 26.03559  23.81767\n4 0.9063270 1.2724180 5  5.000000e-01 -8.660254e-01 30.01602  26.03559\n5 1.7337683 0.9063270 6  1.224647e-16 -1.000000e+00 31.12094  30.01602\n6 1.5430335 1.7337683 7 -5.000000e-01 -8.660254e-01 32.81130  31.12094\n      Precip   Precipl1\n1 16.5442658  3.3039919\n2  2.4056512 16.5442658\n3  8.9744062  2.4056512\n4  0.5679609  8.9744062\n5  4.8413427  0.5679609\n6  3.8490104  4.8413427"
   },
   {
-    "objectID": "VB_TimeDepData_practical_soln.html#building-a-first-model",
-    "href": "VB_TimeDepData_practical_soln.html#building-a-first-model",
-    "title": "VectorByte Methods Training: Regression Methods for Time Dependent Data (practical - solution)",
+    "objectID": "VB_TimeDepData_practical.html#building-a-first-model",
+    "href": "VB_TimeDepData_practical.html#building-a-first-model",
+    "title": "VectorByte Methods Training: Regression Methods for Time Dependent Data (practical)",
     "section": "Building a first model",
     "text": "Building a first model\nWe will first build a very simple model – just a trend – to practice building the model, checking diagnostics, and plotting predictions.\n\nmod1&lt;-lm(Y ~ t, data=mozTS)\nsummary(mod1)\n\n\nCall:\nlm(formula = Y ~ t, data = mozTS)\n\nResiduals:\n     Min       1Q   Median       3Q      Max \n-0.81332 -0.47902  0.03671  0.37384  0.87119 \n\nCoefficients:\n             Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)  0.904809   0.178421   5.071  1.5e-05 ***\nt           -0.007038   0.008292  -0.849    0.402    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.4954 on 33 degrees of freedom\nMultiple R-squared:  0.02136,   Adjusted R-squared:  -0.008291 \nF-statistic: 0.7204 on 1 and 33 DF,  p-value: 0.4021\n\n\nThe model output indicates that this model is not useful – the trend is not significant and it only explains about 2% of the variability. Let’s plot the predictions:\n\n## plot points and fitted lines\nplot(Y~t, data=mozTS, col=1, type=\"l\")\nlines(t, mod1$fitted, col=\"dodgerblue\", lwd=2)\n\n\n\n\n\n\n\n\nNot good – we’ll definitely need to try something else! Remember that since we’re using a linear model for this, that we should check our residual plots as usual, and then also plot the acf of the residuals:\n\npar(mfrow=c(1,3), mar=c(4,4,2,0.5))   \n\n## studentized residuals vs fitted\nplot(mod1$fitted, rstudent(mod1), col=1,\n     xlab=\"Fitted Values\", \n     ylab=\"Studentized Residuals\", \n     pch=20, main=\"AR 1 only model\")\n\n## qq plot of studentized residuals\nqqnorm(rstudent(mod1), pch=20, col=1, main=\"\" )\nabline(a=0,b=1,lty=2, col=2)\n\n## histogram of studentized residuals\nhist(rstudent(mod1), col=1, \n     xlab=\"Studentized Residuals\", \n     main=\"\", border=8)\n\n\n\n\n\n\n\n\nThis doesn’t look really bad, although the histogram might be a bit weird. Finally the acf\n\nacf(mod1$residuals)\n\n\n\n\n\n\n\n\nThis is where we can see that we definitely aren’t able to capture the pattern. There’s substantial autocorrelation left at a 1 month lag, and around 6 months.\nFinally, for moving forward, we can extract the BIC for this model so that we can compare with other models that you’ll build next.\n\nn&lt;-length(t)\nextractAIC(mod1, k=log(n))[2]\n\n[1] -44.11057"
-  },
-  {
-    "objectID": "VB_TimeDepData_practical_soln.html#example-solution-ar1-model-only",
-    "href": "VB_TimeDepData_practical_soln.html#example-solution-ar1-model-only",
-    "title": "VectorByte Methods Training: Regression Methods for Time Dependent Data (practical - solution)",
-    "section": "Example Solution: AR1 model only",
-    "text": "Example Solution: AR1 model only\n\nmod2&lt;-lm(Y ~ Yl1, data=mozTS)\nsummary(mod2)\n\n\nCall:\nlm(formula = Y ~ Yl1, data = mozTS)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-0.6338 -0.2173 -0.0678  0.2463  0.8675 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)   0.2410     0.1130   2.132   0.0405 *  \nYl1           0.6899     0.1240   5.562 3.51e-06 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.3598 on 33 degrees of freedom\nMultiple R-squared:  0.4839,    Adjusted R-squared:  0.4682 \nF-statistic: 30.94 on 1 and 33 DF,  p-value: 3.507e-06\n\n\nThe model is better than the original trend only model – the AR1 term explains about 48% of the variability. Let’s plot the predictions:\n\n## plot points and fitted lines\nplot(Y~t, data=mozTS, col=1, type=\"l\")\nlines(t, mod2$fitted, col=2, lwd=2)\n\n\n\n\n\n\n\n\nPretty good! Look at all of the diagnostic plots:\n\npar(mfrow=c(1,3), mar=c(4,4,2,0.5))   \n\n## studentized residuals vs fitted\nplot(mod2$fitted, rstudent(mod2), col=2,\n     xlab=\"Fitted Values\", \n     ylab=\"Studentized Residuals\", \n     pch=20, main=\"AR 1 only model\")\n\n## qq plot of studentized residuals\nqqnorm(rstudent(mod2), pch=20, col=2, main=\"\" )\nabline(a=0,b=1,lty=2, col=1)\n\n## histogram of studentized residuals\nhist(rstudent(mod2), col=2, \n     xlab=\"Studentized Residuals\", \n     main=\"\", border=8)\n\n\n\n\n\n\n\n\nMaybe one outlier, but not too bad.\n\nacf(mod2$residuals)\n\n\n\n\n\n\n\n\nWe seem to have taken care of all of the autoregression, even at multiple lags!\n\nn&lt;-length(t)\nextractAIC(mod2, k=log(n))[2]\n\n[1] -66.50482\n\n\nBIC is much lower – overall a much much better model than the first one."
-  },
-  {
-    "objectID": "VB_TimeDepData_practical_soln.html#example-solution-sinecosine-terms-only",
-    "href": "VB_TimeDepData_practical_soln.html#example-solution-sinecosine-terms-only",
-    "title": "VectorByte Methods Training: Regression Methods for Time Dependent Data (practical - solution)",
-    "section": "Example Solution: sine/cosine terms only",
-    "text": "Example Solution: sine/cosine terms only\n\nmod3&lt;-lm(Y ~ sin12 + cos12, data=mozTS)\nsummary(mod3)\n\n\nCall:\nlm(formula = Y ~ sin12 + cos12, data = mozTS)\n\nResiduals:\n     Min       1Q   Median       3Q      Max \n-0.70116 -0.21655 -0.03611  0.19213  0.67992 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)  0.75706    0.05750  13.165 1.83e-14 ***\nsin12       -0.38804    0.08072  -4.807 3.48e-05 ***\ncos12       -0.34298    0.08192  -4.187 0.000207 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.3399 on 32 degrees of freedom\nMultiple R-squared:  0.5533,    Adjusted R-squared:  0.5254 \nF-statistic: 19.82 on 2 and 32 DF,  p-value: 2.512e-06\n\n\nThe model is better than the original trend only model – it explains about 55% of the variability (we expect R^2 to increase as we have more predictors). Let’s plot the predictions:\n\n## plot points and fitted lines\nplot(Y~t, data=mozTS, col=1, type=\"l\")\nlines(t, mod3$fitted, col=3, lwd=2)\n\n\n\n\n\n\n\n\nPretty good! Look at all of the diagnostic plots:\n\npar(mfrow=c(1,3), mar=c(4,4,2,0.5))   \n\n## studentized residuals vs fitted\nplot(mod3$fitted, rstudent(mod3), col=3,\n     xlab=\"Fitted Values\", \n     ylab=\"Studentized Residuals\", \n     pch=20, main=\"sin/cos only model\")\n\n## qq plot of studentized residuals\nqqnorm(rstudent(mod3), pch=20, col=3, main=\"\" )\nabline(a=0,b=1,lty=2, col=2)\n\n## histogram of studentized residuals\nhist(rstudent(mod3), col=3, \n     xlab=\"Studentized Residuals\", \n     main=\"\", border=8)\n\n\n\n\n\n\n\n\nMaybe one outlier, but not too bad.\n\nacf(mod3$residuals)\n\n\n\n\n\n\n\n\nWe seem have taken care of the longer lag autocorrelation, but still some lag 1 left.\n\nn&lt;-length(t)\nextractAIC(mod3, k=log(n))[2]\n\n[1] -68.00597\n\n\nThis model is even better than the AR1 model. We’ll keep this in mind…."
-  },
-  {
-    "objectID": "VB_TimeDepData_practical_soln.html#example-solution-environmental-predictors-only",
-    "href": "VB_TimeDepData_practical_soln.html#example-solution-environmental-predictors-only",
-    "title": "VectorByte Methods Training: Regression Methods for Time Dependent Data (practical - solution)",
-    "section": "Example Solution: environmental predictors only",
-    "text": "Example Solution: environmental predictors only\nI’ll put in the predictors at the current time period. Since this is monthly averaged data we could probably do either current or lagged.\n\nmod4&lt;-lm(Y ~ MaxTemp + Precip, data=mozTS)\nsummary(mod4)\n\n\nCall:\nlm(formula = Y ~ MaxTemp + Precip, data = mozTS)\n\nResiduals:\n     Min       1Q   Median       3Q      Max \n-0.76043 -0.17925 -0.01671  0.15491  0.64193 \n\nCoefficients:\n             Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept) -1.248452   0.323576  -3.858 0.000521 ***\nMaxTemp      0.075450   0.011641   6.481 2.72e-07 ***\nPrecip       0.003928   0.011870   0.331 0.742852    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.3344 on 32 degrees of freedom\nMultiple R-squared:  0.5676,    Adjusted R-squared:  0.5406 \nF-statistic:    21 on 2 and 32 DF,  p-value: 1.493e-06\n\n\nThe model is even better than the last – the model explains about 58% of the variability, although the Precip isn’t significant and we might want to consider dropping it. Let’s plot the predictions:\n\n## plot points and fitted lines\nplot(Y~t, data=mozTS, col=1, type=\"l\")\nlines(t, mod4$fitted, col=4, lwd=2)\n\n\n\n\n\n\n\n\nPretty good! Look at all of the diagnostic plots:\n\npar(mfrow=c(1,3), mar=c(4,4,2,0.5))   \n\n## studentized residuals vs fitted\nplot(mod4$fitted, rstudent(mod4), col=4,\n     xlab=\"Fitted Values\", \n     ylab=\"Studentized Residuals\", \n     pch=20, main=\"weather model\")\n\n## qq plot of studentized residuals\nqqnorm(rstudent(mod4), pch=20, col=4, main=\"\" )\nabline(a=0,b=1,lty=2, col=2)\n\n## histogram of studentized residuals\nhist(rstudent(mod4), col=4, \n     xlab=\"Studentized Residuals\", \n     main=\"\", border=8)\n\n\n\n\n\n\n\n\nMaybe one outlier again, but not too bad.\n\nacf(mod4$residuals)\n\n\n\n\n\n\n\n\nWe seem to have taken care of all of the autoregression, except maybe a bit of AR1.\n\nn&lt;-length(t)\nextractAIC(mod4, k=log(n))[2]\n\n[1] -69.14372\n\n\nEven better, although it’s not much different than the sin/cos"
-  },
-  {
-    "objectID": "VB_TimeDepData_practical_soln.html#example-solution-ar1-plus-sincos",
-    "href": "VB_TimeDepData_practical_soln.html#example-solution-ar1-plus-sincos",
-    "title": "VectorByte Methods Training: Regression Methods for Time Dependent Data (practical - solution)",
-    "section": "Example Solution: AR1 plus sin/cos",
-    "text": "Example Solution: AR1 plus sin/cos\nOk, now to combine things:\n\nmod5&lt;-lm(Y ~ Yl1 + sin12 + cos12, data=mozTS)\nsummary(mod5)\n\n\nCall:\nlm(formula = Y ~ Yl1 + sin12 + cos12, data = mozTS)\n\nResiduals:\n     Min       1Q   Median       3Q      Max \n-0.49092 -0.25028 -0.02153  0.17287  0.60748 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)  0.38035    0.12935   2.940 0.006148 ** \nYl1          0.49652    0.15681   3.166 0.003453 ** \nsin12       -0.13417    0.10729  -1.251 0.220457    \ncos12       -0.29593    0.07386  -4.007 0.000358 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.3002 on 31 degrees of freedom\nMultiple R-squared:  0.6625,    Adjusted R-squared:  0.6298 \nF-statistic: 20.28 on 3 and 31 DF,  p-value: 1.835e-07\n\n\nThe model is better than the original trend only model – the AR1 term explains about 48% of the variability. Let’s plot the predictions:\n\n## plot points and fitted lines\nplot(Y~t, data=mozTS, col=1, type=\"l\")\nlines(t, mod5$fitted, col=5, lwd=2)\n\n\n\n\n\n\n\n\nPretty good! Look at all of the diagnostic plots:\n\npar(mfrow=c(1,3), mar=c(4,4,2,0.5))   \n\n## studentized residuals vs fitted\nplot(mod5$fitted, rstudent(mod5), col=5,\n     xlab=\"Fitted Values\", \n     ylab=\"Studentized Residuals\", \n     pch=20, main=\"AR 1 only model\")\n\n## qq plot of studentized residuals\nqqnorm(rstudent(mod5), pch=20, col=5, main=\"\" )\nabline(a=0,b=1,lty=2, col=2)\n\n## histogram of studentized residuals\nhist(rstudent(mod5), col=5, \n     xlab=\"Studentized Residuals\", \n     main=\"\", border=8)\n\n\n\n\n\n\n\n\nThat’s really good!.\n\nacf(mod5$residuals)\n\n\n\n\n\n\n\n\nWe seem to have taken care of all of the autoregression!\n\nn&lt;-length(t)\nextractAIC(mod5, k=log(n))[2]\n\n[1] -74.25862\n\n\nAnd definitely the best so far. Just to compare more easily:\n\nc(mod1 = extractAIC(mod1, k=log(n))[2],\n  mod2 = extractAIC(mod2, k=log(n))[2],\n  mod3 = extractAIC(mod3, k=log(n))[2],\n  mod4 = extractAIC(mod4, k=log(n))[2],\n  mod5 = extractAIC(mod5, k=log(n))[2])\n\n     mod1      mod2      mod3      mod4      mod5 \n-44.11057 -66.50482 -68.00597 -69.14372 -74.25862 \n\n\nWe’re looking for difference of about 5 to determine if a model is better. Model 5 is about 5 better than model 4, and models 2-4 are all about even. It may be that AR1 plus temperature might be even better, but it’s easier to forecast with a sine/cosine than using temperature, so I went for that…."
-  },
-  {
-    "objectID": "VB_RegDiagTrans.html#learning-objectives",
-    "href": "VB_RegDiagTrans.html#learning-objectives",
-    "title": "Review of Diagnostics and Transformations for Regression Models",
-    "section": "Learning Objectives",
-    "text": "Learning Objectives\n\nReview assumptions of SLR/MLR models\nReview using diagnostic plots to assess whether assumptions are met\nReview the idea of basic transformations to use when assumptions aren’t met"
-  },
-  {
-    "objectID": "VB_RegDiagTrans.html#slr-model-assumptions",
-    "href": "VB_RegDiagTrans.html#slr-model-assumptions",
-    "title": "Review of Diagnostics and Transformations for Regression Models",
-    "section": "SLR model assumptions",
-    "text": "SLR model assumptions\n\\[\nY_i |X_i \\stackrel{ind}{\\sim} \\mathcal{N}(\\beta_0 + \\beta_1 X_i, \\sigma^2)\n\\]\nRecall the key assumptions of the Simple Linear Regression model:\n\nThe conditional mean of \\(Y\\) is linear in \\(X\\).\nThe additive errors (deviations from line)\n\nare normally distributed\nindependent from each other\nidentically distributed (i.e., they have constant variance)"
-  },
-  {
-    "objectID": "VB_RegDiagTrans.html#example-model-violations",
-    "href": "VB_RegDiagTrans.html#example-model-violations",
-    "title": "Review of Diagnostics and Transformations for Regression Models",
-    "section": "Example model violations",
-    "text": "Example model violations\nAnscombe’s quartet comprises four datasets that have similar statistical properties …\n\n\n\n\nXmean\nYmean\nXsd\nYsd\nXYcor\n\n\n\n\n1\n9.000\n7.501\n3.317\n2.032\n0.816\n\n\n2\n9.000\n7.501\n3.317\n2.032\n0.816\n\n\n3\n9.000\n7.500\n3.317\n2.030\n0.816\n\n\n4\n9.000\n7.501\n3.317\n2.031\n0.817"
-  },
-  {
-    "objectID": "VB_RegDiagTrans.html#residuals-and-the-model-assumptions",
-    "href": "VB_RegDiagTrans.html#residuals-and-the-model-assumptions",
-    "title": "Review of Diagnostics and Transformations for Regression Models",
-    "section": "Residuals and the model assumptions",
-    "text": "Residuals and the model assumptions\nRecall that the linear regression model assumes \\[\nY_i =\\beta_0 + \\beta_1 X_i + \\varepsilon_i,~~\\mbox{where}~~\n\\varepsilon_i \\stackrel{iid}{\\sim} \\mathcal{N}(0,\\sigma^2).\n\\]\nOur goal is to determine if the “true” residuals are iid normal and unrelated to \\(X\\). If the SLR model assumptions are true, then the residuals must be just “white noise”:\n\nEach \\(\\varepsilon_i\\) has the same variance (\\(\\sigma^2\\)).\nEach \\(\\varepsilon_i\\) has the same mean (0).\nAll of the \\(\\varepsilon_i\\) have the same normal distribution."
-  },
-  {
-    "objectID": "VB_RegDiagTrans.html#understanding-leverage",
-    "href": "VB_RegDiagTrans.html#understanding-leverage",
-    "title": "Review of Diagnostics and Transformations for Regression Models",
-    "section": "Understanding Leverage",
-    "text": "Understanding Leverage\nThe \\(h_i\\) leverage term measures sensitivity of the estimated least squares regression line to changes in \\(Y_i\\).\nThe term “leverage” provides a mechanical intuition:\n\nThe farther you are from a pivot joint, the more torque you have pulling on a lever.\n\nHere is a nice online (interactive) illustration of leverage:\n\nhttps://omaymas.shinyapps.io/Influence_Analysis/\n\n\nOutliers do more damage if they have high leverage!"
-  },
-  {
-    "objectID": "VB_RegDiagTrans.html#standardized-residuals",
-    "href": "VB_RegDiagTrans.html#standardized-residuals",
-    "title": "Review of Diagnostics and Transformations for Regression Models",
-    "section": "Standardized residuals",
-    "text": "Standardized residuals\nSince \\(e_i \\sim N(0, \\sigma^2 [1-h_i])\\), we know that \\[\n\\color{red}{\\frac{e_i}{\\sigma \\sqrt{1-h_i} }\\sim N(0, 1)}.\n\\]\nThese transformed \\(e_i\\)’s are called the standardized residuals.\n\nThey all have the same distribution if the SLR model assumptions are true.\nThey are almost (close enough) independent (\\(\\stackrel{iid}{\\sim}N(0,1)\\)).\nEstimate \\(\\sigma^2 \\approx s^2 = \\frac{1}{n-p}\\sum_{j=1}^n e_j^2\\). (\\(p=2\\) for SLR)"
-  },
-  {
-    "objectID": "VB_RegDiagTrans.html#studentized-residuals",
-    "href": "VB_RegDiagTrans.html#studentized-residuals",
-    "title": "Review of Diagnostics and Transformations for Regression Models",
-    "section": "Studentized residuals",
-    "text": "Studentized residuals\nWe thus define a standard Studentized residual as \\[\nr_i = \\frac{e_i}{s_{-i} \\sqrt{1-h_i} }\\sim t_{n-p-1}(0, 1)\n\\] where \\(s_{-i}^2 = \\frac{1}{n-p-1}\\sum_{j \\neq i} e_j^2\\) is \\(\\hat{\\sigma~}^2\\) calculated without \\(e_i\\).\n\nThese are easy to get in R with the rstudent() function:\n\nas.numeric(rstudent(reg3))\n#&gt;  [1]   -0.43905545   -0.18550224 1203.53946386   -0.31384418   -0.57429485\n#&gt;  [6]   -1.15598185    0.06640743    0.36185145   -0.73567703   -0.06576806\n#&gt; [11]    0.20026336"
-  },
-  {
-    "objectID": "VB_RegDiagTrans.html#outliers-and-studentized-residuals",
-    "href": "VB_RegDiagTrans.html#outliers-and-studentized-residuals",
-    "title": "Review of Diagnostics and Transformations for Regression Models",
-    "section": "Outliers and Studentized residuals",
-    "text": "Outliers and Studentized residuals\nSince the studentized residuals are distributed \\(t_{n-p-1}(0,1)\\), we should be concerned about any \\(r_i\\) outside of about \\([-2.5, 2.5]\\).\n\n (Note: As \\(n\\) gets much bigger, we will expect to see some very rare events (big \\(\\color{red}{\\varepsilon_i}\\) ) and not get worried unless \\(|r_i| &gt; 3\\) or \\(4\\).)"
-  },
-  {
-    "objectID": "VB_RegDiagTrans.html#how-to-deal-with-outliers",
-    "href": "VB_RegDiagTrans.html#how-to-deal-with-outliers",
-    "title": "Review of Diagnostics and Transformations for Regression Models",
-    "section": "How to deal with outliers",
-    "text": "How to deal with outliers\n\n\n\n\nfrom Research Wahlberg"
-  },
-  {
-    "objectID": "VB_RegDiagTrans.html#how-to-deal-with-outliers-1",
-    "href": "VB_RegDiagTrans.html#how-to-deal-with-outliers-1",
-    "title": "Review of Diagnostics and Transformations for Regression Models",
-    "section": "How to deal with outliers",
-    "text": "How to deal with outliers\nWhen should you delete outliers?\n\nOnly when you have a really good reason!\n\nThere is nothing wrong with running a regression with and without potential outliers to see whether results are significantly impacted.\nAny time outliers are dropped, the reasons for doing so should be clearly noted.\n\nI maintain that both a statistical and a non-statistical reason are required."
-  },
-  {
-    "objectID": "VB_RegDiagTrans.html#outliers-leverage-and-residuals",
-    "href": "VB_RegDiagTrans.html#outliers-leverage-and-residuals",
-    "title": "Review of Diagnostics and Transformations for Regression Models",
-    "section": "Outliers, leverage, and residuals",
-    "text": "Outliers, leverage, and residuals\nWarning: Unfortunately, outliers with high leverage are hard to catch through \\(\\color{dodgerblue}{r_i}\\) (since the line is pulled towards them).\nMeans get distracted by outliers…"
-  },
-  {
-    "objectID": "VB_RegDiagTrans.html#outliers-leverage-and-residuals-1",
-    "href": "VB_RegDiagTrans.html#outliers-leverage-and-residuals-1",
-    "title": "Review of Diagnostics and Transformations for Regression Models",
-    "section": "Outliers, leverage, and residuals",
-    "text": "Outliers, leverage, and residuals\nWarning: Unfortunately, outliers with high leverage are hard to catch through \\(\\color{dodgerblue}{r_i}\\) (since the line is pulled towards them).\nConsider data on house Rents vs SqFt:\n\nPlots of \\(r_i\\) or \\(e_i\\) against \\(\\hat{Y~}_i\\) or \\(X_i\\) are still your best diagnostic!"
-  },
-  {
-    "objectID": "VB_RegDiagTrans.html#normality-and-studentized-residuals",
-    "href": "VB_RegDiagTrans.html#normality-and-studentized-residuals",
-    "title": "Review of Diagnostics and Transformations for Regression Models",
-    "section": "Normality and studentized residuals",
-    "text": "Normality and studentized residuals\nA more subtle issue is the normality of the distribution on \\(\\varepsilon\\).\n\nWe can look at the residuals to judge normality if \\(n\\) is big enough (say \\(&gt;20~~ \\rightarrow\\) less than that makes it too hard to call).\n\nIn particular, if we have decent size \\(\\color{red}{n}\\), we want the shape of the studentized residual distribution to “look” like \\(\\color{red}{N(0,1)}\\).\n The most obvious tactic is to look at a histogram of \\(r_i\\)."
-  },
-  {
-    "objectID": "VB_RegDiagTrans.html#assessing-normality-via-q-q-plots",
-    "href": "VB_RegDiagTrans.html#assessing-normality-via-q-q-plots",
-    "title": "Review of Diagnostics and Transformations for Regression Models",
-    "section": "Assessing normality via Q-Q plots",
-    "text": "Assessing normality via Q-Q plots\nHigher fidelity diagnostics are provided by normal quantile-quantile (Q-Q) plots that:\n\nplot the sample quantiles (e.g. \\(10^{th}\\) percentile, etc.)\nagainst true percentiles from a \\(N(0,1)\\) distribution (e.g. \\(-1.96\\) is the true 2.5% quantile).\n\nIf \\(r_i \\sim N(0,1)\\) these quantiles should be equal\n\nlie on a line through 0 with slope 1"
-  },
-  {
-    "objectID": "VB_RegDiagTrans.html#go-to-diagnostic-plots",
-    "href": "VB_RegDiagTrans.html#go-to-diagnostic-plots",
-    "title": "Review of Diagnostics and Transformations for Regression Models",
-    "section": "3 Go-To Diagnostic Plots",
-    "text": "3 Go-To Diagnostic Plots"
-  },
-  {
-    "objectID": "VB_RegDiagTrans.html#violations-of-slr-model-assumptions",
-    "href": "VB_RegDiagTrans.html#violations-of-slr-model-assumptions",
-    "title": "Review of Diagnostics and Transformations for Regression Models",
-    "section": "Violations of SLR Model Assumptions",
-    "text": "Violations of SLR Model Assumptions\n\\[\\color{dodgerblue}{Y_i |X_i \\stackrel{ind}{\\sim} \\mathcal{N}(\\beta_0 + \\beta_1 X_i, \\sigma^2)}\\]\n\nThe conditional mean of \\(Y\\) is linear in \\(X\\).\nThe additive errors (deviations from line)\n\nare normally distributed\nindependent from each other\nidentically distributed (i.e., they have constant variance)\n\n\nAll of these can be violated! Let’s see what violations look like and how we can deal with them within the SLR framework."
-  },
-  {
-    "objectID": "VB_RegDiagTrans.html#violation-1-non-constant-variance",
-    "href": "VB_RegDiagTrans.html#violation-1-non-constant-variance",
-    "title": "Review of Diagnostics and Transformations for Regression Models",
-    "section": "Violation 1: Non-constant variance",
-    "text": "Violation 1: Non-constant variance\nIf you get a trumpet shape (bunching of the \\(Y\\)s), you have nonconstant variance.\n\nThis violates our assumption that all \\(\\varepsilon_i\\) have the same \\(\\sigma^2\\)."
-  },
-  {
-    "objectID": "VB_RegDiagTrans.html#solution-1-variance-stabilizing-transformations",
-    "href": "VB_RegDiagTrans.html#solution-1-variance-stabilizing-transformations",
-    "title": "Review of Diagnostics and Transformations for Regression Models",
-    "section": "Solution 1: Variance stabilizing transformations",
-    "text": "Solution 1: Variance stabilizing transformations\nThis is one of the most common model violations; luckily, it is usually fixable by transforming the response (\\(Y\\)) variable.\n\\(\\color{dodgerblue}{\\log(Y)}\\) is the most common variance stabilizing transform.\n\nIf \\(Y\\) has only positive values (e.g. sales) or is a count (e.g. # of customers), take \\(\\log(Y)\\) (always natural log).\n\n\\(\\color{dodgerblue}{\\sqrt{Y}}\\) is sometimes used, especially if the data have zeros.\n\nIn general, think what you expect to be linear for your data."
-  },
-  {
-    "objectID": "VB_RegDiagTrans.html#violation-2-nonlinear-residual-patterns",
-    "href": "VB_RegDiagTrans.html#violation-2-nonlinear-residual-patterns",
-    "title": "Review of Diagnostics and Transformations for Regression Models",
-    "section": "Violation 2: Nonlinear residual patterns",
-    "text": "Violation 2: Nonlinear residual patterns\nConsider regression residuals for the 2nd Anscombe dataset:\n\nThings are not good! It appears that we do not have a linear mean function; that is \\(\\color{dodgerblue}{\\mathbb{E}[Y] \\neq \\beta_0 + \\beta_1 X}\\)."
-  },
-  {
-    "objectID": "VB_RegDiagTrans.html#solution-2-polynomial-regression",
-    "href": "VB_RegDiagTrans.html#solution-2-polynomial-regression",
-    "title": "Review of Diagnostics and Transformations for Regression Models",
-    "section": "Solution 2: Polynomial regression",
-    "text": "Solution 2: Polynomial regression\nEven though we are limited to a linear mean, it is possible to get nonlinear regression by transforming the \\(X\\) variable.\n\nIn general, we can add powers of \\(\\color{dodgerblue}X\\) to get polynomial regression: \\(\\color{red}{\\mathbb{E}[Y] = \\beta_0 + \\beta_1X + \\beta_2 X^2 + \\cdots + \\beta_m X^m}\\)\n\nYou can fit any mean function if \\(m\\) is big enough.\n\nUsually stick to m=2 unless you have a good reason."
-  },
-  {
-    "objectID": "VB_RegDiagTrans.html#testing-for-nonlinearity",
-    "href": "VB_RegDiagTrans.html#testing-for-nonlinearity",
-    "title": "Review of Diagnostics and Transformations for Regression Models",
-    "section": "Testing for nonlinearity",
-    "text": "Testing for nonlinearity\nTo see if you need more nonlinearity, try the regression which includes the next polynomial term, and see if it is significant.\nFor example, to see if you need a quadratic term,\n\nfit the model then run the regression \\(\\mathbb{E}[Y] = \\beta_0 + \\beta_1 X + \\beta_2 X^2\\).\nIf your test implies \\(\\color{dodgerblue}{\\beta_2 \\neq 0}\\), you need \\(\\color{dodgerblue}{X^2}\\) in your model.\n\nNote: \\(p\\)-values are calculated “given the other \\(\\beta\\)’s are nonzero”; i.e., conditional on \\(X\\) being in the model."
-  },
-  {
-    "objectID": "VB_RegDiagTrans.html#closing-comments-on-polynomials",
-    "href": "VB_RegDiagTrans.html#closing-comments-on-polynomials",
-    "title": "Review of Diagnostics and Transformations for Regression Models",
-    "section": "Closing comments on polynomials",
-    "text": "Closing comments on polynomials\n\nWe can always add higher powers (cubic, etc.) if necessary.\n\nIf you add a higher order term, the lower order term is kept in the model regardless of its individual \\(t\\)-stat.\n\nBe very careful about predicting outside the data range as the curve may do unintended things beyond the data.\nWatch out for over-fitting.\n\nYou can get a “perfect” fit with enough polynomial terms,\nbut that doesn’t mean it will be any good for prediction or understanding."
-  },
-  {
-    "objectID": "VB_RegDiagTrans.html#other-problems",
-    "href": "VB_RegDiagTrans.html#other-problems",
-    "title": "Review of Diagnostics and Transformations for Regression Models",
-    "section": "Other problems",
-    "text": "Other problems\nSometimes we have other strange things going on in our data sets\n\ndata are “clumped” up in \\(X\\) – high leverage points\nresiduals still aren’t normally distributed after taking transforms from earlier\nresponses take discrete values instead of continuous\n\n\nThe latter 2 we can deal with using MLR and GLMs. What about the first?"
-  },
-  {
-    "objectID": "VB_RegDiagTrans.html#the-log-log-model",
-    "href": "VB_RegDiagTrans.html#the-log-log-model",
-    "title": "Review of Diagnostics and Transformations for Regression Models",
-    "section": "The log-log model",
-    "text": "The log-log model\nThe other common covariate transform is \\(\\log(X)\\).\n\nWhen \\(X\\)-values are bunched up, \\(\\log(X)\\) helps spread them out and reduces the leverage of extreme values.\nRecall that both reduce \\(s_{b_1}\\).\n\nIn practice, this is often used in conjunction with a \\(\\log(Y)\\) response transformation. The log-log model is \\[\n    \\color{red}{\\log(Y) = \\beta_0 + \\beta_1 \\log(X) + \\varepsilon}.\n    \\]\nIt is super useful, and has some special properties …"
-  },
-  {
-    "objectID": "VB_RegDiagTrans.html#elasticity-and-the-log-log-model",
-    "href": "VB_RegDiagTrans.html#elasticity-and-the-log-log-model",
-    "title": "Review of Diagnostics and Transformations for Regression Models",
-    "section": "Elasticity and the log-log model",
-    "text": "Elasticity and the log-log model\nIn a log-log model, the slope \\(\\beta_1\\) is sometimes called elasticity.\nThe elasticity is (roughly) % change in \\(Y\\) per 1% change in \\(X\\). \\[\\color{dodgerblue}{\n\\beta_1 \\approx \\frac{d\\%Y}{d\\%X}}\\] For example, economists often assume that GDP has import elasticity of 1. Indeed:\n\nGDPlm&lt;-lm(log(GDP) ~ log(IMPORTS))\ncoef(GDPlm)\n#&gt;  (Intercept) log(IMPORTS) \n#&gt;     1.891516     0.969337\n\n\n(Can we test for 1%?)"
-  },
-  {
-    "objectID": "VB_RegDiagTrans.html#practical",
-    "href": "VB_RegDiagTrans.html#practical",
-    "title": "Review of Diagnostics and Transformations for Regression Models",
-    "section": "Practical",
-    "text": "Practical\nNext we’ll do a short practical to practice:\n\nFitting linear models in R\nChecking diagnostics\nChoosing transformations\nPlotting predictions"
-  },
-  {
-    "objectID": "schedule2025.html",
-    "href": "schedule2025.html",
-    "title": "2025 Training Schedule",
-    "section": "",
-    "text": "Main materials\n\nPre-workshop\nInformation about pre-workshop preparation – including software installation, expectations for what you should already be familiar with, and review materials – is available in the pre-work portion of the materials page.\n  \n\n\n13 June 2025\n\n\n\nTime\nActivity\n\n\n\n\n\nArrival\n\n\n\n  \n\n\n14 July 2025 (08:30 - 17:30)\n\n\n\n\n\n\n\n\nTime\nActivity\nMaterials\n\n\n\n\n8:30\nIntroduction to time dependent data and forecasting, course overview\n\n\n\n9:30\nLecture: Regression Transformations and Diagnostics\n\n\n\n10:30\nBreak\n\n\n\n10:45\nPractical: Regression Transformations and Diagnostics\n\n\n\n12:00\nLunch\n\n\n\n13:00\nIntroduction to VecDyn Database and API\n\n\n\n14:00\nLecture: Time Dependent Data Analysis\n\n\n\n15:00\nBreak\n\n\n\n15:30\nPractical: Time Dependent Data Analysis\n\n\n\n16:30\nWorking with VecDyn/time dependent data (data aggregation, covariate/predictor sources)\n\n\n\n17:00\nSupported practice - pull VecDyn data, add covars, fit linear model\n\n\n\n\n  \n\n\n15 June 2025 (08:30 - 17:30)\n\n\n\n\n\n\n\n\nTime\nActivity\nMaterials\n\n\n\n\n8:30\nOverview of the day\n\n\n\n9:00\nLecture: Basics of Time Series methods\n\n\n\n10:00\nBreak\n\n\n\n10:30\nPractical: Basics of Time Series methods\n\n\n\n12:00\nLunch\n\n\n\n13:00\nLecture: Introduction to Gaussian Process (GP) regression applied to time dependent data\n\n\n\n14:00\nPractical: GPs in R with hetGP\n\n\n\n15:00\nBreak\n\n\n\n15:30\nIntroduction to the dengue forecasting challenge\n\n\n\n16:00\nForm forecasting groups and begin forecasting challenge\n\n\n\n17:00\nLightning talks\n\n\n\n\n  \n\n\n16 June 2025 (08:30 - 11:45)\n\n\n\nTime.\nActivity\nMaterials\n\n\n\n\n8:30\nOverview of the day\n\n\n\n9:00\nForecasting Challenge\n\n\n\n10:30\nBreak\n\n\n\n11:00\nPresent and Evaluate forecasts\n\n\n\n11:45\nLunch (Boxes to go)\n\n\n\n\n  \n\n\nPost-workshop\nEnjoy using these new techniques and databases!"
-  },
-  {
-    "objectID": "DengueForecatingChallenge.html",
-    "href": "DengueForecatingChallenge.html",
-    "title": "VectorByte Methods Training: Dengue Forecasting Challenge",
-    "section": "",
-    "text": "Using the skills you have gained in this year’s training, we are going to build some real forecasting models! We will focus on one part of a larger forecasting challenge called the Infodengue-Mosqlimate Dengue Challenge (IMDC). It aims to help make improved predictions of weekly dengue cases (incidence) in Brazil.\nThe IMDC involves three validation tests and one forecasting task, each focusing on predicting weekly dengue cases by state (UF) for specific epidemiological seasons:\nValidation Test 1: Predict cases for the 2022–2023 season using data from 2010 to mid-2022.\nValidation Test 2: Predict cases for the 2023–2024 season using data up to mid-2023.\nValidation Test 3: Predict cases for the 2024–2025 season using data up to mid-2024.\nForecast Task: Predict cases for the 2025–2026 season using data up to mid-2025.\nEach model must provide median estimates along with 50%, 80%, 90%, and 95% predictive intervals for all 27 Brazilian federative units.\nSee this link for the full challenge details: https://sprint.mosqlimate.org/2025/\nFor time’s sake, we will focus on making forecasts for just one of the 27 states, and we will work with validation test 3"
-  },
-  {
-    "objectID": "DengueForecatingChallenge.html#easier-version",
-    "href": "DengueForecatingChallenge.html#easier-version",
-    "title": "VectorByte Methods Training: Dengue Forecasting Challenge",
-    "section": "Easier version",
-    "text": "Easier version\n1 state, covariates already attached, just validation test 3 Using the"
-  },
-  {
-    "objectID": "DengueForecatingChallenge.html#harder-version",
-    "href": "DengueForecatingChallenge.html#harder-version",
-    "title": "VectorByte Methods Training: Dengue Forecasting Challenge",
-    "section": "Harder version",
-    "text": "Harder version\n10 states, covariates available but not attached, all validation tests and forecasting task"
   },
   {
     "objectID": "index.html",

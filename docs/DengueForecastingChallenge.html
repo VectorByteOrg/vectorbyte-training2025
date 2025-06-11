@@ -138,8 +138,9 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#instructions" id="toc-instructions" class="nav-link" data-scroll-target="#instructions">Instructions</a>
   <ul class="collapse">
   <li><a href="#easier-version" id="toc-easier-version" class="nav-link" data-scroll-target="#easier-version">Easier version</a></li>
-  <li><a href="#harder-version" id="toc-harder-version" class="nav-link" data-scroll-target="#harder-version">Harder version</a></li>
+  <li><a href="#some-tips" id="toc-some-tips" class="nav-link" data-scroll-target="#some-tips">Some Tips</a></li>
   </ul></li>
+  <li><a href="#data-dictionary" id="toc-data-dictionary" class="nav-link" data-scroll-target="#data-dictionary">Data Dictionary</a></li>
   </ul>
 </nav>
 </nav>
@@ -206,20 +207,136 @@ ul.task-list li input[type="checkbox"] {
 <p><em>Forecast Task:</em> Predict cases for the 2025–2026 season using data up to mid-2025.</p>
 <p>Each model must provide median estimates along with 50%, 80%, 90%, and 95% predictive intervals for all 27 Brazilian federative units.</p>
 <p>See this link for the full challenge details: https://sprint.mosqlimate.org/2025/</p>
-<p>For time’s sake, we will focus on making forecasts for just one of the 27 states, and we will work with validation test 3</p>
+<p>For time’s sake, we will focus on making forecasts for just a few of the 27 states, and we will work with part of validation test 3.</p>
 </section>
 <section id="instructions" class="level1">
 <h1>Instructions</h1>
+<p>Using the modeling skills you have earned over the course of the workshop, you are going to produce 12 weekly forecasts of Dengue incidence for 5 separate states in Brazil. You can use any of the models we discussed in the workshop, or others you may have experience with. You have incidence data and several covariates ranging from 2010 to mid-2024 in the data set called dengueForecasting.csv.</p>
+<p>The code file called dengueForecastingChallenge.R contains the infrastructure you need to quickly read in the data set and export a .csv file of the forecasts you make in a standard file. Once you have generated your forecasts, you will submit them here: <a href="https://virginiatech.questionpro.com/t/AaEFhZ6WQD">Forecast Submission Form</a>. We will score the forecasts using RMSE and a winner will be crowned!</p>
 <section id="easier-version" class="level2">
 <h2 class="anchored" data-anchor-id="easier-version">Easier version</h2>
-<p>1 state, covariates already attached, just validation test 3 Using the</p>
+<p>If that task sounds overwhelming, aim to produce those 12 weekly forecasts just for 1 state of your choice.</p>
 </section>
-<section id="harder-version" class="level2">
-<h2 class="anchored" data-anchor-id="harder-version">Harder version</h2>
-<p>10 states, covariates available but not attached, all validation tests and forecasting task</p>
+<section id="some-tips" class="level2">
+<h2 class="anchored" data-anchor-id="some-tips">Some Tips</h2>
+<ol type="1">
+<li><p>Remember - if you are using any covariates you will also have to produce forecasting models for each of those to have data available during the forecasting horizon, because in real life, we don’t know what the future holds - we have to make educated assumptions using models!</p></li>
+<li><p>Don’t forget to split your data into a training and test set to see how your model does on unseen data after you fit it. It is also good to test your covariate forecasts in this way.</p></li>
+<li><p>Your training and test set selection should be representative of your forecasting goal. Since we want 12 weeks of forecasts, consider holding back the last 12 weeks of data as a test set (there is a convenient column in the data to make this split easy if you choose to do it this way).</p></li>
+<li><p>Before making your forecasts, remember to go back and fit your chosen model to the whole data set to give it access to the most relevant data.</p></li>
+</ol>
+</section>
+</section>
+<section id="data-dictionary" class="level1">
+<h1>Data Dictionary</h1>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable Name</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>uf</td>
+<td>The Brazilian state code</td>
+</tr>
+<tr class="even">
+<td>date</td>
+<td>The date of the Sunday that falls on the associated epiweek</td>
+</tr>
+<tr class="odd">
+<td>epiweek</td>
+<td>A continous numerical value associated with the weekly timescale</td>
+</tr>
+<tr class="even">
+<td>cases</td>
+<td>The total probable cases within the given state for the given epiweek</td>
+</tr>
+<tr class="odd">
+<td>minTemp</td>
+<td>The minimum temperature across the state in the given epiweek</td>
+</tr>
+<tr class="even">
+<td>medTemp</td>
+<td>The median temperature across the state in the given epiweek</td>
+</tr>
+<tr class="odd">
+<td>maxTemp</td>
+<td>The maximum temperature across the state in the given epiweek</td>
+</tr>
+<tr class="even">
+<td>minPrecip</td>
+<td>The minimum daily precipitation in mm across the state in the given epiweek</td>
+</tr>
+<tr class="odd">
+<td>medPrecip</td>
+<td>The median daily precipitation in mm across the state in the given epiweek</td>
+</tr>
+<tr class="even">
+<td>maxPrecip</td>
+<td>The maximum daily precipitation in mm across the state in the given epiweek</td>
+</tr>
+<tr class="odd">
+<td>minPressure</td>
+<td>The minimum daily air pressure at sea level across the state in the given epiweek</td>
+</tr>
+<tr class="even">
+<td>medPressure</td>
+<td>The median daily air pressure at sea level across the state in the given epiweek</td>
+</tr>
+<tr class="odd">
+<td>maxPressure</td>
+<td>The maximum daily air pressure at sea level across the state in the given epiweek</td>
+</tr>
+<tr class="even">
+<td>minRH</td>
+<td>The minimum daily relative humidity across the state in the given epiweek</td>
+</tr>
+<tr class="odd">
+<td>medRH</td>
+<td>The median daily relative humidity across the state in the given epiweek</td>
+</tr>
+<tr class="even">
+<td>maxRH</td>
+<td>The maximum daily relative humidity across the state in the given epiweek</td>
+</tr>
+<tr class="odd">
+<td>meanRainyDays</td>
+<td>The average number of rainy days across the state during the given epiweek</td>
+</tr>
+<tr class="even">
+<td>meanThermalRange</td>
+<td>The average thermal range across the state during the given epiweek</td>
+</tr>
+<tr class="odd">
+<td>enso</td>
+<td>The average el niño/ southern oscillation value across the state during the given epiweek</td>
+</tr>
+<tr class="even">
+<td>iod</td>
+<td>The average indian ocean dipole value across the state during the given epiweek</td>
+</tr>
+<tr class="odd">
+<td>pdo</td>
+<td>The average pacific decadal oscillation value across the state during the given epiweek</td>
+</tr>
+<tr class="even">
+<td>population</td>
+<td>The total estimated population within the given state during the given epiweek (the same value within the same year)</td>
+</tr>
+<tr class="odd">
+<td>test</td>
+<td>A binary variable that tells you whether the observation belongs in the test set if you choose to hold back the last 12 weeks of data (up to you). “Y” indicates that the observation should be part of that test set.</td>
+</tr>
+</tbody>
+</table>
 
 
-</section>
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{arneson2025,
