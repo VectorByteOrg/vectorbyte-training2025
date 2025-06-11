@@ -102,8 +102,9 @@ We are assuming familiarity with `R` basics as well as at least introductory sta
 
 ## Dengue Forecasting Challenge
 
-- [Description -- coming soon]()
-- dataset: [coming soon!]()
+- [Description](DengueForecastingChallenge.qmd)
+- dataset: [dengueForecasting.csv](data/dengueForecasting.csv)
+- helper code: [dengueForecastingChallenge.R](dengueForecastingChallenge.R)
 
 <br>
 <br>
