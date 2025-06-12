@@ -58,9 +58,11 @@ We are assuming familiarity with `R` basics as well as at least introductory sta
 
 ## Introduction to the VecDyn database
 
--   [The VecDyn website](https://vectorbyte.crc.nd.edu/vecdyn-datasets).
+-   [The VecDyn website](https://vectorbyte.crc.nd.edu/vecdyn-datasets)
 -   [About the VecDyn API](https://www.vectorbyte.org/blog/vecdyn-api)
--   Other Materials Coming Soon!
+-  [Intro to VecDyn (slides)](
+https://docs.google.com/presentation/d/1GZuAR8zFRFJaR1QConiNHG5v71W4psAd/edit?usp=sharing&ouid=103950001421882927979&rtpof=true&sd=true)
+- [VecDyn Files for Uploading](https://drive.google.com/drive/folders/1BBK3zWEm3uuKDttXJquDKXDwXTodh8XB?usp=sharing)
 
 <br> <br>
 
@@ -95,7 +97,7 @@ We are assuming familiarity with `R` basics as well as at least introductory sta
 
 -   [Lecture Slides](VB_GP_slides.qmd)
 -   [Lecture Notes -- coming soon]()
--   [Practical -- coming soon]()
+-   [Practical](VB_GP_Practical.qmd)
 
 <br> <br>
 
