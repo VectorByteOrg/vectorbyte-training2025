@@ -18,7 +18,7 @@ format:
 
 # Introduction to Gaussian Processes for Time Dependent Data
 
-This document introduces the conceptual background to Gaussian Process (GP) regression, along with mathematical concepts. We also demonstrate briefly fitting GPs using the `laGP`[@laGP] package in R. The material here is intended to give a more verbose introduction to what is covered in the [lecture](GP.qmd) in order to support a student to work through the [practical component](GP_Practical.qmd). This material has been adapted from chapter 5 of the book [Surrogates: Gaussian process modeling, design and optimization for the applied sciences](https://bobby.gramacy.com/surrogates/) by Robert Gramacy.
+This document introduces the conceptual background to Gaussian Process (GP) regression, along with mathematical concepts. We also demonstrate briefly fitting GPs using the `hetGP` package in R. The material here is intended to give a more verbose introduction to what is covered in the [lecture](GP.qmd) in order to support a student to work through the [practical component](GP_Practical.qmd). This material has been adapted from chapter 5 and chapter 10 of the book [Surrogates: Gaussian process modeling, design and optimization for the applied sciences](https://bobby.gramacy.com/surrogates/) by Robert Gramacy.
 
 
 # Gaussian Processes
@@ -137,57 +137,49 @@ $$Y(x) = 5 \ \sin (x)$$
 
 Now we use the above, and try and obtain $Y(x_p) \vert Y$. Here is a visual of what a GP prediction for this function looks like. Each gray line is a draw from our predicted normal distribution, the blue line is the truth and the black line is the mean prediction from our GP. The red lines are confidence bounds. Pretty good? Let's learn how we do that. 
 
-```{r, echo = F, cache=TRUE, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 7, fig.height= 5, fig.align="center", warn.conflicts = FALSE}
+```{r, echo = F, cache=F, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 7, fig.height= 5, fig.align="center", warn.conflicts = FALSE}
 
 library(mvtnorm)
+library(hetGP)
 library(laGP)
-library(ggplot2)
-library(plgp)
 
 n <- 8 
 X <- matrix(seq(0, 2*pi, length= n), ncol=1) 
 y <- 5*sin(X)
+# Fitting GP 
+gp <- mleHomGP(X = X, Z = y, known = list(theta = 1))
 
 XX <- matrix(seq(-0.5, 2*pi + 0.5, length= 100), ncol=1)
 
-# Fitting GP 
-gpi <- newGP(X,y,d = 1,g = sqrt(.Machine$double.eps),dK = TRUE)
-yy <- predGP(gpi,XX)
-
 # Predictions
-YY <- rmvnorm (100, yy$mean, yy$Sigma)
-q1 <- yy$mean + qnorm(0.05, 0, sqrt(diag(yy$Sigma))) 
-q2 <- yy$mean + qnorm(0.95, 0, sqrt(diag(yy$Sigma))) 
+yy <- predict(object = gp, x = XX)
 
-df <- data.frame(
-  XX = rep(XX, each = 100),
-  YY = as.vector(YY),
-  Line = factor(rep(1:100, 100))
-)
+mean <- yy$mean # store mean
+s2 <- yy$sd2 + yy$nugs # store variance
 
-ggplot() +
-  geom_line(aes(x = df$XX, y = df$YY, group = df$Line), color = "darkgray", alpha = 0.5,
-            linewidth =1.5) +
-  geom_point(aes(x = X, y = y), shape = 20, size = 10, color = "darkblue") +
-  geom_line(aes(x = XX, y = yy$mean), size = 1, linewidth =3) +
-  geom_line(aes(x = XX, y = 5*sin(XX)), color = "blue", linewidth =3, alpha = 0.8) +
-  geom_line(aes(x = XX, y = q1), linetype = "dashed", color = "red", size = 1,
-            alpha = 0.7,linewidth =2) +
-  geom_line(aes(x = XX, y = q2), linetype = "dashed", color = "red", size = 1,
-            alpha = 0.7,linewidth =2) +
-  labs(x = "x", y = "y") +
-  theme_minimal() + 
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1, size = 25, face = "bold"),
-    axis.text.y = element_text(size = 25, face = "bold"),
-    axis.title.y = element_text(margin = margin(r = 10), size = 20, face = "bold"),
-    axis.title.x = element_text(margin = margin(r = 10), size = 20, face = "bold"),
-    panel.grid.major = element_blank(),
-    panel.grid.minor = element_blank(),
-    panel.background = element_rect(fill = "white"),
-    strip.background = element_rect(fill = "white", color = "white"),
-    strip.text = element_text(color = "black")) +
-  guides(color = "none")
+# Using the function and pass xprime as the new X matrix to get Sigma(XX, XX)
+yy <- predict(object = gp, x = XX, xprime = XX)
+
+# This is the covariance structure. This too does not include the nugget term.
+Kn <- yy$cov 
+Sigma <- Kn + diag(yy$nugs) # this is our predictive sigma of interest
+
+# Since our posterior is a distribution, we take 100 samples from this.
+YY <- rmvnorm (100, mean = mean, sigma = Sigma, checkSymmetry = F)
+
+# We calculate the 95% bounds
+q1 <- yy$mean + qnorm(0.025, 0, sqrt(s2))
+q2 <- yy$mean + qnorm(0.975, 0, sqrt(s2))
+
+trueYY <- 5 * sin(XX)
+
+matplot(XX, t(YY), type = 'l', col = "gray", lty = 1)
+matlines(XX, mean, col = "red", lty = 1, lwd = 2)
+matlines(XX, q1, col = "red", lty = 2, lwd = 3)
+matlines(XX, q2, col = "red", lty = 2, lwd = 3)
+matlines(XX, trueYY, col = "blue", lty = 1, lwd = 2)
+matpoints(X, y, col = "black", cex = 1.5, pch = 19)
+
 ```
 
 <!-- More verbose description of GPs -->
@@ -208,10 +200,7 @@ We have three main hyper-parameters here:
 
 This parameter dictates the amplitude of our function. A MVN Distribution with scale = 1 will usually have data between -2 to 2. As the scale increases, this range expands. Here is a plo that shows two different scales for the same function, with all other parameters fixed. 
 
-```{r, cache=TRUE, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 15, fig.height= 5, fig.align="center", warn.conflicts = FALSE}
-
-library(mvtnorm)
-library(laGP)
+```{r, cache=FALSE, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 15, fig.height= 5, fig.align="center", warn.conflicts = FALSE}
 
 set.seed(24)
 n <- 100
@@ -242,7 +231,7 @@ matplot(X, t(Y_scaled), type = 'l', main = expression(paste(tau^2, " = 25")),
 
 The length-scale controls the wiggliness of the function. It is also referred to as the rate of decay of correlation. The smaller it's value, the more wiggly the function gets. This is because we expect the change in directionalilty of the function to be rather quick. We will once again demonstrate how a difference in magnitude of $\theta$ affects the function, keeping everything else constant.
 
-```{r, cache=TRUE, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 15, fig.height= 5, fig.align="center", warn.conflicts = FALSE}
+```{r, cache=FALSE, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 15, fig.height= 5, fig.align="center", warn.conflicts = FALSE}
 
 set.seed(1)
 n <- 100
@@ -280,10 +269,7 @@ This type of modelling is also referred to a seperable GP since we can take the 
 
 This parameter adds some noise into the function. For $g > 0$, it determines the magnitude of discontinuity as $x'$ tends to $x$. It is also called the nugget effect. For $g=0$, there would be no noise and the function would interpolate between the points. This effect is only added to the diagonals of the correlation matrix. We never add $g$ to the off-diagonal elements. This also allows for numeric stability. Below is a snippet of what different magnitudes of $g$ look like. 
 
-```{r, cache=TRUE, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 15, fig.height= 5, fig.align="center", warn.conflicts = FALSE}
-library(mvtnorm)
-library(laGP)
-
+```{r, cache=F, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 15, fig.height= 5, fig.align="center", warn.conflicts = FALSE}
 n <- 100
 X <- as.matrix(seq(0, 10, length.out = n))
 Dx <- laGP::distance(X)
@@ -313,7 +299,7 @@ We will study this in some detail later, but here instead of using one nugget $g
 
 **Back to GP fitting**
 
-For now, let's get back to GP and fitting and learn how to use it. We have already seen a small example of the `laGP` package in action. However, we had not used any of the hyper-parameters in that case. We assumed to know all the information. However, that is not always the case. Without getting into the nitty-gritty details, here is how we obtain our parameters when we have some real data $D_n = (X_n, Y_n)$. 
+For now, let's get back to GP and fitting and learn how to use it. We have already seen a small example of the `hetGP` package in action to fit a HomGP. However, we had not used any of the hyper-parameters in that case. We assumed to know all the information. However, that is not always the case. Without getting into the nitty-gritty details, here is how we obtain our parameters when we have some real data $D_n = (X_n, Y_n)$. 
 
 - $g$ and $\theta$: An estimate can be obtained using MLE method by maximizing the likelihood. This is done using numerical algorithms. 
 
@@ -335,14 +321,33 @@ $$
 
 In case of a hetGP, we have:
 
-$$
 \begin{aligned} 
-Y_n\ & \ \sim GP \left( 0 \ , \tau^2 C_{n, \Lambda}  \right) \ \ \text{where, }\\[2pt]
-C_{n, \Lambda}  & \ = \exp{ \left( -\frac{\vert\vert x - x' \vert \vert ^2}{\theta} \right ) + \Lambda_n} \ \ \ \text{and, }\ \\[2pt]
-\ \ \Lambda_n \  & \ = \ \text{Diag}(\lambda_1, \lambda_2 ... , \lambda_n) \\[2pt]
+Y_n & \sim GP \left( 0 , \tau^2 \Sigma_{n}  \right); \quad \ \Sigma_{n} = (C_n + \Lambda_n) \quad\\[2pt]
+\Lambda_n & = \text{Diag}(\lambda_1, \dots, \lambda_n) \equiv \text{Diag}(\boldsymbol{\lambda}_n) \\[2pt]
+\log \boldsymbol{\lambda_n} & \sim GP \left( 0 , \tau^2_\lambda \Sigma_\lambda  \right); \quad \ \Sigma_{\lambda} = (C_n + g\mathbb{I}_n) \quad\\[2pt]
+
 \end{aligned} 
-$$ 
 
 Instead of one nugget for the GP, we have a **vector of nuggets** i.e. a unique nugget for each unique input. This allows us to obtain tighter bounds as we can have a large nugget where we have less data/ more noise and a smaller nugget where we have more data and/or less noise. 
+
+To make predictions, we infer hyper-parameters $\{ \boldsymbol{\lambda}_n, \theta_Y, \theta_\lambda \}$ through MLE. 
+
+For predictions, we first predict $\lambda(x_p)$ at new locations using regular GP predictive equations so we have:
+
+\begin{aligned}
+\log \lambda(x_p) \vert D_n & \sim \mathcal{N} \left(\mu_\lambda(x_p), \sigma^2(x_p) \right) \quad \text{where, }\\[3pt]
+\mu_\lambda(x_p) & = \Sigma_\lambda(x_p, X_n) \Sigma_\lambda^{-1}\log \boldsymbol{\lambda}_n \; \;\\[3pt]
+\sigma_\lambda^2(x_p) & = \tau2_\lambda \left( \Sigma_\lambda(x_p, x_p) - \Sigma_\lambda(x_p, X_n) \Sigma_\lambda^{-1}\Sigma_\lambda(X_n, x_p) \right)\\[3pt]
+\end{aligned}
+
+We can then use the mean estimated noise levels as plug-ins to obtain predictions for $Y(x_p)$.
+
+\begin{aligned}
+Y(x_p) \vert \ D_n \ & \sim \mathcal{N} \left(\mu(x_p) \ , \ \sigma^2(x_p) \right) \; \; \text{where, }\\[3pt]
+\mu(x_p) \ & = \Sigma(x_p, X_n) \Sigma_n^{-1}Y_n \; \;\\[3pt]
+\sigma^2(x_p) \ & = \Sigma(x_p, x_p) - \Sigma(x_p, X_n) \Sigma_n^{-1}\Sigma(X_n, x_p) \\[3pt]
+\end{aligned}
+
+- Here $\Sigma(x_p, x_p) = C_{n_p} + \Lambda_{n_p}$ where, $\Lambda_{n_p} = \text{Diag}(\boldsymbol{\lambda}_{n_p})$. We can use $\boldsymbol{\lambda}_{n_p} \equiv \exp(\mu_\lambda(x_p))$
 
 We can fit a hetGP using the`hetGP` [@binois2021hetgp] package on CRAN very similar to that as a regular GP, also called homoskedastic GP.
