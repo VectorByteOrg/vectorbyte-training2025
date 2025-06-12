@@ -1181,5 +1181,215 @@
     "title": "VectorByte Methods Training: Introduction to Time Series and Forecasting (practical)",
     "section": "Extra predictors with Linear Regression",
     "text": "Extra predictors with Linear Regression\nIn addition to the observation time series itself, we have a bunch of other predictor information. Maybe some of it will be useful for forecasting!\nWe could extend an ARIMA type model. For example, an additional argument in stlm() exists that allows for the inclusion of extra predictors into an ARIMA-based model post-decomposition. However, this function requires the predictors to exist in a separate matrix rather than inside of a data frame, which makes it somewhat challenging to use if you are unfamiliar with using matrices in R. Interpretation can also be more difficult.\nSo let’s go back and use our linear modeling approach, but add in a bit of spicy TS modeling aspects. We have a lot of predictors in our data set to choose from. Feel free to play around with them! For time’s sake, I am going to focus on lagged versions of mean temperature. Note that when we’re predicting into the future you usually don’t know what tomorrow’s temperature will be, so we often don’t include the temperature of the day itself. Let’s take a look at this predictor:\n\nplot(train$meanTempLag1, type=\"l\")\n\n\n\n\n\n\n\n\nWe can fit a really simple model here, and examine the residuals.\n\n# We will start with just our predictors\nlm.fit &lt;- lm(observation ~ meanTempLag1, \n             data = train)\nsummary(lm.fit)\n\n\nCall:\nlm(formula = observation ~ meanTempLag1, data = train)\n\nResiduals:\n      Min        1Q    Median        3Q       Max \n-0.109866 -0.016777  0.001162  0.017598  0.091915 \n\nCoefficients:\n              Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)  2.666e-01  2.244e-03  118.79   &lt;2e-16 ***\nmeanTempLag1 2.198e-03  4.299e-05   51.12   &lt;2e-16 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.02831 on 1526 degrees of freedom\nMultiple R-squared:  0.6314,    Adjusted R-squared:  0.6311 \nF-statistic:  2614 on 1 and 1526 DF,  p-value: &lt; 2.2e-16\n\nacf(lm.fit$residuals, 365) \n\n\n\n\n\n\n\n\nThere is still a lot of seasonal signal left! So we know this isn’t a great model. Also, the temperature TS itself is really noisy, and further, we maybe expect that how many leaves are out on trees might depend on not just the temperature today, but maybe over the last week. So let’s start by filtering the temperature to smooth it out. Then I’ll fit a simple linear model of the filtered data.\n\n## 7 day moving average, not including today\ntrain$meanTempMA7 &lt;- as.vector(stats::filter(ts(train$meanTemp), \n                           filter = c(0,rep(1/7, 7)),\n                           sides = 1))\nplot(train$meanTempMA7, type=\"l\")\n\n\n\n\n\n\n\n\nThe only down-side is that the first few terms are now going to be NAs, so we’ll have to trim when we fit:\n\ntrain$meanTempMA7[1:10]\n\n [1]       NA       NA       NA       NA       NA       NA       NA 43.68582\n [9] 46.05725 45.95011\n\n\nLet’s add the sine and cosine terms into the data set to include them in the model for both the eventual model of the greeness and also for the temperature. We will need to do this for train and test. Note that if you were to be forecasting beyond test, you would need to generate these terms for those time points as well.\n\n# Add to the training set\ntrain$sinSeason &lt;- sin((2*pi*train$X)/365)\ntrain$cosSeason &lt;- cos((2*pi*train$X)/365)\n\n# Add to the testing set\ntest$sinSeason &lt;- sin((2*pi*test$X)/365)\ntest$cosSeason &lt;- cos((2*pi*test$X)/365)\n\nSo first build a model for estimating average temperature over the previous 7 days using an ARIMA model:\n\ntemp.lm&lt;-auto.arima(train$meanTempMA7)\nsummary(temp.lm)\n\nSeries: train$meanTempMA7 \nARIMA(2,0,1) with non-zero mean \n\nCoefficients:\n         ar1      ar2     ma1     mean\n      1.3911  -0.3991  0.3679  49.4059\ns.e.  0.0349   0.0348  0.0351   4.7291\n\nsigma^2 = 1.278:  log likelihood = -2345.93\nAIC=4701.85   AICc=4701.89   BIC=4728.49\n\nTraining set error measures:\n                      ME     RMSE      MAE          MPE     MAPE      MASE\nTraining set 0.005395499 1.129179 0.851712 -0.001762966 2.106571 0.7484872\n                     ACF1\nTraining set -0.001454693\n\nacf(temp.lm$residuals)\n\n\n\n\n\n\n\n\nPretty good! Now we forecast this ahead and add it to the testing data set. Note that this is already lagged….\n\ntemp.fc&lt;-forecast(temp.lm, 30)\n\ntest$meanTempMA7&lt;-temp.fc$mean\n\nNOTE: this is a point forecast and is uncertain. We will technically be underestimating the amount of noise in our full forecast.\nBack to the main forecast! Let’s add in the sine and cosine terms for seasonality.\n\n# Add seasonality via sine and cosine terms\nlm.fit &lt;- lm(observation ~ sinSeason + cosSeason + meanTempMA7, \n             data = train)\n\nsummary(lm.fit)\n\n\nCall:\nlm(formula = observation ~ sinSeason + cosSeason + meanTempMA7, \n    data = train)\n\nResiduals:\n     Min       1Q   Median       3Q      Max \n-0.07866 -0.01345  0.00263  0.01679  0.07124 \n\nCoefficients:\n              Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)  0.3349204  0.0071517  46.831  &lt; 2e-16 ***\nsinSeason    0.0372707  0.0031038  12.008  &lt; 2e-16 ***\ncosSeason   -0.0116599  0.0014433  -8.079 1.32e-15 ***\nmeanTempMA7  0.0008089  0.0001449   5.581 2.83e-08 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.02426 on 1517 degrees of freedom\n  (7 observations deleted due to missingness)\nMultiple R-squared:  0.7296,    Adjusted R-squared:  0.729 \nF-statistic:  1364 on 3 and 1517 DF,  p-value: &lt; 2.2e-16\n\nacf(lm.fit$residuals, 365)\n\n\n\n\n\n\n\n\nWe’re still missing a lot….we can try to add in the trend.\n\n# Add trend\nlm.fit &lt;- lm(observation ~ X + sinSeason + cosSeason  + meanTempMA7, \n             data = train)\n\nsummary(lm.fit)\n\n\nCall:\nlm(formula = observation ~ X + sinSeason + cosSeason + meanTempMA7, \n    data = train)\n\nResiduals:\n      Min        1Q    Median        3Q       Max \n-0.080370 -0.013469  0.003456  0.016310  0.063255 \n\nCoefficients:\n              Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)  3.312e-01  7.034e-03  47.090  &lt; 2e-16 ***\nX            1.090e-05  1.413e-06   7.715 2.19e-14 ***\nsinSeason    4.008e-02  3.067e-03  13.068  &lt; 2e-16 ***\ncosSeason   -1.307e-02  1.428e-03  -9.153  &lt; 2e-16 ***\nmeanTempMA7  7.138e-04  1.428e-04   5.000 6.41e-07 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.0238 on 1516 degrees of freedom\n  (7 observations deleted due to missingness)\nMultiple R-squared:  0.7398,    Adjusted R-squared:  0.7391 \nF-statistic:  1078 on 4 and 1516 DF,  p-value: &lt; 2.2e-16\n\n# Check for leftover autocorrelation in the residuals - still a lot.\n#   Stay tuned for how to deal with this! For now we will move \n#   forward.\nacf(lm.fit$residuals)\n\n\n\n\n\n\n\n# These models still do assume normal residuals - these look good!\nhist(lm.fit$residuals)\n\n\n\n\n\n\n\n\nNext we’ll generate forecasts for this model.\n\n# We can generate forecasts with the forecast() function in the\n#    forecast package\nlm.forecasts &lt;- forecast(lm.fit, h = 30, newdata = test)\n\n# The forecast function gives us point forecasts, as well as\n#    prediction intervals\nlm.forecasts\n\n   Point Forecast     Lo 80     Hi 80     Lo 95     Hi 95\n1       0.4264719 0.3958881 0.4570557 0.3796811 0.4732628\n2       0.4265667 0.3959814 0.4571521 0.3797735 0.4733599\n3       0.4267938 0.3962068 0.4573807 0.3799981 0.4735895\n4       0.4270695 0.3964809 0.4576582 0.3802712 0.4738679\n5       0.4273601 0.3967696 0.4579506 0.3805590 0.4741612\n6       0.4276517 0.3970592 0.4582442 0.3808475 0.4744558\n7       0.4279386 0.3973440 0.4585332 0.3811312 0.4747460\n8       0.4282185 0.3976216 0.4588153 0.3814076 0.4750293\n9       0.4284903 0.3978910 0.4590895 0.3816757 0.4753048\n10      0.4287535 0.3981516 0.4593553 0.3819350 0.4755719\n11      0.4290078 0.3984033 0.4596123 0.3821853 0.4758303\n12      0.4292530 0.3986458 0.4598603 0.3824263 0.4760798\n13      0.4294891 0.3988790 0.4600992 0.3826580 0.4763202\n14      0.4297158 0.3991027 0.4603288 0.3828801 0.4765514\n15      0.4299330 0.3993168 0.4605491 0.3830927 0.4767733\n16      0.4301406 0.3995213 0.4607598 0.3832955 0.4769856\n17      0.4303384 0.3997160 0.4609609 0.3834885 0.4771884\n18      0.4305265 0.3999009 0.4611521 0.3836716 0.4773814\n19      0.4307046 0.4000757 0.4613335 0.3838447 0.4775645\n20      0.4308727 0.4002405 0.4615049 0.3840078 0.4777376\n21      0.4310306 0.4003951 0.4616662 0.3841606 0.4779007\n22      0.4311783 0.4005394 0.4618172 0.3843032 0.4780535\n23      0.4313157 0.4006734 0.4619579 0.3844354 0.4781960\n24      0.4314426 0.4007970 0.4620883 0.3845572 0.4783281\n25      0.4315591 0.4009101 0.4622081 0.3846685 0.4784497\n26      0.4316650 0.4010127 0.4623173 0.3847693 0.4785606\n27      0.4317602 0.4011045 0.4624158 0.3848594 0.4786609\n28      0.4318446 0.4011857 0.4625035 0.3849389 0.4787504\n29      0.4319183 0.4012561 0.4625804 0.3850075 0.4788290\n30      0.4319811 0.4013157 0.4626464 0.3850654 0.4788967\n\n\nWe can visualize the forecasts against the observed values if we add them to our compare data set.\n\n# Add the forecasts to test\ntest$forecast &lt;- lm.forecasts$mean\n\n# and to the compare set\ncompare$forecast3 &lt;- lm.forecasts$mean\n\n# What do you think??\nggplot(data = compare, aes(x = time, y = observed))+\n  geom_line(color = \"blue\")+\n  geom_point(color = \"blue\")+\n  geom_line(aes(y = forecast1), color = \"red\", lty=2)+\n  geom_point(aes(y = forecast1), color = \"red\", pch=1)+\n  geom_line(aes(y = forecast2), color = \"darkred\", lty=2)+\n  geom_point(aes(y = forecast2), color = \"darkred\", pch=1)+\n  geom_line(aes(y = forecast3), color = \"brown\", lty=2)+\n  geom_point(aes(y = forecast3), color = \"brown\", pch=1)\n\n\n\n\n\n\n\n\nThis linear model is much different! It’s partly because we don’t include an AR term in the model and also because we are including a forecast of the temperature, which is relatively smooth.\nFinally we will generate and save the accuracy metrics again.\n\nlm.comps &lt;- c(rmse = rmse(test$observation, test$forecast),\n              mae = mae(test$observation, test$forecast))\n\ncomps.DF &lt;-as.data.frame(cbind(model = c(\"arima\", \"stl\", \"lm\"), rbind(arima.comps, stl.comps, lm.comps)))\ncomps.DF\n\n            model               rmse                 mae\narima.comps arima 0.0147668036444357  0.0125105424697741\nstl.comps     stl 0.0116232134034618 0.00904861924106935\nlm.comps       lm 0.0129054709145573  0.0108634504332085"
+  },
+  {
+    "objectID": "VB_GP_slides.html#outline",
+    "href": "VB_GP_slides.html#outline",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "Outline",
+    "text": "Outline\nWe will go through the following topics:\n\nMotivation as Ecologists\nIntroducing Gaussian Processes (GPs)\nHyper-Parameters in GPs\nFitting a GP with some code\nHeteroskedastic GPs (HetGPs)\nFitting a HetGP with some code\nMotivating Ecological Example: Hands-On Practice"
+  },
+  {
+    "objectID": "VB_GP_slides.html#time-depedent-data",
+    "href": "VB_GP_slides.html#time-depedent-data",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "Time-Depedent Data",
+    "text": "Time-Depedent Data\n\n\n\nIn ecology, we often have data with features such as:\n\nSparse and irregularly sampled time series (Time-Dependent Data).\nVaries from location to location.\nOften consists of several noisy observations due to sampling errors."
+  },
+  {
+    "objectID": "VB_GP_slides.html#gaussian-process-introduction",
+    "href": "VB_GP_slides.html#gaussian-process-introduction",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "Gaussian Process: Introduction",
+    "text": "Gaussian Process: Introduction\n\n\nGaussian Process (GP) models are non paramteric and flexible regression model.\nExcellent for uncertainty quantification (UQ).\nSuppose we have n observations Y_n corresponding to X_n inputs, then\n\nY_{n} \\sim N (\\mu, \\Sigma_n)\n\nWe wish to estimate the response at a new input X_p i.e. Y_p \\mid Y_n, X_n.\nNote: If you set \\mu = X \\beta and \\Sigma_n = \\sigma^2 \\mathbb{I}, we have a Linear Regression (LR) Setup."
+  },
+  {
+    "objectID": "VB_GP_slides.html#distance",
+    "href": "VB_GP_slides.html#distance",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "Distance",
+    "text": "Distance\n\nFor a GP, the covariance matrix, \\Sigma_n is defined by a distance based kernel.\nConsider,\n\n\\Sigma_n = \\tau^2 C_n \\quad \\text{where} \\quad C_n^{ij} = \\exp \\left( - \\vert \\vert x_i - x_j \\vert \\vert^2 \\right)\n\n\nThe covariance structure now depends on how close together the inputs.\nThe covariance will decay at an exponential rate as x moves away from x'."
+  },
+  {
+    "objectID": "VB_GP_slides.html#visualizing-a-gp",
+    "href": "VB_GP_slides.html#visualizing-a-gp",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "Visualizing a GP",
+    "text": "Visualizing a GP"
+  },
+  {
+    "objectID": "VB_GP_slides.html#predictions-using-the-data",
+    "href": "VB_GP_slides.html#predictions-using-the-data",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "Predictions using the Data",
+    "text": "Predictions using the Data\n\nWe wish to find \\mathcal{Y} \\vert X_n, Y_n and we know Y_n \\vert X_n \\sim \\mathcal{N}( 0, \\Sigma_n).\nFirst we will “stack” the predictions and the data.\n\n\\begin{equation*}\n\\begin{bmatrix}\n\\mathcal{Y} \\\\\nY_n \\\\\n\\end{bmatrix}\n\\ \\sim \\ \\mathcal{N}\n\\left(\n\\;\n\\begin{bmatrix}\n0 \\\\\n0 \\\\\n\\end{bmatrix}\\; , \\;\n\\begin{bmatrix}\n\\Sigma(\\mathcal{X}, \\mathcal{X}) & \\Sigma(\\mathcal{X}, X_n)\\\\\n\\Sigma({X_n, \\mathcal{X}}) &  \\Sigma_n\\\\\n\\end{bmatrix}\n\\;\n\\right)\n\\end{equation*}\n\nBy properties of Normal distribution, \\mathcal{Y} \\vert X_n, Y_n is also normally distributed.\nWe can notate this as:\n\n\\begin{equation*}\n\\begin{aligned}\n\\mathcal{Y} \\mid Y_n, X_n \\sim \\mathcal{N} \\left(\\mu(\\mathcal{X}),  \\sigma^2(\\mathcal{X})\\right)\n\\end{aligned}\n\\end{equation*}"
+  },
+  {
+    "objectID": "VB_GP_slides.html#distribution-of-interest",
+    "href": "VB_GP_slides.html#distribution-of-interest",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "Distribution of Interest!",
+    "text": "Distribution of Interest!\n\n\nWe will apply the properties of conditional Normal distributions.\n\n\\begin{equation*}\n\\begin{aligned}\n\\mu(\\mathcal{X}) & = \\Sigma(\\mathcal{X}, X_n) \\Sigma_n^{-1} Y_n \\\\[10pt]  \n\\sigma^2(\\mathcal{X}) & = \\Sigma(\\mathcal{X}, \\mathcal{X}) - \\Sigma(\\mathcal{X}, X_n) \\Sigma_n^{-1} \\Sigma(X_n, \\mathcal{X}) \\\\\n\\end{aligned}\n\\end{equation*}\n\n\n\nTo make predictions at a single new location x, \\Sigma(x, x) = 1 + g.\nWe need to focus on \\Sigma so we can tune our GP appropriately."
+  },
+  {
+    "objectID": "VB_GP_slides.html#sigma-matrix",
+    "href": "VB_GP_slides.html#sigma-matrix",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "Sigma Matrix",
+    "text": "Sigma Matrix\n\n\n\\Sigma_n = \\tau^2 \\left( C_{\\theta}(X_n) + g \\mathbb{I_n} \\right) where C_n is our kernel.\n\n\n\n\nOne of the most common kernels which we will focus on is the squared exponential distance kernel written as\n\nC_\\theta(x, x') = \\exp{ \\left( -\\frac{\\vert\\vert x - x' \\vert \\vert ^2}{\\theta} \\right ) }\n\n\n\nWhat’s \\tau^2, g and \\theta though? No more math. We will just conceptually go through these"
+  },
+  {
+    "objectID": "VB_GP_slides.html#hyper-parameters",
+    "href": "VB_GP_slides.html#hyper-parameters",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "Hyper Parameters",
+    "text": "Hyper Parameters\n\nA GP is non parameteric, however, has some hyper-parameters. In this case,\n\n\\tau^2 (Scale): This parameter can be used to adjust the amplitude of the data.\n\\theta (Length-scale): This parameter controls the rate of decay of correlation.\ng (Nugget): This parameter controls the noise in the covariance structure (adds discontinuity)\n\nThese hyper-parameters \\{ \\tau^2, \\theta, g \\} are inferred using MLE/Bayesian schemes."
+  },
+  {
+    "objectID": "VB_GP_slides.html#scale-amplitude",
+    "href": "VB_GP_slides.html#scale-amplitude",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "Scale (Amplitude)",
+    "text": "Scale (Amplitude)\n\n\nA random draw from a multivariate normal distribution with \\tau^2 = 1 will produce data between -2 and 2.\nNow let’s visualize what happens when we increase \\tau^2 to 25."
+  },
+  {
+    "objectID": "VB_GP_slides.html#length-scale-rate-of-decay-of-correlation",
+    "href": "VB_GP_slides.html#length-scale-rate-of-decay-of-correlation",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "Length-scale (Rate of decay of correlation)",
+    "text": "Length-scale (Rate of decay of correlation)\n\n\nDetermines how “wiggly” a function is\nSmaller \\theta means wigglier functions i.e. visually:"
+  },
+  {
+    "objectID": "VB_GP_slides.html#nugget-noise",
+    "href": "VB_GP_slides.html#nugget-noise",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "Nugget (Noise)",
+    "text": "Nugget (Noise)\n\n\nEnsures discontinuity and prevents interpolation which in turn yields better UQ.\nWe will compare a sample from g ~ 0 (&lt; 1e-8 for numeric stability) vs g = 0.1 to observe what actually happens."
+  },
+  {
+    "objectID": "VB_GP_slides.html#toy-example-1d-example",
+    "href": "VB_GP_slides.html#toy-example-1d-example",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "Toy Example (1D Example)",
+    "text": "Toy Example (1D Example)\n\n\n\n\n\nX &lt;- matrix(seq(0, 2*pi, length = 100), ncol =1)\nn &lt;- nrow(X) \ntrue_y &lt;- 5 * sin(X)\nobs_y &lt;- true_y + rnorm(n, sd=1)\n\nXX &lt;- matrix(seq(0, 2*pi, length = 200), ncol =1)"
+  },
+  {
+    "objectID": "VB_GP_slides.html#toy-example-1d-example-1",
+    "href": "VB_GP_slides.html#toy-example-1d-example-1",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "Toy Example (1D Example)",
+    "text": "Toy Example (1D Example)\n\n\n\n\n# Fit GP\ngp &lt;- mleHomGP(X, obs_y)\n\n# Make Predictions\np &lt;- predict(gp, XX)"
+  },
+  {
+    "objectID": "VB_GP_slides.html#toy-example-1d-example-2",
+    "href": "VB_GP_slides.html#toy-example-1d-example-2",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "Toy Example (1D Example)",
+    "text": "Toy Example (1D Example)\n\n\n\n\ngp &lt;- mleHomGP(X, obs_y)\n\n# Make Predictions\np &lt;- predict(gp, XX)\n\nmean_gp &lt;- p$mean\ns2_gp &lt;- p$sd2 + p$nugs"
+  },
+  {
+    "objectID": "VB_GP_slides.html#extentions-anisotropic-gaussian-processes",
+    "href": "VB_GP_slides.html#extentions-anisotropic-gaussian-processes",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "Extentions: Anisotropic Gaussian Processes",
+    "text": "Extentions: Anisotropic Gaussian Processes\n\nSuppose we have a d dimensional input space, X_{n \\times d}. We can have one length-scale for each dimension i.e. \\mathbf{\\theta} = \\{ \\theta_1, \\dots, \\theta_d \\}.\nIn this situation, we can rewrite the C_n matrix as,\n\nC_\\theta(x , x') = \\exp{ \\left( -\\sum_{k=1}^{d} \\frac{ (x_k - x_k')^2 }{\\theta_k} \\right )}\n\nThis is also called a Seperable GP\nWe will explore newGPsep, mleGPsep and predGPsep."
+  },
+  {
+    "objectID": "VB_GP_slides.html#tick-populations-ornl",
+    "href": "VB_GP_slides.html#tick-populations-ornl",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "Tick Populations: ORNL",
+    "text": "Tick Populations: ORNL\n\n\n\n\n\n\nIso-week (c)\nPeriodicity\nTransformed Density\n\n\n\n\n2014-06-23\n0.49\n1.00\n5.72\n\n\n2014-07-14\n0.55\n0.98\n5.18\n\n\n2015-05-04\n0.36\n0.82\n3.51\n\n\n\n\n\n\n\n\n\n\n# Fitting the GP\ngp &lt;- mleHomGP(X, y_obs)\n\n# Make Predictions\nppt &lt;- predict(gp, XXt)"
+  },
+  {
+    "objectID": "VB_GP_slides.html#tick-populations-ornl-1",
+    "href": "VB_GP_slides.html#tick-populations-ornl-1",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "Tick Populations: ORNL",
+    "text": "Tick Populations: ORNL\n\n\n\n\n\n\nIso-week (c)\nPeriodicity\nTransformed Density\n\n\n\n\n2014-06-23\n0.49\n1.00\n5.72\n\n\n2014-07-14\n0.55\n0.98\n5.18\n\n\n2015-05-04\n0.36\n0.82\n3.51\n\n\n\n\n\n\n\n\n\n# Fitting the GP\ngp &lt;- mleHomGP(X, y_obs)\n\n# Make Predictions\nppt &lt;- predict(gp, XXt)"
+  },
+  {
+    "objectID": "VB_GP_slides.html#extension-heteroskedastic-gps-hetgp",
+    "href": "VB_GP_slides.html#extension-heteroskedastic-gps-hetgp",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "Extension: Heteroskedastic GPs (HetGP)",
+    "text": "Extension: Heteroskedastic GPs (HetGP)\n\nSuppose we have noise is input dependent (Binois, Gramacy, and Ludkovski 2018)."
+  },
+  {
+    "objectID": "VB_GP_slides.html#extension-heteroskedastic-gps-hetgp-1",
+    "href": "VB_GP_slides.html#extension-heteroskedastic-gps-hetgp-1",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "Extension: Heteroskedastic GPs (HetGP)",
+    "text": "Extension: Heteroskedastic GPs (HetGP)\n\nSuppose we have noise is input dependent (Binois, Gramacy, and Ludkovski 2018).\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWe can use a different nugget for each unique input rather than a scalar g."
+  },
+  {
+    "objectID": "VB_GP_slides.html#hetgp-setup",
+    "href": "VB_GP_slides.html#hetgp-setup",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "HetGP Setup",
+    "text": "HetGP Setup\n\nLet X_n, Y_n be the data and \\mathbf{\\lambda_n} be the noise level at input X_n.\nIn case of a hetGP, we have:\n\n\n\\begin{align*}\nY_n & \\sim GP \\left( 0, \\tau^2 \\left( C_{\\theta_Y}(X_n)  + \\Lambda_n \\right)  \\right) \\quad \\text{where,} \\quad \\Lambda_n = \\text{Diag}(\\bold{\\lambda}_n);\\\\\n\\log \\bold{\\lambda}_n & \\sim GP \\left( 0, \\tau_\\lambda^2 C_{\\theta_\\lambda}(X_n)  \\right)\\\\\n\\end{align*}\n\n\nNote that in a regular GP: \\Lambda_n = g \\mathbb{I}_n. We average over the noise across the input space.\nWe must infer \\{ \\bold{\\lambda}_n, \\theta_Y, \\theta_\\lambda, \\tau^2, \\tau^2_\\lambda \\} using MLE/Bayesian schemes."
+  },
+  {
+    "objectID": "VB_GP_slides.html#hetgp-predictions",
+    "href": "VB_GP_slides.html#hetgp-predictions",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "HetGP Predictions",
+    "text": "HetGP Predictions"
+  },
+  {
+    "objectID": "VB_GP_slides.html#hetgp-latent-layer-modeling",
+    "href": "VB_GP_slides.html#hetgp-latent-layer-modeling",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "HetGP Latent Layer Modeling",
+    "text": "HetGP Latent Layer Modeling"
+  },
+  {
+    "objectID": "VB_GP_slides.html#hetgp-toy-example-1d-example",
+    "href": "VB_GP_slides.html#hetgp-toy-example-1d-example",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "HetGP: Toy Example (1D Example)",
+    "text": "HetGP: Toy Example (1D Example)\n\n\n\n\nhomgp &lt;- mleHomGP(x, y)\np_hom &lt;- predict(object = homgp, x = XX)\n\nmean_gp &lt;- p_hom$mean\ns2_gp &lt;- p_hom$sd2 + p_hom$nugs"
+  },
+  {
+    "objectID": "VB_GP_slides.html#hetgp-toy-example-1d-example-1",
+    "href": "VB_GP_slides.html#hetgp-toy-example-1d-example-1",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "HetGP: Toy Example (1D Example)",
+    "text": "HetGP: Toy Example (1D Example)\n\n\n\n\nhomgp &lt;- mleHomGP(x, y)\np_hom &lt;- predict(object = homgp, x = XX)\n\nmean_gp &lt;- p_hom$mean\ns2_gp &lt;- p_hom$sd2 + p_hom$nugs\n\n\n\n\n\n\n\n\n\n\n\n\nhetgp &lt;- mleHetGP(x, y)\np_het &lt;- predict(object = hetgp, x = XX)\n\nmean &lt;-  p_het$mean\ns2 &lt;-  p_het$sd2 + p_het$nugs"
+  },
+  {
+    "objectID": "VB_GP_slides.html#hetgp-noise-levels",
+    "href": "VB_GP_slides.html#hetgp-noise-levels",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "HetGP: Noise Levels",
+    "text": "HetGP: Noise Levels"
+  },
+  {
+    "objectID": "VB_GP_slides.html#tick-population-forecasting",
+    "href": "VB_GP_slides.html#tick-population-forecasting",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "Tick Population Forecasting",
+    "text": "Tick Population Forecasting\n\n\nEFI-RCN held an ecological forecasting challenge NEON Forecasting Challenge (Thomas et al. 2022)\nWe focus on the Tick Populations theme which studies the abundance of the lone star tick (Amblyomma americanum)\n\n\n\n\n\n\nObjective: Forecast tick density for 4 weeks into the future.\nSites: The data is collected across 9 different NEON plots.\nData: Sparse and irregularly spaced.\nn = ~570 observations since 2014."
+  },
+  {
+    "objectID": "VB_GP_slides.html#predictors",
+    "href": "VB_GP_slides.html#predictors",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "Predictors",
+    "text": "Predictors\n\n\n\nIso-week, X_1 = 1,2,... 53.\nPeriodicity, X_2 = \\text{sin}^2 \\left( \\frac{2 \\pi X_1}{106} \\right).\nMean Elevation, X_3."
+  },
+  {
+    "objectID": "VB_GP_slides.html#practical",
+    "href": "VB_GP_slides.html#practical",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "Practical",
+    "text": "Practical\n\n\nSetup these predictors\nTransform the data to normal\nFit a GP to the Data\nMake Predictions on a testing set\nCheck how predictions perform."
+  },
+  {
+    "objectID": "VB_GP_slides.html#references",
+    "href": "VB_GP_slides.html#references",
+    "title": "Introduction to Gaussian Processes for Time Dependent Data",
+    "section": "References",
+    "text": "References\n\n\n\n\nBinois, Mickael, Robert B Gramacy, and Mike Ludkovski. 2018. “Practical Heteroscedastic Gaussian Process Modeling for Large Simulation Experiments.” Journal of Computational and Graphical Statistics 27 (4): 808–21.\n\n\nThomas, R Quinn, Carl Boettiger, Cayelan C Carey, Michael C Dietze, Leah R Johnson, Melissa A Kenney, Jason S Mclachlan, et al. 2022. “The NEON Ecological Forecasting Challenge.” Authorea Preprints."
   }
 ]

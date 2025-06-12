@@ -2,8 +2,9 @@
 subtitle: "Virginia Tech"
 title: "Introduction to Gaussian Processes for Time Dependent Data"
 editor: source
-author: "Parul Vijay Patil, Leah R. Johnson, Robert B. Gramacy"
+author: "The VectorByte Team (Parul Vijay Patil, Leah R. Johnson, Robert B. Gramacy)"
 title-slide-attributes:
+  data-background-image: graphics/VectorByte-logo_lg.png
   data-background-size: contain
   data-background-opacity: "0.2"
 format: revealjs
@@ -148,6 +149,7 @@ $$Y_{n} \sim N (\mu, \Sigma_n)$$
 - Note: If you set $\mu = X \beta$ and $\Sigma_n = \sigma^2 \mathbb{I}$, we have a Linear Regression (LR) Setup.
 
 <!-- -   We are essentially taking a "fancy" average of the data to make predictions -->
+
 ## Distance
 
 -   For a GP, the covariance matrix, $\Sigma_n$ is defined by a **distance** based kernel.
@@ -503,7 +505,7 @@ lines(XX, true_yy, col = 2, lwd = 3)
 ```{r, echo = T, cache=F, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.align="center", warn.conflicts = FALSE}
 #| code-line-numbers: "|2|5"
 # Fit GP
-gp <- mleHomGP(X, y_obs)
+gp <- mleHomGP(X, obs_y)
 
 # Make Predictions
 p <- predict(gp, XX)
@@ -539,7 +541,7 @@ lines(XX, true_yy, col = 2, lwd = 3)
 ```{r, echo = T, cache=F, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), warn.conflicts = FALSE}
 #| code-line-numbers: "|12|14-15|"
 #| code-overflow: wrap
-gp <- mleHomGP(X, y_obs)
+gp <- mleHomGP(X, obs_y)
 
 # Make Predictions
 p <- predict(gp, XX)
@@ -668,7 +670,7 @@ knitr::kable(snip, align = "c", table.attr = "style='width:80%;'") %>%
 gp <- mleHomGP(X, y_obs)
 
 # Make Predictions
-ppt <- predict(gp, XX)
+ppt <- predict(gp, XXt)
 ```
 
 :::
@@ -729,7 +731,7 @@ knitr::kable(snip, align = "c", table.attr = "style='width:80%;'") %>%
 gp <- mleHomGP(X, y_obs)
 
 # Make Predictions
-ppt <- predict(gp, XX)
+ppt <- predict(gp, XXt)
 ```
 
 :::
@@ -881,11 +883,11 @@ $$
 
 ## HetGP Predictions
 
-![](HetGPmod.png)
+![](graphics/HetGPmod.png)
 
 ## HetGP Latent Layer Modeling
 
-![](Latentnosie.png)
+![](graphics/Latentnoise.png)
 
 ## HetGP: Toy Example (1D Example)
 
