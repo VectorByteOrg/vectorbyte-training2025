@@ -93,10 +93,9 @@ We are assuming familiarity with `R` basics as well as at least introductory sta
 
 ## Gaussian Process models (GPs) for Time Dependent Data
 
--   [Lecture Slides -- coming soon]()
+-   [Lecture Slides](VB_GP_slides.qmd)
 -   [Lecture Notes -- coming soon]()
 -   [Practical -- coming soon]()
--   [additional R code -- df_spline.R -- coming soon]()
 
 <br> <br>
 
