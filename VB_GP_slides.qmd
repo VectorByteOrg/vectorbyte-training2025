@@ -586,14 +586,13 @@ $$C_\theta(x , x') = \exp{ \left( -\sum_{k=1}^{d} \frac{ (x_k - x_k')^2 }{\theta
 ```{r, include = F, echo = T, cache = F, warning=FALSE, message = FALSE}
 # transforms y
 f <- function(x) {
-  y <- log(x)
+  y <- log(x + 1) 
   return(y)
 }
 
 # This function back transforms the input argument
 fi <- function(y) {
-  x <- exp(y)
-  return(x)
+  x <- exp(y) - 1
 }
 
 fx.iso_week <- function(datetime){
@@ -642,7 +641,7 @@ XXt1c <- XXt1/53
 XXt <- as.matrix(cbind.data.frame(XXt1c, XXt2))
 
 y_obs <- df_train$observation
-y <- f(y_obs + 1)
+y <- f(y_obs)
 
 rownames(X) <- as.character(df_train$datetime)
 colnames(X) <- c("Iso-week (c)", "Periodicity")
@@ -682,9 +681,9 @@ yyt <- ppt$mean
 q1t <- ppt$mean + qnorm(0.025,0,sqrt(ppt$sd2 + ppt$nugs)) #lower bound
 q2t <- ppt$mean + qnorm(0.975,0,sqrt(ppt$sd2 + ppt$nugs)) # upper bound
 
-gp_yy <- fi(yyt) - 1 
-gp_q1 <- fi(q1t) - 1
-gp_q2 <- fi(q2t) - 1
+gp_yy <- fi(yyt)
+gp_q1 <- fi(q1t)
+gp_q2 <- fi(q2t)
 
 # Plot the observed points
 par(mfrow = c(1, 1), mar = c(5, 5, 0, 1),  cex.axis = 2, cex.lab = 2, font.lab = 2)
@@ -743,9 +742,9 @@ yyt <- ppt$mean
 q1t <- ppt$mean + qnorm(0.025,0,sqrt(ppt$sd2 + ppt$nugs)) #lower bound
 q2t <- ppt$mean + qnorm(0.975,0,sqrt(ppt$sd2 + ppt$nugs)) # upper bound
 
-gp_yy <- fi(yyt) - 1
-gp_q1 <- fi(q1t) - 1
-gp_q2 <- fi(q2t) - 1
+gp_yy <- fi(yyt) 
+gp_q1 <- fi(q1t) 
+gp_q2 <- fi(q2t) 
 
 # Plot the observed points
 par(mfrow = c(1, 1), mar = c(5, 5, 0, 1),  cex.axis = 2, cex.lab = 2, font.lab = 2)
