@@ -96,7 +96,7 @@ https://docs.google.com/presentation/d/1GZuAR8zFRFJaR1QConiNHG5v71W4psAd/edit?us
 ## Gaussian Process models (GPs) for Time Dependent Data
 
 -   [Lecture Slides](VB_GP_slides.qmd)
--   [Lecture Notes -- coming soon]()
+-   [Lecture Notes](VB_GP_Notes.qmd)
 -   [Practical](VB_GP_Practical.qmd)
 
 <br> <br>

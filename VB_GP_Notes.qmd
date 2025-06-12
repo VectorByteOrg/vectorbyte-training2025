@@ -6,7 +6,7 @@ author:
 citation: true
 bibliography: references.bib
 link-citations: TRUE
-date: 2024-07-21
+date: 2025-06-10
 date-format: long
 format:
   html:
@@ -18,7 +18,7 @@ format:
 
 # Introduction to Gaussian Processes for Time Dependent Data
 
-This document introduces the conceptual background to Gaussian Process (GP) regression, along with mathematical concepts. We also demonstrate briefly fitting GPs using the `hetGP` package in R. The material here is intended to give a more verbose introduction to what is covered in the [lecture](GP.qmd) in order to support a student to work through the [practical component](GP_Practical.qmd). This material has been adapted from chapter 5 and chapter 10 of the book [Surrogates: Gaussian process modeling, design and optimization for the applied sciences](https://bobby.gramacy.com/surrogates/) by Robert Gramacy.
+This document introduces the conceptual background to Gaussian Process (GP) regression, along with mathematical concepts. We also demonstrate briefly fitting GPs using the `hetGP` package in R. The material here is intended to give a more verbose introduction to what is covered in the [lecture](VB_GP_slides.qmd) in order to support a student to work through the [practical component](VB_GP_Practical.qmd). This material has been adapted from chapter 5 and chapter 10 of the book [Surrogates: Gaussian process modeling, design and optimization for the applied sciences](https://bobby.gramacy.com/surrogates/) by Robert Gramacy.
 
 
 # Gaussian Processes
