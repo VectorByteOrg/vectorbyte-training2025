@@ -157,7 +157,7 @@ Let's start with loading all the libraries that we will need, load our data and 
 
 
 
-```{r setup, include = TRUE, cache=TRUE, warning=FALSE, message=FALSE }
+```{r setup, include = TRUE, cache=FALSE, warning=FALSE, message=FALSE }
 library(tidyverse)
 library(hetGP)
 library(ggplot2)
@@ -189,7 +189,7 @@ We pass in (`response` + 1) into this function to ensure we don't take a log of 
 
 Let's write a function for this, as well as the inverse of the transform.
 
-```{r, cache=TRUE}
+```{r, cache=FALSE}
 
 # transforms y
 f <- function(x) {
@@ -257,7 +257,7 @@ Some observations:
 - We also want the next year to repeat the same pattern i.e. we want to restrict it to [0, 1] interval. Thus, we square the sin wave. 
 
 
-```{r, cache=TRUE}
+```{r, cache=FALSE}
 # Then with datetime and the function, we can assign
 fx.sin <- function(datetime){
   # identify iso week
@@ -544,7 +544,7 @@ The function is setup so you have to enter a `datetime`. It identifies the start
 
 Next, a sequence of weeks is created and labeled $\{1, 2, \dots, n\}$.
 
-```{r, cache=TRUE}
+```{r, cache=FALSE}
 
 # This function tells us the week number given the date from minimum date to maximum date
 fx.week <- function(datetime){
