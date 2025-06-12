@@ -1,10 +1,22 @@
 ---
-title: "Introduction to Gaussian Processes for Time Dependent Data (Practical)"
+title: "VectorByte Methods Training: Introduction to Gaussian Processes for Time Dependent Data (Practical)"
 author:
-  - name: Parul Vijay Patil, Leah R. Johnson, Robert B. Gramacy
+  - name: 
+      given:  Parul Vijay
+      family: Patil
+    affiliation: Virginia Tech and VectorByte
+  - name: 
+      given: Leah R.
+      family: Johnson
+    url: https://lrjohnson0.github.io/QEDLab/leahJ.html
+    affiliation: Virginia Tech and VectorByte
+  - name:
+      given: Robert B.
+      family: Gramacy
+    url: https://bobby.gramacy.com/
     affiliation: Virginia Tech
 citation: true
-date: 2024-07-21
+date: 2025-06-10
 date-format: long
 format:
   html:
