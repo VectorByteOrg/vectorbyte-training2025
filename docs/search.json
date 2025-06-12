@@ -256,7 +256,7 @@
     "href": "materials.html#introduction-to-the-workshop",
     "title": "VectorByte Training Materials 2025",
     "section": "Introduction to the Workshop",
-    "text": "Introduction to the Workshop\n\nLecture"
+    "text": "Introduction to the Workshop\n\nLecture Slides"
   },
   {
     "objectID": "materials.html#regression-in-r-refresher-transformations-and-diagnostics",
@@ -291,7 +291,7 @@
     "href": "materials.html#basics-of-forecasting-time-series-using-r",
     "title": "VectorByte Training Materials 2025",
     "section": "Basics of Forecasting Time Series using R",
-    "text": "Basics of Forecasting Time Series using R\n\nLecture\nPractical\nDataset: NEONphenologyClean.csv"
+    "text": "Basics of Forecasting Time Series using R\n\nLecture Slides\nPractical\nDataset: NEONphenologyClean.csv"
   },
   {
     "objectID": "materials.html#gaussian-process-models-gps-for-time-dependent-data",
@@ -352,224 +352,224 @@
   {
     "objectID": "VB_TimeSeries.html#learning-objectives",
     "href": "VB_TimeSeries.html#learning-objectives",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "Learning Objectives",
     "text": "Learning Objectives\n\nIntroduce traditional time-series approaches\nBe able to conduct simple time series analyses\nBe able to produce a forecast for a time series model."
   },
   {
     "objectID": "VB_TimeSeries.html#recall-time-series-data",
     "href": "VB_TimeSeries.html#recall-time-series-data",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "Recall: Time Series Data",
     "text": "Recall: Time Series Data\nTime dependent data may be considered a comprise a time series (TS) if the data are observed at evenly spaced intervals.\n\nMost TS methods WILL NOT work properly if data are irregularly spaced\nOccasionally data points may be missing – then there are methods to interpolate.\nIrregularly spaced data may be aggregated in a systematic way to fulfill the TS requirements."
   },
   {
     "objectID": "VB_TimeSeries.html#components-of-a-time-series-model",
     "href": "VB_TimeSeries.html#components-of-a-time-series-model",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "Components of a time-series model",
     "text": "Components of a time-series model\nWe can classify the patterns that we wish to quantify with a time series model into five categories:\n\nLevel: the average value of the overall TS\nTrend: whether the TS tends to go up or down\nSeasonality: the tendency of the TS to repeat or cycle with a set frequency\nAuto-regression: correlation in the TS with nearby times\nNoise: random components, not correlated to other parts of the model"
   },
   {
     "objectID": "VB_TimeSeries.html#last-time-regression-based",
     "href": "VB_TimeSeries.html#last-time-regression-based",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "Last time: Regression based",
     "text": "Last time: Regression based\nWe previously used a regression approach to allow us to explore these patterns:\n\nLevel: usually the intercept in the model\nTrend: added time as a predictor\nSeasonality: included sine/cosine predictors\nAuto-regression: response at lagged times as a predictor\nNoise: assumed additive, normal noise\n\nWe want to expand our toolbox and give ourselves more options to build models, and eventually use them to forecast!."
   },
   {
     "objectID": "VB_TimeSeries.html#first-approach-smoothing",
     "href": "VB_TimeSeries.html#first-approach-smoothing",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "First approach – Smoothing",
     "text": "First approach – Smoothing\nOften one of the first things we want to do is smooth a TS. This is simply averaging multiple time periods to reduce noise.\n\nThis can, on it’s own, bring out the “signal” in a TS.\n\nIt’s also super useful to produce smoothed time dependent predictors, so that you’re not using noise/extreme values to predict patterns in your target TS."
   },
   {
     "objectID": "VB_TimeSeries.html#moving-average-ma-models",
     "href": "VB_TimeSeries.html#moving-average-ma-models",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "Moving Average (MA) Models",
     "text": "Moving Average (MA) Models\nIn a MA model, average over a window of consecutive periods.\n\nWe define the window by:\n\nwidth – number of time points\norientation – which time points\n\nIt is also possible to weight the time points, e.g., make nearby times more important."
   },
   {
     "objectID": "VB_TimeSeries.html#effects-of-smoothing-width",
     "href": "VB_TimeSeries.html#effects-of-smoothing-width",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "Effects of smoothing: width",
     "text": "Effects of smoothing: width\nIn base R, the filter function gives us an easy way to explore the effect of smoothing.\n\n\nShort vs Long\n\nt&lt;-1:length(airquality$Wind)\nwind&lt;-airquality$Wind\n## centered\nFC5&lt;- filter(wind, \n             filter = rep(0.2, 5))\n\n## longer centered\nFC25&lt;- filter(wind, \n              filter = rep(1/25,25), \n              sides=2)"
   },
   {
     "objectID": "VB_TimeSeries.html#effects-of-smoothing-orientation",
     "href": "VB_TimeSeries.html#effects-of-smoothing-orientation",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "Effects of smoothing: orientation",
     "text": "Effects of smoothing: orientation\nIn base R, the filter function gives us an easy way to explore the effect of smoothing.\n\n\nCentered vs. Trailing\n\nt&lt;-1:length(airquality$Temp)\nwind&lt;-airquality$Wind\n## centered\nFC&lt;- filter(wind, \n            filter = rep(1/9, 9))\n## trailing:  by default\n## filter function includes point\n## t in the average\nFT&lt;- filter(wind, \n            filter = c(0,rep(1/9, 9)), \n            sides=1)"
   },
   {
     "objectID": "VB_TimeSeries.html#effects-of-smoothing-weighting",
     "href": "VB_TimeSeries.html#effects-of-smoothing-weighting",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "Effects of smoothing: weighting",
     "text": "Effects of smoothing: weighting\nIn base R, the filter function gives us an easy way to explore the effect of smoothing.\n\n\nUnweighted vs Weighted\n\nt&lt;-1:length(airquality$Temp)\nwind&lt;-airquality$Wind\n## trailing \nFT10&lt;- filter(wind, \n             filter = c(0,rep(0.1, 10)),\n             sides = 1)\n\n## trailing, weighted, coeffs in reverse time order\nFT10w&lt;- filter(wind, \n              filter = c(0, 0.3, 0.2, 0.1, 0.1, \n                         rep(0.05, 6)), \n              sides=1)"
   },
   {
     "objectID": "VB_TimeSeries.html#exponential-smoothing",
     "href": "VB_TimeSeries.html#exponential-smoothing",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "Exponential Smoothing",
     "text": "Exponential Smoothing\nInstead of weighting all points the same, or manually determining weights, Exponential smoothing/moving average (ema) uses a special weighting of \\(k\\) past values: \\[\n\\begin{align*}\nema_{t+1} = & \\alpha y_t + \\alpha(1-\\alpha)y_{t-1} + \\alpha(1-\\alpha)^2 y_{t-2} \\\\\n& + \\cdots + \\alpha(1-\\alpha)^k y_{t-k}\n\\end{align*}\n\\] where \\(\\alpha\\) is a smoothing constant between 0 and 1. This can be rewritten as a recurssion:\n\\[\nema_{t+1} = \\alpha y_t + \\alpha(1-\\alpha)ema_{t}\n\\]"
   },
   {
     "objectID": "VB_TimeSeries.html#choosing-a-smoothing-constant",
     "href": "VB_TimeSeries.html#choosing-a-smoothing-constant",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "Choosing a smoothing constant",
     "text": "Choosing a smoothing constant\nThe value of \\(\\alpha\\) determines the influence of points farther in the past. This is sometimes called the “rate of learning”\n\n\n\nDefault values are often around 0.1 - 0.2."
   },
   {
     "objectID": "VB_TimeSeries.html#exponential-smoothing-example",
     "href": "VB_TimeSeries.html#exponential-smoothing-example",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "Exponential Smoothing Example",
     "text": "Exponential Smoothing Example\nThe filter function doesn’t give us quite what we want. Instead we can use the EMA function in the TTR package:\n\n\nUnweighted vs Exponential\n\nt&lt;-1:length(airquality$Temp)\nwind&lt;-airquality$Wind\n## trailing \nFT10&lt;- filter(wind, \n             filter = rep(0.1, 10),\n             sides = 1)\n\n## exponential\nFE  &lt;- TTR::EMA(wind, 10)"
   },
   {
     "objectID": "VB_TimeSeries.html#arma",
     "href": "VB_TimeSeries.html#arma",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "ARMA",
     "text": "ARMA\nWe can combine the idea of smoothing back to capture signal while recognizing the high amount of correlation at nearby time-steps using Auto-Regressive Moving Average (ARMA) models.\nWe combine the AR(\\(p\\)) (i.e., using \\(p\\) lags) with a (trailing) MA(\\(q\\)) model (i.e., window of size \\(q\\)).\n\nBut how do we build the model?"
   },
   {
     "objectID": "VB_TimeSeries.html#specifying-the-ma-part",
     "href": "VB_TimeSeries.html#specifying-the-ma-part",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "Specifying the MA part",
     "text": "Specifying the MA part\nThe tricky bit is that the MA part that goes into the model is not the result of the smoother itself (i.e., it’s not the \\(F_t\\) on Slide 7).\n\nInstead, we use the residuals – that is, how far the data at the previous time points are from the smoothed estimate based on \\(q\\) previous times: \\[\n\\varepsilon_{t-1} = y_{t-1} - F_{t-1, q}\n\\]"
   },
   {
     "objectID": "VB_TimeSeries.html#arma-model",
     "href": "VB_TimeSeries.html#arma-model",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "ARMA model",
     "text": "ARMA model\nThe ARMA(\\(p,q\\)) model is then a regression model (like we saw in our previous AR model) but with extra parameters and terms corresponding to those errors: \\[\n\\begin{align*}\ny_t =~& \\beta_0 + \\beta_1 y_{t-1} + \\cdots + \\beta_p y_{t-p} \\\\\n& + \\varepsilon_t + \\theta_1 \\varepsilon_{t-1} + \\cdots \\theta_q \\varepsilon_{t-q}\n\\end{align*}\n\\]"
   },
   {
     "objectID": "VB_TimeSeries.html#pros-and-cons-of-arma",
     "href": "VB_TimeSeries.html#pros-and-cons-of-arma",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "Pros and Cons of ARMA",
     "text": "Pros and Cons of ARMA\nPros:\n\ncan capture some signal without needing to specify a functional form\nfairly flexible and tunable\n\nCons:\n\ndon’t capture trends or seasonality well (assume nearly stationary)\nforecasts must be done one step ahead at a time"
   },
   {
     "objectID": "VB_TimeSeries.html#arima-and-sarima",
     "href": "VB_TimeSeries.html#arima-and-sarima",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "ARIMA and SARIMA",
     "text": "ARIMA and SARIMA\nIn order to relax the assumption of stationarity and allow for seasonality/periodicity, we can add another letter “I” for Integrated and “S” for Seasonal.\n\nWhat does this mean?\n\nFirst a digression…."
   },
   {
     "objectID": "VB_TimeSeries.html#differencing",
     "href": "VB_TimeSeries.html#differencing",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "Differencing",
     "text": "Differencing\nAR/ARMA models without explicit trend or periodic components can only describe data that are stationary.\n\nIt turns out that we fiddle with a non-stationary TS to get something that is stationary through differencing:\n\ncomputing the differences between consecutive data points (or at another fixed lag)."
   },
   {
     "objectID": "VB_TimeSeries.html#back-to-arima",
     "href": "VB_TimeSeries.html#back-to-arima",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "back to ARIMA",
     "text": "back to ARIMA\nNow we can get to ARIMA. If we define the Lag-\\(d\\) differenced time series data as \\(y'_t\\) then an ARIMA(\\(p,d,q\\)) model is just:\n\\[\n\\begin{align*}\ny'_t =~& \\beta_0 + \\beta_1 y'_{t-1} + \\cdots + \\beta_p y'_{t-p} \\\\\n& + \\varepsilon_t + \\theta_1 \\varepsilon_{t-1} + \\cdots \\theta_q \\varepsilon_{t-q}\n\\end{align*}\n\\] That is, it’s an ARMA model but on the differenced time series to take care of trends.\n\\(\\Rightarrow\\) like adding polynomial terms in our regression context."
   },
   {
     "objectID": "VB_TimeSeries.html#fitting-an-arima-model-in-r",
     "href": "VB_TimeSeries.html#fitting-an-arima-model-in-r",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "Fitting an ARIMA model in R",
     "text": "Fitting an ARIMA model in R\nOne advantage of ARIMA modeling is that there are automatic ways to choose the order of your model (the \\(p, q\\), and \\(d\\)).\nThis can be convenient when you are only interested in forecasting/prediction.\n\n\\(\\Rightarrow\\) We can use the auto.arima function in the forecast package."
   },
   {
     "objectID": "VB_TimeSeries.html#forecasting",
     "href": "VB_TimeSeries.html#forecasting",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "Forecasting",
     "text": "Forecasting\n\n## forecasting at a 12 mo horizon\nf.ld&lt;-forecast::forecast(m.ld, h=12)"
   },
   {
     "objectID": "VB_TimeSeries.html#elaborating-on-arima",
     "href": "VB_TimeSeries.html#elaborating-on-arima",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "Elaborating on ARIMA",
     "text": "Elaborating on ARIMA\nYou can include multiple sets of differences in your model.\n\nSpecifically, if your differencing reflects the number of time steps over which you observe a periodic pattern, you can add this extra bit on top and create a SARIMA model.\n\nThis also requires a second set of variables (\\(P,Q\\) and \\(D\\)) to specify what is effectively a second entire model built on the lagged dataset."
   },
   {
     "objectID": "VB_TimeSeries.html#fun-trick-ar-model-of-residuals",
     "href": "VB_TimeSeries.html#fun-trick-ar-model-of-residuals",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "Fun trick – AR model of residuals",
     "text": "Fun trick – AR model of residuals\nLet’s say you have time series data, and you had some other model that you wanted to fit – maybe an ODE or even just a smoother.\nOften you find that your predictions/forecasts aren’t great because you don’t account for autocorrelation in the error\n\nif you were higher than expected at time \\(t-1\\) you’re likely to still be a bit high at time \\(t\\).\n\nHow can we incorporate this?"
   },
   {
     "objectID": "VB_TimeSeries.html#arima-vs.-regression-approaches",
     "href": "VB_TimeSeries.html#arima-vs.-regression-approaches",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "ARIMA vs. regression approaches",
     "text": "ARIMA vs. regression approaches\n\nRegression type approaches are highly flexible, and data don’t need to be evenly spaced\nlagged predictors can be used as long as the aren’t predictor values missing\nOnce you add any AR or MA components, or differencing, you must have evenly spaced data w/o gaps\ninterpreting ARIMA and similar models is tricky – usually they’re better for forecasting\n\nTS analysis is a huge field – we’re only scratching the surface!"
   },
   {
     "objectID": "VB_TimeSeries.html#forecasting-1",
     "href": "VB_TimeSeries.html#forecasting-1",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "Forecasting",
     "text": "Forecasting\nWe’re going to practice our TS modeling approaches through the lens of forecasting.\n\nThat is, we’re going to focus on how to use our TS models to produce a prediction of what we think might happen in the future.\n\nThis is actually trickier to do well than you might think…"
   },
   {
     "objectID": "VB_TimeSeries.html#recall-forecasting-process",
     "href": "VB_TimeSeries.html#recall-forecasting-process",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "Recall: Forecasting Process",
     "text": "Recall: Forecasting Process\n\nDefine Goal - what to forecast? how far out?\nGet Data - what resolution? any predictors?\nExplore/Visualize - outliers? spacing?\nPre-Processing - clean and organize data\nPartitioning - need to test our forecasts\nModeling - what methods? what predictors?\nEvaluation - how good is the forecast?\nImplementation - make it repeatable, maybe automate"
   },
   {
     "objectID": "VB_TimeSeries.html#evaluating-predictions-and-forecasts",
     "href": "VB_TimeSeries.html#evaluating-predictions-and-forecasts",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "Evaluating predictions and forecasts",
     "text": "Evaluating predictions and forecasts\nWe’ve already learned a few ways to explore how good our model is on the data that we’ve trained it on (within sample).\nMostly we’ve focused on qualitative metrics:\n\nDoes the pattern look like the data?\nAre there patterns left in the residuals?\nAre the residuals still auto-correlated?\nAre the residuals normally distributed?\n\nWhat about quantitative metrics?"
   },
   {
     "objectID": "VB_TimeSeries.html#root-mean-squared-error-rmse",
     "href": "VB_TimeSeries.html#root-mean-squared-error-rmse",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "Root Mean Squared Error (RMSE)",
     "text": "Root Mean Squared Error (RMSE)\nRMSE is one of the simplest quantitative metrics to calculate: \\[\n\\text{RMSE} = \\left(\\frac{1}{n}\\sum_{i=1}^n (y_i - \\hat{y}_i)^2 \\right)^{1/2}\n\\] where \\(e_i = y_i - \\hat{y}_i\\) is the residual for the \\(i^{\\text{th}}\\) data point.\n\nThis gives us a quantitative measure of how close, overall, our predictions are to the data."
   },
   {
     "objectID": "VB_TimeSeries.html#in-sample-vs.-forecasting-error",
     "href": "VB_TimeSeries.html#in-sample-vs.-forecasting-error",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "In-sample vs. Forecasting error",
     "text": "In-sample vs. Forecasting error\nBecause RMSE requires that we know the data values, the obvious use is to use it to compare within-sample – fit a couple of models, calculate RMSE, and use it as a tool to decide which model might be better (along with residual diagnostics).\n\nWhat about forecasting?\n\nIf we knew what the future values were going to be, we could also calculate RMSE and compare models!"
   },
   {
     "objectID": "VB_TimeSeries.html#data-partitioning",
     "href": "VB_TimeSeries.html#data-partitioning",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "Data Partitioning",
     "text": "Data Partitioning\nData partitioning – dividing data into a training set to fit the model and a testing set where we make predictions – is a standard statistical technique.\nOften the testing and training sets are divided up randomly (maybe many times) so you don’t accidentally bias your experiment.\nHowever, we cannot remove data at random from a time series as it will impact all aspects of the analysis."
   },
   {
     "objectID": "VB_TimeSeries.html#data-partitioning-for-forecasting",
     "href": "VB_TimeSeries.html#data-partitioning-for-forecasting",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "Data Partitioning for Forecasting",
     "text": "Data Partitioning for Forecasting\nWhen we are dealing with time dependent data, we instead systematically leave out data.\nIf we have data from times 1 to \\(t_{\\text{max}}\\) we choose a final window of data to leave out:\n\ntraining: times from 1 to \\(t_{\\text{test}}\\)\ntesting: times from \\(t_{\\text{test}}+1\\) to \\(t_{\\text{max}}\\)\n\nThen we fit the model just to the training data, make the forecast from the model, and calculate RMSE just on the testing data."
   },
   {
     "objectID": "VB_TimeSeries.html#time-series-and-forecasting-practical",
     "href": "VB_TimeSeries.html#time-series-and-forecasting-practical",
-    "title": "Regression Methods for Time Dependent Data",
+    "title": "Introduction to Time Series Methods",
     "section": "Time Series and Forecasting Practical",
     "text": "Time Series and Forecasting Practical\n\n\n\nIn the next practical, we’re going to use our new time series methods on a new data set on tree greenness.\n\nAs part of this you’ll practice all of the steps in the forecasting cycle (except the last).\n\n\n\n\nDefine Goal\nGet Data\nExplore/Visualize\nPre-Processing\nPartitioning\nModeling\nEvaluation\nImplementation"
   },
@@ -879,7 +879,7 @@
     "href": "schedule2025.html",
     "title": "2025 Training Schedule",
     "section": "",
-    "text": "Main materials\n\nPre-workshop\nInformation about pre-workshop preparation – including software installation, expectations for what you should already be familiar with, and review materials – is available in the pre-work portion of the materials page.\n  \n\n\n13 June 2025\n\n\n\nTime\nActivity\n\n\n\n\n\nArrival\n\n\n\n  \n\n\n14 June 2025 (08:30 - 17:30)\n\n\n\n\n\n\n\n\nTime\nActivity\nMaterials\n\n\n\n\n8:30\nIntroduction to time dependent data and forecasting, course overview\n\n\n\n9:30\nLecture: Regression Transformations and Diagnostics\n\n\n\n10:30\nBreak\n\n\n\n10:45\nPractical: Regression Transformations and Diagnostics\n\n\n\n12:00\nLunch\n\n\n\n13:00\nIntroduction to VecDyn Database and API\n\n\n\n14:00\nLecture: Time Dependent Data Analysis\n\n\n\n15:00\nBreak\n\n\n\n15:30\nPractical: Time Dependent Data Analysis\n\n\n\n16:30\nWorking with VecDyn/time dependent data (data aggregation, covariate/predictor sources)\n\n\n\n17:00\nSupported practice - pull VecDyn data, add covars, fit linear model\n\n\n\n\n  \n\n\n15 June 2025 (08:30 - 17:30)\n\n\n\n\n\n\n\n\nTime\nActivity\nMaterials\n\n\n\n\n8:30\nOverview of the day\n\n\n\n9:00\nLecture: Basics of Time Series methods\n\n\n\n10:00\nBreak\n\n\n\n10:30\nPractical: Basics of Time Series methods\n\n\n\n12:00\nLunch\n\n\n\n13:00\nLecture: Introduction to Gaussian Process (GP) regression applied to time dependent data\n\n\n\n14:00\nPractical: GPs in R with hetGP\n\n\n\n15:00\nBreak\n\n\n\n15:30\nIntroduction to the dengue forecasting challenge\n\n\n\n16:00\nForm forecasting groups and begin forecasting challenge\n\n\n\n17:00\nLightning talks\n\n\n\n\n  \n\n\n16 June 2025 (08:30 - 11:45)\n\n\n\nTime.\nActivity\nMaterials\n\n\n\n\n8:30\nOverview of the day\n\n\n\n9:00\nForecasting Challenge\n\n\n\n10:30\nBreak\n\n\n\n11:00\nPresent and Evaluate forecasts\n\n\n\n11:45\nLunch (Boxes to go)\n\n\n\n\n  \n\n\nPost-workshop\nEnjoy using these new techniques and databases!"
+    "text": "Main materials\n\nPre-workshop\nInformation about pre-workshop preparation – including software installation, expectations for what you should already be familiar with, and review materials – is available in the pre-work portion of the materials page.\n  \n\n\n13 June 2025\n\n\n\nTime\nActivity\n\n\n\n\n\nArrival\n\n\n\n  \n\n\n14 June 2025 (08:30 - 17:30)\n\n\n\nTime\nActivity\nMaterials\n\n\n\n\n8:30\nIntroduction to time dependent data and forecasting, course overview\nLecture Slides\n\n\n9:30\nLecture: Regression Transformations and Diagnostics\nLecture Slides\n\n\n10:30\nBreak\n\n\n\n10:45\nPractical: Regression Transformations and Diagnostics\nPractical; transforms.csv\n\n\n12:00\nLunch\n\n\n\n13:00\nIntroduction to VecDyn Database and API\nmaterials\n\n\n14:00\nLecture: Time Dependent Data Analysis\nLecture Slides\n\n\n15:00\nBreak\n\n\n\n15:30\nPractical: Time Dependent Data Analysis\nPractical; Walton Co, FL Mosquito data\n\n\n16:30\nIntroduction to climate and weather data for time dependent analyses\nGuided Practice; NEON_tickplots_13sites_utf8.csv\n\n\n17:00\nSupported practice - pull VecDyn data, add covars, fit linear model\n\n\n\n\n  \n\n\n15 June 2025 (08:30 - 17:30)\n\n\n\nTime\nActivity\nMaterials\n\n\n\n\n8:30\nOverview of the day\n\n\n\n9:00\nLecture: Basics of Time Series methods\nLecture Slides\n\n\n10:00\nBreak\n\n\n\n10:30\nPractical: Basics of Time Series methods\nPractical; NEONphenologyClean.csv\n\n\n12:00\nLunch\n\n\n\n13:00\nLecture: Introduction to Gaussian Process (GP) regression applied to time dependent data\nLecture Slides\n\n\n14:00\nPractical: GPs in R with hetGP\nPractical\n\n\n15:00\nBreak\n\n\n\n15:30\nIntroduction to the dengue forecasting challenge\nDescription; data: dengueForecasting.csv; helper code: dengueForecastingChallenge.R\n\n\n16:00\nForm forecasting groups and begin forecasting challenge\n\n\n\n17:00\nLightning talks\n\n\n\n\n  \n\n\n16 June 2025 (08:30 - 11:45)\n\n\n\nTime.\nActivity\nMaterials\n\n\n\n\n8:30\nOverview of the day\n\n\n\n9:00\nForecasting Challenge\n\n\n\n10:30\nBreak\n\n\n\n11:00\nPresent and Evaluate forecasts\n\n\n\n11:45\nLunch (Boxes to go)\n\n\n\n\n  \n\n\nPost-workshop\nEnjoy using these new techniques and databases!"
   },
   {
     "objectID": "VB_RegDiagTrans_practical.html#fit-the-linear-regression-model.-plot-the-data-and-fitted-line.",

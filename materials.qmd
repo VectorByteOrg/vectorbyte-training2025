@@ -44,7 +44,7 @@ We are assuming familiarity with `R` basics as well as at least introductory sta
 
 ## Introduction to the Workshop
 
--   [Lecture](VB_IntroTimeDepData.qmd)
+-   [Lecture Slides](VB_IntroTimeDepData.qmd)
 
 <br> <br>
 
@@ -85,7 +85,7 @@ https://docs.google.com/presentation/d/1GZuAR8zFRFJaR1QConiNHG5v71W4psAd/edit?us
 
 ## Basics of Forecasting Time Series using `R`
 
--   [Lecture](VB_TimeSeries.qmd)
+-   [Lecture Slides](VB_TimeSeries.qmd)
 -   [Practical](VB_TimeSeriesForecastingPractical.qmd)
 -   Dataset: [NEONphenologyClean.csv](data/NEONphenologyClean.csv)
 

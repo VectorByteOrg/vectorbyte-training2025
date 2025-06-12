@@ -9,7 +9,7 @@ format:
     css: styles.css
 ---
 
-[Main materials](materials.qmd)
+[***Main materials***](materials.qmd)
 
 # Pre-workshop
 
@@ -29,16 +29,16 @@ Information about pre-workshop preparation -- including software installation, e
 
 | Time   | Activity | Materials |
 |--------|----------|-----------|
-| 8:30   | Introduction to time dependent data and forecasting, course overview            |           |
-| 9:30   | Lecture: Regression Transformations and Diagnostics         |           |
+| 8:30   | Introduction to time dependent data and forecasting, course overview            | [Lecture Slides](VB_IntroTimeDepData.qmd) |
+| 9:30   | Lecture: Regression Transformations and Diagnostics         | [Lecture Slides](VB_RegDiagTrans.qmd) |
 | 10:30  | Break    |           |
-| 10:45  | Practical: Regression Transformations and Diagnostics     |           |
+| 10:45  | Practical: Regression Transformations and Diagnostics     | [Practical](VB_RegDiagTrans_practical.qmd);  [transforms.csv](/data/transforms.csv) |
 | 12:00  | Lunch    |           |
-| 13:00  | Introduction to VecDyn Database and API                                   |           |
-| 14:00  | Lecture: Time Dependent Data Analysis | |
+| 13:00  | Introduction to VecDyn Database and API                                   | [materials](materials.html#introduction-to-the-vecdyn-database) |
+| 14:00  | Lecture: Time Dependent Data Analysis | [Lecture Slides](VB_TimeDepData.qmd)|
 | 15:00  | Break    |           |
-| 15:30  | Practical: Time Dependent Data Analysis                               |           |
-| 16:30  | Working with VecDyn/time dependent data (data aggregation, covariate/predictor sources)                                        |           |
+| 15:30  | Practical: Time Dependent Data Analysis                               | [Practical](VB_TimeDepData_practical.qmd); [Walton Co, FL Mosquito data](/data/Culex_erraticus_walton_covariates_aggregated.csv) |
+| 16:30  | Introduction to climate and weather data for time dependent analyses |[Guided Practice](VByteWkshp25_Climate_SJR.qmd); [NEON_tickplots_13sites_utf8.csv](data/NEON_tickplots_13sites_utf8.csv) |
 | 17:00  | Supported practice - pull VecDyn data, add covars, fit linear model |           |
 
 
@@ -50,14 +50,14 @@ Information about pre-workshop preparation -- including software installation, e
 | Time   | Activity | Materials |
 |--------|----------|-----------|
 | 8:30   | Overview  of the day         |           |
-| 9:00   | Lecture: Basics of Time Series methods                      |           |
+| 9:00   | Lecture: Basics of Time Series methods                      | [Lecture Slides](VB_TimeSeries.qmd) |
 | 10:00  | Break    |           |
-| 10:30  | Practical: Basics of Time Series methods                     |           |
+| 10:30  | Practical: Basics of Time Series methods                     | [Practical](VB_TimeSeriesForecastingPractical.qmd); [NEONphenologyClean.csv](data/NEONphenologyClean.csv) |
 | 12:00  | Lunch    |           |
-| 13:00  | Lecture: Introduction to Gaussian Process (GP) regression applied to time dependent data                |           |
-| 14:00  | Practical: GPs in R with `hetGP`                            |           |
+| 13:00  | Lecture: Introduction to Gaussian Process (GP) regression applied to time dependent data                | [Lecture Slides](VB_GP_slides.qmd) |
+| 14:00  | Practical: GPs in R with `hetGP`                            | [Practical](VB_GP_Practical.qmd) |
 | 15:00  | Break    |           |
-| 15:30  | Introduction to the dengue forecasting challenge           |           |
+| 15:30  | Introduction to the dengue forecasting challenge           | [Description](DengueForecastingChallenge.qmd); [data: dengueForecasting.csv](data/dengueForecasting.csv); [helper code: dengueForecastingChallenge.R](dengueForecastingChallenge.R) |
 | 16:00  | Form forecasting groups and begin forecasting challenge  |           |
 | 17:00  | Lightning talks                                             |           |
 

@@ -1,6 +1,6 @@
 ---
 subtitle: "VectorByte Methods Training"
-title: "Regression Methods for Time Dependent Data"
+title: "Introduction to Time Series Methods"
 author: "The VectorByte Team (Leah R. Johnson and Alicia Arneson, Virginia Tech)"
 title-slide-attributes:
   data-background-image: graphics/VectorByte-logo_lg.png
