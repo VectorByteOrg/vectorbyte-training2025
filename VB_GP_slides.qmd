@@ -170,7 +170,7 @@ $$\Sigma_n = \tau^2 C_n \quad \text{where} \quad C_n^{ij} = \exp \left( - \vert 
 
 ::: {.column width="55%" .fragment}
 
-```{r, echo = FALSE, cache=TRUE, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 9.5, fig.height= 7.5, fig.align="center", warn.conflicts = FALSE}
+```{r, echo = FALSE, cache=FALSE, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 9.5, fig.height= 7.5, fig.align="center", warn.conflicts = FALSE}
 
 library(mvtnorm)
 library(laGP)
@@ -358,7 +358,7 @@ These hyper-parameters $\{ \tau^2, \theta, g \}$ are inferred using MLE/Bayesian
 
 . . .
 
-```{r, echo = FALSE, cache=TRUE, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 18, fig.height= 6.5, fig.align="center", warn.conflicts = FALSE}
+```{r, echo = FALSE, cache=FALSE, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 18, fig.height= 6.5, fig.align="center", warn.conflicts = FALSE}
 
 set.seed(24)
 n <- 100
@@ -395,7 +395,7 @@ matplot(X, t(Y_scaled), type = 'l', main = expression(paste(tau^2, " = 25")),
 
 . . .
 
-```{r, echo = FALSE, cache=TRUE, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 18, fig.height= 6.5, fig.align="center", warn.conflicts = FALSE}
+```{r, echo = FALSE, cache=FALSE, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 18, fig.height= 6.5, fig.align="center", warn.conflicts = FALSE}
 library(mvtnorm)
 library(laGP)
 
@@ -431,7 +431,7 @@ matplot(X, t(Y2), type= 'l',  main = expression(paste(theta, " = 5")),
 
 -   We will compare a sample from g \~ 0 (\< 1e-8 for numeric stability) vs g = 0.1 to observe what actually happens.
 
-```{r, echo = FALSE, cache=TRUE, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 18, fig.height= 6.5, fig.align="center", warn.conflicts = FALSE}
+```{r, echo = FALSE, cache=FALSE, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 18, fig.height= 6.5, fig.align="center", warn.conflicts = FALSE}
 library(mvtnorm)
 library(laGP)
 
@@ -586,13 +586,13 @@ $$C_\theta(x , x') = \exp{ \left( -\sum_{k=1}^{d} \frac{ (x_k - x_k')^2 }{\theta
 ```{r, include = F, echo = T, cache = F, warning=FALSE, message = FALSE}
 # transforms y
 f <- function(x) {
-  y <- log(x + 1)
+  y <- log(x)
   return(y)
 }
 
 # This function back transforms the input argument
 fi <- function(y) {
-  x <- exp(y) - 1
+  x <- exp(y)
   return(x)
 }
 
@@ -642,7 +642,7 @@ XXt1c <- XXt1/53
 XXt <- as.matrix(cbind.data.frame(XXt1c, XXt2))
 
 y_obs <- df_train$observation
-y <- f(y_obs)
+y <- f(y_obs + 1)
 
 rownames(X) <- as.character(df_train$datetime)
 colnames(X) <- c("Iso-week (c)", "Periodicity")
@@ -667,7 +667,7 @@ knitr::kable(snip, align = "c", table.attr = "style='width:80%;'") %>%
 ```{r, echo = T, cache = F, warning=F, message = FALSE}
 #| code-line-numbers: "|2|5"
 # Fitting the GP
-gp <- mleHomGP(X, y_obs)
+gp <- mleHomGP(X, y)
 
 # Make Predictions
 ppt <- predict(gp, XXt)
@@ -682,9 +682,9 @@ yyt <- ppt$mean
 q1t <- ppt$mean + qnorm(0.025,0,sqrt(ppt$sd2 + ppt$nugs)) #lower bound
 q2t <- ppt$mean + qnorm(0.975,0,sqrt(ppt$sd2 + ppt$nugs)) # upper bound
 
-gp_yy <- fi(yyt)
-gp_q1 <- fi(q1t)
-gp_q2 <- fi(q2t)
+gp_yy <- fi(yyt) - 1 
+gp_q1 <- fi(q1t) - 1
+gp_q2 <- fi(q2t) - 1
 
 # Plot the observed points
 par(mfrow = c(1, 1), mar = c(5, 5, 0, 1),  cex.axis = 2, cex.lab = 2, font.lab = 2)
@@ -728,7 +728,7 @@ knitr::kable(snip, align = "c", table.attr = "style='width:80%;'") %>%
 
 ```{r, echo = T, cache = F, warning=F, message = FALSE}
 # Fitting the GP
-gp <- mleHomGP(X, y_obs)
+gp <- mleHomGP(X, y)
 
 # Make Predictions
 ppt <- predict(gp, XXt)
@@ -738,14 +738,14 @@ ppt <- predict(gp, XXt)
 
 ::: {.column width="60%"}
 
-```{r, echo = FALSE, cache=T, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 10, fig.height= 5, fig.align="center", warn.conflicts = FALSE}
+```{r, echo = FALSE, cache=F , warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 10, fig.height= 5, fig.align="center", warn.conflicts = FALSE}
 yyt <- ppt$mean
 q1t <- ppt$mean + qnorm(0.025,0,sqrt(ppt$sd2 + ppt$nugs)) #lower bound
 q2t <- ppt$mean + qnorm(0.975,0,sqrt(ppt$sd2 + ppt$nugs)) # upper bound
 
-gp_yy <- fi(yyt)
-gp_q1 <- fi(q1t)
-gp_q2 <- fi(q2t)
+gp_yy <- fi(yyt) - 1
+gp_q1 <- fi(q1t) - 1
+gp_q2 <- fi(q2t) - 1
 
 # Plot the observed points
 par(mfrow = c(1, 1), mar = c(5, 5, 0, 1),  cex.axis = 2, cex.lab = 2, font.lab = 2)
@@ -778,7 +778,7 @@ lines(grid_datetime, gp_q2, col = 4, lwd = 3, lty =2)
 
 ::: {.column width="50%"}
 
-```{r hetviz, echo = FALSE, cache=T, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 8.5, fig.height= 6, fig.align="center", warn.conflicts = FALSE}
+```{r hetviz, echo = FALSE, cache=F, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 8.5, fig.height= 6, fig.align="center", warn.conflicts = FALSE}
 
 set.seed(5)
 fx <- function(x){
@@ -817,7 +817,7 @@ abline(v = 0.6, col = "#646464", lwd = 3)
 ::: {.column width="50%"}
 
 
-```{r, include = F, echo = FALSE, cache=T, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 8.5, fig.height= 6, fig.align="center", warn.conflicts = FALSE}
+```{r, include = F, echo = FALSE, cache=F, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 8.5, fig.height= 6, fig.align="center", warn.conflicts = FALSE}
 
 par(mfrow = c(1, 1), mar = c(4, 4.5, 0, 1), cex.axis = 2, cex.lab = 2, cex.main = 3, font.lab = 2)
 plot(x, rn, pch = 19, type = 'l', lwd = 3, col = "red", xlab = "x", ylab = "noise")
@@ -836,7 +836,7 @@ abline(v = 0.6, col = "#646464", lwd = 3)
 
 ::: {.column width="50%"}
 
-```{r hetviz2, echo = FALSE, cache=T, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 8.5, fig.height= 6, fig.align="center", warn.conflicts = FALSE}
+```{r hetviz2, echo = FALSE, cache=F, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 8.5, fig.height= 6, fig.align="center", warn.conflicts = FALSE}
 par(mfrow = c(1, 1), mar = c(4, 4.5, 0, 1), cex.axis = 2, cex.lab = 2, cex.main = 3, font.lab = 2)
 plot(x, y, pch = 19, cex = 1.2)
 lines(x, f, col = "red", lwd = 3)
@@ -849,7 +849,7 @@ abline(v = 0.6, col = "#646464", lwd = 3)
 ::: {.column width="50%"}
 
 
-```{r, include = T, echo = FALSE, cache=T, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 8.5, fig.height= 6, fig.align="center", warn.conflicts = FALSE}
+```{r, include = T, echo = FALSE, cache=F, warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.width= 8.5, fig.height= 6, fig.align="center", warn.conflicts = FALSE}
 
 par(mfrow = c(1, 1), mar = c(4, 4.5, 0, 1), cex.axis = 2, cex.lab = 2, cex.main = 3, font.lab = 2)
 
@@ -904,7 +904,7 @@ library(hetGP)
 XX <- as.matrix(XX)
 ```
 
-```{r, include = TRUE, echo = T, cache=T, warning=FALSE, message=FALSE}
+```{r, include = TRUE, echo = T, cache=F, warning=FALSE, message=FALSE}
 #| code-line-numbers: "|1|2|4-5|"
 homgp <- mleHomGP(x, y)
 p_hom <- predict(object = homgp, x = XX)
