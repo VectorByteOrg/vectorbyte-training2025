@@ -1,7 +1,12 @@
 ---
 title: "VectorByte Methods Training"
 subtitle: "Practical: Diagnostics and Transformations (SOLUTION)"
-author: "The VectorByte Team (Leah R. Johnson, Virginia Tech)"
+author: 
+  - name: 
+      given: Leah R.
+      family: Johnson
+    url: https://lrjohnson0.github.io/QEDLab/leahJ.html
+    affiliation: Virginia Tech and VectorByte
 format:
   html:
     toc: true
