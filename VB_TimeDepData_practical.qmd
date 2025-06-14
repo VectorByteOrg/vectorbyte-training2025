@@ -5,7 +5,7 @@ author:
     url: https://lrjohnson0.github.io/QEDLab/leahJ.html
     affiliation: Virginia Tech and VectorByte
 citation: true
-date: 2024-07-01
+date: 2025-06-01
 date-format: long
 format:
   html:
