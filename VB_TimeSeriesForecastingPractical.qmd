@@ -230,7 +230,10 @@ Let's fit one more model then we'll talk about out of sample comparisons...
 
 ## Series Decomposition by Loess + ARIMA or Exponential Smoothing
 
-In the lecture portion, we mentioned that one can smooth or fit a model first and then fit an AR or ARIMA model to the residuals. We're going to show an example of this. In this approach the time series is first de-trended and de-seasonalized using something called ***loess*** smoothing. We're going to treat loess as something of a black box -- an alternative to the other smoothing methods we've talked about. If you want more details you can take a look here: 
+In the lecture portion, we mentioned that one can smooth or fit a model first and then fit an AR or ARIMA model to the residuals. We're going to show an example of this. In this approach the time series is first de-trended and de-seasonalized using something called ***loess*** smoothing. We're going to treat loess as something of a black box -- an alternative to the other smoothing methods we've talked about. If you want more details you can take a look at [WikiPedia -- Local Regression](https://en.wikipedia.org/wiki/Local_regression) or see some `R` documentation:
+```{r}
+?loess
+```
 
 
 After we've applied the loess smoother, the remaining stationary series is modeled using ARIMA (or another method if we select a different one). 
