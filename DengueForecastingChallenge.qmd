@@ -30,7 +30,7 @@ set.seed(123)
 
 # Overview
 
-Using the skills you have gained in this year's training, we are going to build some real forecasting models! We will focus on one part of a larger forecasting challenge called the Infodengue-Mosqlimate Dengue Challenge (IMDC). It aims to help make improved predictions of weekly dengue cases (incidence) in Brazil.
+Using the skills you have gained in this year's training, we are going to build some real forecasting models! We will focus on one part of a larger forecasting challenge called the [Infodengue-Mosqlimate Dengue Challenge (IMDC)](https://sprint.mosqlimate.org/2025/). It aims to help make improved predictions of weekly dengue cases (incidence) in Brazil.
 
 The IMDC involves three validation tests and one forecasting task, each focusing on predicting weekly dengue cases by state (UF) for specific epidemiological seasons:
 
@@ -44,15 +44,15 @@ The IMDC involves three validation tests and one forecasting task, each focusing
 
 Each model must provide median estimates along with 50%, 80%, 90%, and 95% predictive intervals for all 27 Brazilian federative units.
 
-See this link for the full challenge details: https://sprint.mosqlimate.org/2025/
+See this link for the full challenge details: [https://sprint.mosqlimate.org/2025/](https://sprint.mosqlimate.org/2025/)
 
 For time's sake, we will focus on making forecasts for just a few of the 27 states, and we will work with part of validation test 3.
 
 # Instructions
 
-Using the modeling skills you have earned over the course of the workshop, you are going to produce 12 weekly forecasts of Dengue incidence for 5 separate states in Brazil. You can use any of the models we discussed in the workshop, or others you may have experience with. You have incidence data and several covariates ranging from 2010 to mid-2024 in the data set called dengueForecasting.csv.
+Using the modeling skills you have earned over the course of the workshop, you are going to produce 12 weekly forecasts of Dengue incidence for 5 separate states in Brazil. You can use any of the models we discussed in the workshop, or others you may have experience with. You have incidence data and several covariates ranging from 2010 to mid-2024 in the data set called [dengueForecasting.csv](dengueForecasting.csv).
 
-The code file called dengueForecastingChallenge.R contains the infrastructure you need to quickly read in the data set and export a .csv file of the forecasts you make in a standard file. Once you have generated your forecasts, you will submit them here: [Forecast Submission Form](https://virginiatech.questionpro.com/t/AaEFhZ6WQD). We will score the forecasts using RMSE and a winner will be crowned!
+The code file called [dengueForecastingChallenge.R](dengueForecastingChallenge.R) contains the infrastructure you need to quickly read in the data set and export a .csv file of the forecasts you make in a standard file. Once you have generated your forecasts, you will submit them here: [Forecast Submission Form](https://virginiatech.questionpro.com/t/AaEFhZ6WQD). We will score the forecasts using RMSE and a winner will be crowned!
 
 ## Easier version
 
@@ -95,3 +95,6 @@ If that task sounds overwhelming, aim to produce those 12 weekly forecasts just 
 | pdo | The average pacific decadal oscillation value across the state during the given epiweek |
 | population | The total estimated population within the given state during the given epiweek (the same value within the same year) |
 | test | A binary variable that tells you whether the observation belongs in the test set if you choose to hold back the last 12 weeks of data (up to you). "Y" indicates that the observation should be part of that test set. |
+
+[Group Presentation slides](https://docs.google.com/presentation/d/1a5msRu0-FpL0Pl5fPiJdY8cL5A7b18s1TkjRVAymyXo/edit?usp=sharing)
+
