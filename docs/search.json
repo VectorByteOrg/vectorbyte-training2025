@@ -284,7 +284,7 @@
     "href": "materials.html#introduction-to-climate-and-weather-data-for-time-dependent-analyses",
     "title": "VectorByte Training Materials 2025",
     "section": "Introduction to climate and weather data for time dependent analyses",
-    "text": "Introduction to climate and weather data for time dependent analyses\n\nGuided Practice\ndataset: NEON_tickplots_13sites_utf8.csv"
+    "text": "Introduction to climate and weather data for time dependent analyses\n\nGuided Practice\nGEE code\ndataset: NEON_tickplots_13sites_utf8.csv"
   },
   {
     "objectID": "materials.html#basics-of-forecasting-time-series-using-r",

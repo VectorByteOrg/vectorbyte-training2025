@@ -78,6 +78,7 @@ https://docs.google.com/presentation/d/1GZuAR8zFRFJaR1QConiNHG5v71W4psAd/edit?us
 ## Introduction to climate and weather data for time dependent analyses
 
 - [Guided Practice](VByteWkshp25_Climate_SJR.qmd)
+- [GEE code](NEON_SJR_MODIS_LST.txt)
 - dataset: [NEON_tickplots_13sites_utf8.csv](data/NEON_tickplots_13sites_utf8.csv)
 
 <br><br>
