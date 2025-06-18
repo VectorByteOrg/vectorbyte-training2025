@@ -96,5 +96,7 @@ If that task sounds overwhelming, aim to produce those 12 weekly forecasts just 
 | population | The total estimated population within the given state during the given epiweek (the same value within the same year) |
 | test | A binary variable that tells you whether the observation belongs in the test set if you choose to hold back the last 12 weeks of data (up to you). "Y" indicates that the observation should be part of that test set. |
 
+```{r echo=FALSE, eval=FALSE}
 [Group Presentation slides](https://docs.google.com/presentation/d/1a5msRu0-FpL0Pl5fPiJdY8cL5A7b18s1TkjRVAymyXo/edit?usp=sharing)
+```
 
